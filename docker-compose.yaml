@@ -1,0 +1,32 @@
+services:
+  backend:
+    container_name: ${SPRING_APPLICATION_NAME}
+    build: backend
+    ports:
+      - '8080:8080'
+    env_file:
+      - ./backend/.env
+    networks:
+      - spring-postgres
+    depends_on:
+      - postgres
+
+  postgres:
+    image: 'postgres:latest'
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=tunetown_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - spring-postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+networks:
+  spring-postgres:
