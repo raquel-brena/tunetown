@@ -1,6 +1,6 @@
-package com.imd.backend.core.gateway.TunablePlataformGateway;
+package com.imd.backend.app.gateway.tunablePlataformGateway;
 
-import com.imd.backend.core.domain.TunableItem.TunableItem;
+import com.imd.backend.domain.entities.TunableItem.TunableItem;
 
 public interface TunablePlataformGateway {
   public TunableItem searchItem(String query);

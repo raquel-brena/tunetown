@@ -1,7 +1,7 @@
-package com.imd.backend.app.gateway.tunablePlataformGateway;
+package com.imd.backend.app.gateway.tunablePlataformGateway.Spotify;
 
-import com.imd.backend.core.domain.TunableItem.TunableItem;
-import com.imd.backend.core.gateway.TunablePlataformGateway.TunablePlataformGateway;
+import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
+import com.imd.backend.domain.entities.TunableItem.TunableItem;
 
 public class SpotifyGateway implements TunablePlataformGateway {
   // TODO: Spotify
