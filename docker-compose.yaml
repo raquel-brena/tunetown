@@ -1,6 +1,6 @@
 services:
   backend:
-    container_name: ${SPRING_APPLICATION_NAME}
+    container_name: backend
     build: backend
     ports:
       - '8080:8080'
