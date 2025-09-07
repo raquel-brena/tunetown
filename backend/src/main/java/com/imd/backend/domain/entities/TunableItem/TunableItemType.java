@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TunableItemType {
-  MUSIC("MUSIC"),
-  ALBUM("ALBUM"),
-  PODCAST("PODCAST");
+    MUSIC("MUSIC"),
+    ALBUM("ALBUM"),
+    PODCAST("PODCAST");
 
-  private String typeName;
+    private String typeName;
 }

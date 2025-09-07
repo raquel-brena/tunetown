@@ -1,6 +1,5 @@
 package com.imd.backend.domain.entities;
 
-import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
 import lombok.*;
 
 import java.util.Date;

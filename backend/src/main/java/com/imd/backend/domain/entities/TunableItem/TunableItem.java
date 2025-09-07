@@ -3,9 +3,13 @@ package com.imd.backend.domain.entities.TunableItem;
 import java.net.URI;
 
 public interface TunableItem {
-  public String getPlataformId();
-  public String getTitle();
-  public String getArtist();
-  public URI getArtworkUrl();
-  public TunableItemType getItemType();
+    public String getPlataformId();
+
+    public String getTitle();
+
+    public String getArtist();
+
+    public URI getArtworkUrl();
+
+    public TunableItemType getItemType();
 }

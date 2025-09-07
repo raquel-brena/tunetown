@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @FeignClient(
-  name = "SpotifyAuthComponent",
-  url = "https://accounts.spotify.com"
+        name = "SpotifyAuthComponent",
+        url = "https://accounts.spotify.com"
 )
 public class SpotifyAuthComponent {
-  
-  // @PostMapping(value = "/api/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-  // SpotifyTokenResponse getToken(
-  //   @RequestBody SpotifyTokenRequest request
-  // );
+
+    // @PostMapping(value = "/api/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    // SpotifyTokenResponse getToken(
+    //   @RequestBody SpotifyTokenRequest request
+    // );
 }

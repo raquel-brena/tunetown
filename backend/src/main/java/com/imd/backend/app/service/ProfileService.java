@@ -2,9 +2,9 @@ package com.imd.backend.app.service;
 
 import com.imd.backend.domain.entities.Profile;
 import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
 import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.ProfileMapper;
+import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
