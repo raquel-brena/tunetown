@@ -1,8 +1,10 @@
 package com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto;
 
+import feign.form.FormProperty;
+
 public record SpotifyTokenRequest(
-        String grantType,
-        String clientId,
-        String clientSecret
+        @FormProperty("grant_type") String grantType,
+        @FormProperty("client_id") String clientId,
+        @FormProperty("client_secret") String clientSecret
 ) {
 }

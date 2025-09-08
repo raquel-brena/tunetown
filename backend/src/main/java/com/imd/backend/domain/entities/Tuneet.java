@@ -1,22 +1,34 @@
 package com.imd.backend.domain.entities;
 
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import lombok.Getter;
-
 import java.util.UUID;
 
-@Getter
+import com.imd.backend.domain.entities.TunableItem.TunableItem;
+
+/**
+ * Representa um "post" (tuneet) de um usuário
+ */
 public class Tuneet {
+  private final UUID id;
+  private String textContent;
+  // private User author;
+  private TunableItem tunabbleItem;
 
-    private final UUID id;
+  public Tuneet(String textContent, TunableItem tunabbleItem) {
+    this.id = UUID.randomUUID();
 
-    private String textContent;
+    this.tunabbleItem = tunabbleItem;
+  }
 
-    private TunableItem tunabbleItem;
+  // Getters
+  public UUID getId() {
+    return this.id;
+  }
 
-    public Tuneet(String textContent, TunableItem tunabbleItem) {
-        this.id = UUID.randomUUID();
+  public String getTextContent() {
+    return this.textContent;
+  }
 
-        this.tunabbleItem = tunabbleItem;
-    }
+  public TunableItem getTunableItem() {
+    return this.tunabbleItem;
+  }
 }

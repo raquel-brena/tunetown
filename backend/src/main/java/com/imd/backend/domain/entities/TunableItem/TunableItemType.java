@@ -1,14 +1,17 @@
 package com.imd.backend.domain.entities.TunableItem;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public enum TunableItemType {
-    MUSIC("MUSIC"),
-    ALBUM("ALBUM"),
-    PODCAST("PODCAST");
+  MUSIC("MUSIC"),
+  ALBUM("ALBUM"),
+  PODCAST("PODCAST");
 
-    private String typeName;
+  private String typeName;
+
+  TunableItemType(String typeName) {
+    this.typeName = typeName;
+  }
+
+  public String getTypeName() {
+    return this.typeName;
+  }
 }
