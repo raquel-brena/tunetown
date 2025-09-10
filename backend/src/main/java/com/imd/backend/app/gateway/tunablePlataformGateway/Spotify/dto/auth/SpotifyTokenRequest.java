@@ -1,4 +1,4 @@
-package com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto;
+package com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.auth;
 
 import feign.form.FormProperty;
 

@@ -5,8 +5,8 @@ import java.time.Instant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.SpotifyTokenRequest;
-import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.SpotifyTokenResponse;
+import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.auth.SpotifyTokenRequest;
+import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.auth.SpotifyTokenResponse;
 
 @Component
 public class SpotifyAuthComponent {

@@ -5,8 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.SpotifyTokenRequest;
-import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.SpotifyTokenResponse;
+import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.auth.SpotifyTokenRequest;
+import com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto.auth.SpotifyTokenResponse;
 
 @FeignClient(
         name = "SpotifyAuthComponent",
