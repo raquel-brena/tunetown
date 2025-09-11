@@ -76,6 +76,12 @@
             <artifactId>java-jwt</artifactId>
             <version>4.5.0</version>
         </dependency>
+		<!-- OpenFeign -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<version>4.3.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
