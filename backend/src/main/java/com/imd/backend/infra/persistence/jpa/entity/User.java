@@ -1,9 +1,7 @@
-package com.imd.backend.core.domain;
+package com.imd.backend.infra.persistence.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.util.Date;
 
 @Table(name="users")
 @Entity

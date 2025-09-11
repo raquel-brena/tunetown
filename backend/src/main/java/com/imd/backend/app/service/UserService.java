@@ -1,6 +1,6 @@
-package com.imd.backend.core.service;
+package com.imd.backend.app.service;
 
-import com.imd.backend.core.repository.UserRepository;
+import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.imd.backend.core.repository;
+package com.imd.backend.infra.persistence.jpa.repository;
 
 
-import com.imd.backend.core.domain.User;
+import com.imd.backend.infra.persistence.jpa.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

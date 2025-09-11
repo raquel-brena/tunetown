@@ -1,6 +1,6 @@
 package com.imd.backend.infra.security;
 
-import com.imd.backend.core.repository.UserRepository;
+import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
