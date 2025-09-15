@@ -27,6 +27,19 @@ public class TuneetJpaMapper {
     );
   }
 
+  public TuneetEntity fromTuneetResumeDomain(TuneetResume tuneetResume) {
+    return new TuneetEntity(
+      tuneetResume.getId().toString(),
+      tuneetResume.getTextContent(),
+      tuneetResume.getItemId(),
+      tuneetResume.getItemPlataform(),
+      tuneetResume.getItemTitle(),
+      tuneetResume.getItemArtist(),
+      tuneetResume.getItemType().toString(),
+      tuneetResume.getItemArtworkUrl().toString()
+    );    
+  }
+
   public TuneetResume resumeFromTuneetJpaEntity(TuneetEntity entity) throws URISyntaxException {
     return new TuneetResume(
       UUID.fromString(entity.getId()),

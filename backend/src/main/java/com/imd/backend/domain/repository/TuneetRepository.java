@@ -8,6 +8,7 @@ import com.imd.backend.domain.entities.TuneetResume;
 
 public interface TuneetRepository {
     public void save(Tuneet tuneet);
+    public void update(TuneetResume tuneetResume);
     public void deleteById(UUID id);
     public Optional<TuneetResume> findById(UUID id);
 }

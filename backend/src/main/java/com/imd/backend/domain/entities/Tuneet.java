@@ -13,13 +13,13 @@ public class Tuneet {
   private final UUID id;
   private String textContent;
   // private User author;
-  private TunableItem tunabbleItem;
+  private TunableItem tunableItem;
 
-  public Tuneet(String textContent, TunableItem tunabbleItem) {
+  public Tuneet(String textContent, TunableItem tunableItem) {
     this.id = UUID.randomUUID();
 
     this.textContent = textContent;
-    this.tunabbleItem = tunabbleItem;
+    this.tunableItem = tunableItem;
   }
 
   // Getters
@@ -32,26 +32,26 @@ public class Tuneet {
   }
 
   public String getItemId() {
-    return this.tunabbleItem.getItemId();
+    return this.tunableItem.getItemId();
   }
 
   public String getItemPlataform() {
-    return this.tunabbleItem.getPlataformId();
+    return this.tunableItem.getPlataformId();
   }
 
   public String getItemTitle() {
-    return this.tunabbleItem.getTitle();
+    return this.tunableItem.getTitle();
   }
 
   public String getItemArtist() {
-    return this.tunabbleItem.getArtist();
+    return this.tunableItem.getArtist();
   }
 
   public URI getItemArtworkUrl() {
-    return this.tunabbleItem.getArtworkUrl();
+    return this.tunableItem.getArtworkUrl();
   }
 
   public TunableItemType getItemType() {
-    return this.tunabbleItem.getItemType();
+    return this.tunableItem.getItemType();
   }
 }

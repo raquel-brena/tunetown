@@ -12,6 +12,7 @@ import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.entities.TuneetResume;
 import com.imd.backend.domain.entities.TunableItem.TunableItem;
 import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.repository.TuneetRepository;
 
@@ -56,5 +57,35 @@ public class TuneetService {
     
     this.tuneetRepository.deleteById(tuneetId);
     return findedTuneet.get();
+  }
+
+  @Transactional(rollbackOn = Exception.class)
+  public TuneetResume updateTuneet(
+    UUID tuneetId,
+    String textContent,
+    String tunableItemId,
+    TunableItemType tunableItemType
+  ) {
+    final TuneetResume tuneet = this.tuneetRepository.findById(tuneetId)
+      .orElseThrow(() -> new NotFoundException("Não foi encontrado nenhum tuneet com o ID fornecido"));
+    
+    final boolean hasTextContent = textContent != null && !textContent.isBlank();
+    final boolean hasItemId = tunableItemId != null && !tunableItemId.isEmpty();
+    final boolean hasItemType = tunableItemType != null;
+
+    // Se tiver o tipo e o ID do item, mas não ambos juntos
+    if(hasItemId ^ hasItemType) 
+      throw new BusinessException("Para atualizar o item, é necessário passar o ID e o tipo dele");
+
+    if(hasItemId && hasItemType) {
+      final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
+      tuneet.setTunableItem(tunableItem);
+    }
+
+    if(hasTextContent)
+      tuneet.setTextContent(textContent);
+    
+    this.tuneetRepository.update(tuneet);
+    return tuneet;
   }
 }

@@ -28,6 +28,13 @@ public class TuneetJpaRepository implements TuneetRepository {
   }
 
   @Override
+  public void update(TuneetResume tuneetResume) {
+    final TuneetEntity entityToUpdate = tuneetJpaMapper.fromTuneetResumeDomain(tuneetResume);
+
+    this.tuneetJPA.save(entityToUpdate);
+  }  
+
+  @Override
   public void deleteById(UUID id) {
     tuneetJPA.deleteById(id.toString());
   }
@@ -48,5 +55,4 @@ public class TuneetJpaRepository implements TuneetRepository {
       throw new RepositoryException("Erro ao retornar dados da camada de persistência: " + e.getLocalizedMessage());
     }
   }
-  
 }
