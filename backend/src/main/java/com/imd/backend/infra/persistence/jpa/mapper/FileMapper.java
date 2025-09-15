@@ -22,11 +22,11 @@ public class FileMapper {
         if (entity == null) return null;
 
         File file = new File();
-        entity.setId(file.getId());
-        entity.setFileName(file.getFileName());
-        entity.setUrl(file.getUrl());
-        entity.setContentType(file.getContentType());
-        entity.setSize(file.getSize());
+        file.setId(entity.getId());
+        file.setFileName(entity.getFileName());
+        file.setUrl(entity.getUrl());
+        file.setContentType(entity.getContentType());
+        file.setSize(entity.getSize());
         return file;
     }
 }

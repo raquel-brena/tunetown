@@ -4,7 +4,7 @@ package com.imd.backend.infra.configuration;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.imd.backend.api.dto.RestResponseMessage;
 import com.imd.backend.domain.exception.BadRequestException;
-import com.imd.backend.domain.exception.ForbbidenException;
+import com.imd.backend.domain.exception.ForbiddenException;
 import com.imd.backend.domain.exception.NotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class RestExceptionHandler {
     @ExceptionHandler({
             NotFoundException.class,
             BadRequestException.class,
-            ForbbidenException.class,
+            ForbiddenException.class,
             InvalidFormatException.class,
             IllegalArgumentException.class,
             DateTimeParseException.class,
@@ -39,7 +39,7 @@ public class RestExceptionHandler {
         } else if (ex instanceof BadRequestException || ex instanceof InvalidFormatException
                 || ex instanceof DateTimeParseException) {
             return buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
-        } else if (ex instanceof ForbbidenException) {
+        } else if (ex instanceof ForbiddenException) {
             return buildError(HttpStatus.FORBIDDEN, ex.getMessage(), request);
         } else if (ex instanceof MethodArgumentNotValidException) {
             StringBuilder sb = new StringBuilder("Erro de validação: ");

@@ -20,9 +20,6 @@ public class ProfileEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(length = 20, unique = true)
-    private String username;
-
     private String bio;
 
     @OneToOne(cascade = CascadeType.ALL)

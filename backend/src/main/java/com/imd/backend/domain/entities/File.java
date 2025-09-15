@@ -9,14 +9,9 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode(of = "id")
 public class File {
-
     private Long id;
-
     private String fileName;
-
     private String url;
-
     private String contentType;
-
     private Long size;
 }

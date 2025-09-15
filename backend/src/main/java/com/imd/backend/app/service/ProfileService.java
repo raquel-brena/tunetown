@@ -26,11 +26,8 @@ public class ProfileService implements CrudService<String, Profile> {
     }
 
     public Profile findById(String id) {
-        ProfileEntity entity = profileRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("ProfileEntity not found"));
-
+        ProfileEntity entity = findEntityById(id);
         fileService.applyPresignedUrl(entity);
-
         return ProfileMapper.toDomain(entity);
     }
 
@@ -49,12 +46,8 @@ public class ProfileService implements CrudService<String, Profile> {
     }
 
     public Profile update(Profile profile) {
-        ProfileEntity existing = profileRepository.findById(profile.getId())
-                .orElseThrow(() -> new NotFoundException("ProfileEntity not found"));
+        ProfileEntity existing = findEntityById(profile.getId());
 
-        if (profile.getUsername() != null) {
-            existing.setUsername(profile.getUsername());
-        }
         if (profile.getBio() != null) existing.setBio(profile.getBio());
         if (profile.getFavoriteSong() != null) existing.setFavoriteSong(profile.getFavoriteSong());
 
@@ -70,8 +63,7 @@ public class ProfileService implements CrudService<String, Profile> {
     }
 
     public Profile updatePhoto(String id, MultipartFile file) throws IOException {
-        ProfileEntity profile = profileRepository.findById(id)
-                .orElseThrow();
+        ProfileEntity profile = findEntityById(id);
 
         if (profile.getPhoto() != null) {
             fileService.delete(profile.getPhoto());
@@ -87,8 +79,7 @@ public class ProfileService implements CrudService<String, Profile> {
     }
 
     public Profile deletePhoto(String id) throws IOException {
-        ProfileEntity profile = profileRepository.findById(id)
-                .orElseThrow();
+        ProfileEntity profile = findEntityById(id);
 
         if (profile.getPhoto() != null) {
             fileService.delete(profile.getPhoto());
@@ -97,5 +88,10 @@ public class ProfileService implements CrudService<String, Profile> {
         }
 
         return ProfileMapper.toDomain(profile);
+    }
+
+    public ProfileEntity findEntityById(String id) {
+        return  profileRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("ProfileEntity not found"));
     }
 }

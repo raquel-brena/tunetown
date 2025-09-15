@@ -12,17 +12,9 @@ import java.util.Date;
 @Builder
 @EqualsAndHashCode(of = "id")
 public class Profile {
-
     private String id;
-
-    private String username;
-
     private String bio;
-
     private FileEntity photo;
-
     private String favoriteSong;
-
     private Date createdAt;
-
 }
