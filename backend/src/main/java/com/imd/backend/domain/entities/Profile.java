@@ -1,5 +1,6 @@
 package com.imd.backend.domain.entities;
 
+import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
 import lombok.*;
 
 import java.util.Date;
@@ -14,9 +15,11 @@ public class Profile {
 
     private String id;
 
+    private String username;
+
     private String bio;
 
-    private String avatarUrl;
+    private FileEntity photo;
 
     private String favoriteSong;
 
