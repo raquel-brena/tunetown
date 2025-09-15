@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartException;
 
 import java.time.format.DateTimeParseException;
 
@@ -25,10 +26,12 @@ public class RestExceptionHandler {
             BadRequestException.class,
             ForbbidenException.class,
             InvalidFormatException.class,
+            IllegalArgumentException.class,
             DateTimeParseException.class,
             ConstraintViolationException.class,
             InvalidCsrfTokenException.class,
-            MethodArgumentNotValidException.class
+            MethodArgumentNotValidException.class,
+            MultipartException.class
     })
     public ResponseEntity<RestResponseMessage> handleCustomExceptions(Exception ex, WebRequest request) {
         if (ex instanceof NotFoundException) {
@@ -47,6 +50,12 @@ public class RestExceptionHandler {
                         .append("; ");
             });
             return buildError(HttpStatus.BAD_REQUEST, sb.toString(), request);
+        } else if (ex instanceof MultipartException) {
+            return buildError(HttpStatus.BAD_REQUEST,
+                    "A requisição deve ser do tipo multipart/form-data e conter um arquivo.",
+                    request);
+        } else if (ex instanceof IllegalArgumentException) {
+            return buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
         } else {
             return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error: " + ex.getMessage(), request);
         }

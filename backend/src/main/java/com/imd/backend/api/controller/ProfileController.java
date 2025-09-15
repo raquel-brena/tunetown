@@ -66,4 +66,12 @@ public class ProfileController {
         Profile updated = profileService.updatePhoto(id, file);
         return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(updated), HttpStatus.OK.value()));
     }
+
+    @DeleteMapping("/{id}/photo")
+    public ResponseEntity<RestResponseMessage> deletePhoto(
+            @PathVariable String id
+    ) throws IOException {
+        Profile updated = profileService.deletePhoto(id);
+        return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(updated), HttpStatus.OK.value()));
+    }
 }

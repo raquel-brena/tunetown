@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -45,6 +46,14 @@ public class S3Service {
         fileEntity.setSize(file.getSize());
 
         return fileEntity;
+    }
+
+    public void deleteFile(String fileKey) {
+        String key = fileKey.substring(fileKey.lastIndexOf("/") + 1);
+        s3.deleteObject(DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build());
     }
 
     public String generatePresignedUrl(String key, Duration duration) {
