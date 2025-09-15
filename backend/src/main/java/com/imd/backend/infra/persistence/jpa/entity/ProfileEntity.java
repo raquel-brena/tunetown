@@ -22,10 +22,14 @@ public class ProfileEntity {
 
     private String bio;
 
-    private String avatarUrl;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "photo_id")
+    private FileEntity photo;
 
+    @Column(name = "favorite_song")
     private String favoriteSong;
 
+    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
