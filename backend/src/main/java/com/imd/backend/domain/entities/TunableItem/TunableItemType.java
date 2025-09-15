@@ -17,7 +17,7 @@ public enum TunableItemType {
     return this.typeName;
   }
 
-  public TunableItemType fromString(String typeName) {
+  public static TunableItemType fromString(String typeName) {
     switch (typeName.toLowerCase()) {
       case "music":
         return MUSIC;    

@@ -40,7 +40,7 @@ public class TunableItemSpotifyMapper {
           trackDto.name(),
           trackDto.artists().getFirst().name(),
           new URI(trackDto.album().images().getFirst().url()),
-          TunableItemType.ALBUM);
+          TunableItemType.MUSIC);
     } catch (Exception e) {
       throw new TunableItemConvertionException(
         "Erro ao converter música do spotify em item tunetável: " + e.getLocalizedMessage(),
@@ -52,16 +52,18 @@ public class TunableItemSpotifyMapper {
   public TunableItem fromSpotifyShow(ShowResponseDTO showDto) {
     try {
       return new TunableItem(
-          showDto.id(),
-          PLATAFORM_ID,
-          showDto.name(),
-          showDto.publisher(),
-          new URI(showDto.images().getFirst().url()),
-          TunableItemType.ALBUM);
+        showDto.id(),
+        PLATAFORM_ID,
+        showDto.name(),
+        showDto.publisher(),
+        new URI(showDto.images().getFirst().url()),
+        TunableItemType.PODCAST
+      );
     } catch (Exception e) {
       throw new TunableItemConvertionException(
-          "Erro ao converter podcast do spotify em item tunetável: " + e.getLocalizedMessage(),
-          e);
+        "Erro ao converter podcast do spotify em item tunetável: " + e.getLocalizedMessage(),
+        e
+      );
     }
   }  
 }

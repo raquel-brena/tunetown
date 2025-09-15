@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("/tuneet")
+@RequestMapping("tuneet")
 @RequiredArgsConstructor
 public class TuneetController {
   private final TuneetService tuneetService;
 
   @GetMapping("/search-tunable-item")
   public ResponseEntity<List<TunableItem>> searchTunableItem(
-    @RequestParam(defaultValue = "") String query,
+    @RequestParam(required = true) String query,
     @RequestParam(defaultValue = "music") TunableItemType itemType
   ) {
     final List<TunableItem> items = tuneetService.searchTunableItems(query, itemType);

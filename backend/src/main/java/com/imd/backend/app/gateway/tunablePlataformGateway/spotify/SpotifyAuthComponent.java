@@ -5,7 +5,6 @@ import java.time.Instant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.auth.SpotifyTokenRequest;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.auth.SpotifyTokenResponse;
 
 @Component
@@ -43,14 +42,12 @@ public class SpotifyAuthComponent {
     return cachedToken;
   }  
 
-  private void fetchNewAccessToken() {
-    final SpotifyTokenRequest tokenRequest = new SpotifyTokenRequest(
+  private void fetchNewAccessToken() {    
+    final SpotifyTokenResponse tokenResponse = this.webClient.getToken(
       AUTH_GRANT_TYPE,
       clientId,
       clientSecret
     );
-    
-    final SpotifyTokenResponse tokenResponse = this.webClient.getToken(tokenRequest);
 
     if(tokenResponse == null)
       throw new RuntimeException("Não foi possível obter o token de acesso do spotify");
@@ -59,6 +56,4 @@ public class SpotifyAuthComponent {
     // Define a expiração com 60s de margem de segurança para evitar problemas
     this.tokenExpirationTime = Instant.now().plusSeconds(tokenResponse.expiresIn() - 60);    
   }
-
-
 }
