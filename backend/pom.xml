@@ -82,6 +82,13 @@
 			<artifactId>feign-hc5</artifactId>
 			<version>13.5</version>
 		</dependency>		
+
+		<!-- DTO VALIDATION -->
+		<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-validation</artifactId>
+				<version>3.5.5</version>
+		</dependency>		
 	</dependencies>
 
 	<build>
