@@ -1,6 +1,8 @@
 spring:
   application:
     name: TuneTown - Backend
+  main:
+    allow-bean-definition-overriding: true
 
 # Configurações da API do Spotify
 spotify:
