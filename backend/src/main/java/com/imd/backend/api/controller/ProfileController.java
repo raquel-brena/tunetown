@@ -6,6 +6,7 @@ import com.imd.backend.api.dto.profile.ProfileResponseDTO;
 import com.imd.backend.api.dto.profile.ProfileUpdateDTO;
 import com.imd.backend.app.service.ProfileService;
 import com.imd.backend.domain.entities.Profile;
+import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.infra.persistence.jpa.mapper.ProfileMapper;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,9 @@ public class ProfileController {
     public ResponseEntity<Page<ProfileResponseDTO>> findAll(Pageable pageable) {
         Page<Profile> profiles = profileService.findAll(pageable);
         Page<ProfileResponseDTO> dtoPage = profiles.map(ProfileMapper::toDTO);
+        if (!dtoPage.hasContent()) {
+            throw new NotFoundException("Nenhum profile encontrado.");
+        }
         return ResponseEntity.ok(dtoPage);
     }
 
@@ -42,8 +46,9 @@ public class ProfileController {
 
     @PostMapping
     public ResponseEntity<RestResponseMessage> create(@Valid @RequestBody ProfileCreateDTO dto) {
-        Profile profile = profileService.create(ProfileMapper.toDomain(dto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(new RestResponseMessage(ProfileMapper.toDTO(profile), HttpStatus.CREATED.value()));
+        Profile profile = profileService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new RestResponseMessage(ProfileMapper.toDTO(profile), HttpStatus.CREATED.value()));
     }
 
     @PutMapping

@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface CrudController<ID, Entity> {
-
     ResponseEntity<Page<Entity>> findAll(Pageable pageable);
 
     ResponseEntity<Entity> findById(ID id);
