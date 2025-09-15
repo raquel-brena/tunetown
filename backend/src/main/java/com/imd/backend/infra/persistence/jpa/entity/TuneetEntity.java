@@ -25,6 +25,7 @@ public class TuneetEntity {
 
   private String tunableItemId;
   private String tunableItemPlataform;
+  private String tunableItemTitle;
   private String tunableItemArtist;
   private String tunableItemType;
   private String tunableItemArtworkUrl;

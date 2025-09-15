@@ -1,8 +1,13 @@
 package com.imd.backend.infra.persistence.jpa.repository.tuneet;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.stereotype.Repository;
 
 import com.imd.backend.domain.entities.Tuneet;
+import com.imd.backend.domain.entities.TuneetResume;
+import com.imd.backend.domain.exception.RepositoryException;
 import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
@@ -20,6 +25,28 @@ public class TuneetJpaRepository implements TuneetRepository {
     final TuneetEntity entityToSave = tuneetJpaMapper.fromTuneetDomain(tuneet);
 
     this.tuneetJPA.save(entityToSave);
+  }
+
+  @Override
+  public void deleteById(UUID id) {
+    tuneetJPA.deleteById(id.toString());
+  }
+
+  @Override
+  public Optional<TuneetResume> findById(UUID id){
+    final Optional<TuneetEntity> opEntity = this.tuneetJPA.findById(id.toString());
+
+    try {
+      if(opEntity.isPresent()) {
+        final TuneetEntity entity = opEntity.get();
+
+        return Optional.of(tuneetJpaMapper.resumeFromTuneetJpaEntity(entity));
+      }  
+
+      return Optional.empty();
+    } catch (Exception e) {
+      throw new RepositoryException("Erro ao retornar dados da camada de persistência: " + e.getLocalizedMessage());
+    }
   }
   
 }
