@@ -23,4 +23,26 @@ public record TuneUserDetails(User user) implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // Você pode adicionar uma lógica real aqui baseada em um campo do seu User
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // Este é especialmente importante. Um usuário desabilitado sempre receberá 403.
+        return true;
+    }    
 }

@@ -3,7 +3,6 @@ package com.imd.backend.app.service;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.infra.persistence.jpa.entity.User;
 import com.imd.backend.infra.security.TuneUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +19,6 @@ public class AuthService {
     private final TuneUserDetailsService tuneUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public AuthService(UserService userService, @Lazy AuthenticationManager authenticationManager, JwtService jwtService, TuneUserDetailsService tuneUserDetailsService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;

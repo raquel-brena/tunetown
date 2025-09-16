@@ -1,22 +1,57 @@
 package com.imd.backend.domain.entities;
 
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import lombok.Getter;
-
+import java.net.URI;
 import java.util.UUID;
 
-@Getter
+import com.imd.backend.domain.entities.TunableItem.TunableItem;
+import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+
+/**
+ * Representa um "post" (tuneet) de um usuário
+ */
 public class Tuneet {
+  private final UUID id;
+  private String textContent;
+  // private User author;
+  private TunableItem tunableItem;
 
-    private final UUID id;
+  public Tuneet(String textContent, TunableItem tunableItem) {
+    this.id = UUID.randomUUID();
 
-    private String textContent;
+    this.textContent = textContent;
+    this.tunableItem = tunableItem;
+  }
 
-    private TunableItem tunabbleItem;
+  // Getters
+  public UUID getId() {
+    return this.id;
+  }
 
-    public Tuneet(String textContent, TunableItem tunabbleItem) {
-        this.id = UUID.randomUUID();
+  public String getTextContent() {
+    return this.textContent;
+  }
 
-        this.tunabbleItem = tunabbleItem;
-    }
+  public String getItemId() {
+    return this.tunableItem.getItemId();
+  }
+
+  public String getItemPlataform() {
+    return this.tunableItem.getPlataformId();
+  }
+
+  public String getItemTitle() {
+    return this.tunableItem.getTitle();
+  }
+
+  public String getItemArtist() {
+    return this.tunableItem.getArtist();
+  }
+
+  public URI getItemArtworkUrl() {
+    return this.tunableItem.getArtworkUrl();
+  }
+
+  public TunableItemType getItemType() {
+    return this.tunableItem.getItemType();
+  }
 }

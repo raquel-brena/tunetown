@@ -1,6 +1,5 @@
 package com.imd.backend.app.service;
 
-import com.imd.backend.domain.exception.BadRequestException;
 import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
 import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
 import com.imd.backend.infra.persistence.jpa.repository.FileRepository;

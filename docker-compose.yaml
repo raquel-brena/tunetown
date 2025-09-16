@@ -1,6 +1,6 @@
 services:
   backend:
-    container_name: backend
+    container_name: tunetown-backend
     build: backend
     ports:
       - '8080:8080'
