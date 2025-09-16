@@ -91,6 +91,6 @@ public class ProfileService {
 
     public ProfileEntity findEntityById(String id) {
         return profileRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("ProfileEntity not found"));
+                .orElseThrow(() -> new NotFoundException("Profile de id " + id + " não encontrado."));
     }
 }

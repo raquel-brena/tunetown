@@ -52,6 +52,7 @@ public class ProfileMapper {
                 .id(domain.getId())
                 .bio(domain.getBio())
                 .idPhoto(domain.getPhoto() != null ? domain.getPhoto().getId() : null)
+                .urlPhoto(domain.getPhoto() != null ? domain.getPhoto().getUrl() : null)
                 .favoriteSong(domain.getFavoriteSong())
                 .createAt(domain.getCreatedAt())
                 .build();

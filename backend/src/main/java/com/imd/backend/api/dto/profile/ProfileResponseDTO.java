@@ -5,6 +5,6 @@ import lombok.Builder;
 import java.util.Date;
 
 @Builder
-public record ProfileResponseDTO(String id, String bio, Long idPhoto, String favoriteSong,
+public record ProfileResponseDTO(String id, String bio, Long idPhoto, String urlPhoto, String favoriteSong,
                                  Date createAt) {
 }

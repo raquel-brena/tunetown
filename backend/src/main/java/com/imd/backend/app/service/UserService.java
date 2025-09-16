@@ -30,7 +30,7 @@ public class UserService implements CrudService<String, User> {
 
     @Override
     public Page<User> findAll(Pageable pageable) {
-        return null;
+        return userRepository.findAll(pageable);
     }
 
     @Override
