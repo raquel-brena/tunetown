@@ -8,7 +8,6 @@ import com.imd.backend.app.service.AuthService;
 import com.imd.backend.domain.exception.BadRequestException;
 import com.imd.backend.domain.exception.BusinessException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +22,6 @@ public class AuthController {
 
     AuthService authService;
 
-    @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }

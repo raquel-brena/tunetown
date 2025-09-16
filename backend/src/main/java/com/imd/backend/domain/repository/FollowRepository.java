@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface FollowRepository extends JpaRepository<Follow, String> {
+public interface FollowRepository extends JpaRepository<Follow, Long> {
     boolean existsByFollowerAndFollowed(ProfileEntity follower, ProfileEntity followed);
 
     void deleteByFollowerAndFollowed(ProfileEntity follower, ProfileEntity followed);

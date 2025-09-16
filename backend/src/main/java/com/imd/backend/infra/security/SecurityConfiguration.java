@@ -1,6 +1,5 @@
 package com.imd.backend.infra.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +19,6 @@ public class SecurityConfiguration {
 
     private final JwtFilter jwtFilter;
 
-    @Autowired
     public SecurityConfiguration(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }

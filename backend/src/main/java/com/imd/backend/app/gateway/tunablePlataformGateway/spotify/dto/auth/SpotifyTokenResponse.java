@@ -1,4 +1,4 @@
-package com.imd.backend.app.gateway.tunablePlataformGateway.Spotify.dto;
+package com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
