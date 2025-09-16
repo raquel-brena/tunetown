@@ -14,3 +14,12 @@ spotify:
     url: http://googleusercontent.com/spotify.com/4
   api:
     url: https://api.spotify.com/v1
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY:aws_access_key}
+      secret-key: ${AWS_SECRET_KEY:aws_secret_key}
+    region: ${AWS_REGION:us-east-2}
+    s3:
+      bucket: ${AWS_BUCKET:aws_bucket}
