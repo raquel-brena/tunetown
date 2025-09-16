@@ -1,5 +1,6 @@
 package com.imd.backend.app.service;
 
+import com.imd.backend.api.dto.profile.ProfileCreateDTO;
 import com.imd.backend.domain.entities.Profile;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
@@ -12,10 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
 
 @Service
-public class ProfileService implements CrudService<String, Profile> {
+public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final FileService fileService;
@@ -39,8 +39,7 @@ public class ProfileService implements CrudService<String, Profile> {
                 });
     }
 
-    public Profile create(Profile profile) {
-        profile.setCreatedAt(new Date());
+    public Profile create(ProfileCreateDTO profile) {
         ProfileEntity saved = profileRepository.save(ProfileMapper.toEntity(profile));
         return ProfileMapper.toDomain(saved);
     }
@@ -91,7 +90,7 @@ public class ProfileService implements CrudService<String, Profile> {
     }
 
     public ProfileEntity findEntityById(String id) {
-        return  profileRepository.findById(id)
+        return profileRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("ProfileEntity not found"));
     }
 }
