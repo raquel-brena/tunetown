@@ -14,6 +14,7 @@ import java.util.Date;
 public class Profile {
     private String id;
     private String bio;
+    private Long userId;
     private FileEntity photo;
     private String favoriteSong;
     private Date createdAt;

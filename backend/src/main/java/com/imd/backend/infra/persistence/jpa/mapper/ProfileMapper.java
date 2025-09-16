@@ -6,6 +6,9 @@ import com.imd.backend.api.dto.profile.ProfileUpdateDTO;
 import com.imd.backend.domain.entities.Profile;
 import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
 import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
+import com.imd.backend.infra.persistence.jpa.entity.User;
+
+import java.util.Date;
 
 
 public class ProfileMapper {
@@ -13,6 +16,7 @@ public class ProfileMapper {
     public static Profile toDomain(ProfileEntity entity) {
         return Profile.builder()
                 .id(entity.getId())
+                .userId(entity.getUser().getId())
                 .bio(entity.getBio())
                 .photo(FileMapper.toDomain(entity.getPhoto()))
                 .favoriteSong(entity.getFavoriteSong())
@@ -20,11 +24,19 @@ public class ProfileMapper {
                 .build();
     }
 
-    public static Profile toDomain(ProfileCreateDTO entity) {
-        return Profile.builder()
-                .bio(entity.bio())
-                .favoriteSong(entity.favoriteSong())
-                .build();
+    public static ProfileEntity toEntity(ProfileCreateDTO dto) {
+        ProfileEntity entity = new ProfileEntity();
+        entity.setBio(dto.bio());
+        entity.setFavoriteSong(dto.favoriteSong());
+        entity.setCreatedAt(new Date());
+
+        if (dto.userId() != null) {
+            User user = new User();
+            user.setId(dto.userId());
+            entity.setUser(user);
+        }
+
+        return entity;
     }
 
     public static Profile toDomain(ProfileUpdateDTO entity) {
@@ -33,17 +45,6 @@ public class ProfileMapper {
                 .bio(entity.bio())
                 .favoriteSong(entity.favoriteSong())
                 .build();
-    }
-
-
-    public static ProfileEntity toEntity(Profile domain) {
-        return new ProfileEntity(
-                domain.getId(),
-                domain.getBio(),
-                domain.getPhoto(),
-                domain.getFavoriteSong(),
-                domain.getCreatedAt()
-        );
     }
 
     public static ProfileResponseDTO toDTO(Profile domain) {
