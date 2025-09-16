@@ -1,16 +1,38 @@
 spring:
   application:
     name: TuneTown - Backend
-  main:
-    allow-bean-definition-overriding: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tunetown_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
 
 # Configurações da API do Spotify
 spotify:
-  client-id: ${SPOTIFY_CLIENT_ID:client_id} 
+  client-id: ${SPOTIFY_CLIENT_ID:client_id}
   client-secret: ${SPOTIFY_CLIENT_SECRET:client_secret}
-  
+
   # URLs da API
   auth:
     url: http://googleusercontent.com/spotify.com/4
   api:
     url: https://api.spotify.com/v1
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA6ODU6MPQT3T4VETR
+      secret-key: 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
+    region: us-east-2
+    s3:
+      bucket: tunetown-s3
+
