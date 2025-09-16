@@ -1,36 +1,30 @@
 package com.imd.backend.api.controller;
 
-import com.imd.backend.api.dto.ProfileResponseDTO;
+import com.imd.backend.api.dto.RestResponseMessage;
+import com.imd.backend.api.dto.profile.ProfileCreateDTO;
+import com.imd.backend.api.dto.profile.ProfileResponseDTO;
+import com.imd.backend.api.dto.profile.ProfileUpdateDTO;
 import com.imd.backend.app.service.ProfileService;
 import com.imd.backend.domain.entities.Profile;
 import com.imd.backend.infra.persistence.jpa.mapper.ProfileMapper;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
-@RequestMapping("api/profile")
+@RequestMapping("/api/profile")
 public class ProfileController {
 
     private final ProfileService profileService;
 
     public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ProfileResponseDTO> getById(@PathVariable String id) {
-        Profile profile = profileService.findById(id);
-        return ResponseEntity.ok(ProfileMapper.toDTO(profile));
-    }
-
-    @PutMapping
-    public ResponseEntity<ProfileResponseDTO> updateProfile(@Validated @RequestBody ProfileResponseDTO dto) {
-        Profile updated = profileService.update(ProfileMapper.toDomain(dto));
-        return ResponseEntity.ok(ProfileMapper.toDTO(updated));
     }
 
     @GetMapping
@@ -40,9 +34,44 @@ public class ProfileController {
         return ResponseEntity.ok(dtoPage);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RestResponseMessage> findById(@PathVariable String id) {
+        Profile profile = profileService.findById(id);
+        return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(profile), HttpStatus.OK.value()));
+    }
+
     @PostMapping
-    public ResponseEntity<ProfileResponseDTO> create(@Validated @RequestBody ProfileResponseDTO dto) {
-        Profile created = profileService.create(ProfileMapper.toDomain(dto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(ProfileMapper.toDTO(created));
+    public ResponseEntity<RestResponseMessage> create(@Valid @RequestBody ProfileCreateDTO dto) {
+        Profile profile = profileService.create(ProfileMapper.toDomain(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new RestResponseMessage(ProfileMapper.toDTO(profile), HttpStatus.CREATED.value()));
+    }
+
+    @PutMapping
+    public ResponseEntity<RestResponseMessage> update(@RequestBody ProfileUpdateDTO dto) {
+        Profile profile = profileService.update(ProfileMapper.toDomain(dto));
+        return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(profile), HttpStatus.OK.value(), "Profile updated"));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        profileService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/photo")
+    public ResponseEntity<RestResponseMessage> updatePhoto(
+            @PathVariable String id,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        Profile updated = profileService.updatePhoto(id, file);
+        return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(updated), HttpStatus.OK.value()));
+    }
+
+    @DeleteMapping("/{id}/photo")
+    public ResponseEntity<RestResponseMessage> deletePhoto(
+            @PathVariable String id
+    ) throws IOException {
+        Profile updated = profileService.deletePhoto(id);
+        return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(updated), HttpStatus.OK.value()));
     }
 }
