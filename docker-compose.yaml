@@ -1,6 +1,6 @@
 services:
   backend:
-    container_name: ${SPRING_APPLICATION_NAME}
+    container_name: tunetown-backend
     build: backend
     ports:
       - '8080:8080'
@@ -10,6 +10,10 @@ services:
       - spring-postgres
     depends_on:
       - postgres
+    volumes:
+      - ./backend/src:/src
+      - ~/.m2:/root/.m2
+    command: ./mvnw spring-boot:run
 
   postgres:
     image: 'postgres:latest'
