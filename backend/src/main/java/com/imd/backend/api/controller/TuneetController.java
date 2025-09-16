@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("tuneet")
+@RequestMapping("api/tuneet")
 @RequiredArgsConstructor
 public class TuneetController {
   private final TuneetService tuneetService;
