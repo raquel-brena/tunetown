@@ -1,14 +1,14 @@
 package com.imd.backend.app.service;
 
 import com.imd.backend.domain.exception.BusinessException;
-import com.imd.backend.infra.persistence.jpa.entity.User;
+import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements CrudService<String, User> {
+public class UserService implements CrudService<String, UserEntity> {
 
     private final UserRepository userRepository;
 
@@ -16,7 +16,7 @@ public class UserService implements CrudService<String, User> {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) throws BusinessException {
+    public UserEntity createUser(UserEntity user) throws BusinessException {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new BusinessException("Username já registrado");
         }
@@ -29,22 +29,22 @@ public class UserService implements CrudService<String, User> {
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
+    public Page<UserEntity> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
     @Override
-    public User findById(String s) {
+    public UserEntity findById(String s) {
         return null;
     }
 
     @Override
-    public User create(User user) {
+    public UserEntity create(UserEntity user) {
         return null;
     }
 
     @Override
-    public User update(User user) {
+    public UserEntity update(UserEntity user) {
         return null;
     }
 

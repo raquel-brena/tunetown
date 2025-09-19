@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.imd.backend.api.dto.RestResponseMessage;
 import com.imd.backend.domain.exception.BadRequestException;
 import com.imd.backend.domain.exception.ForbiddenException;
+import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 import com.imd.backend.domain.exception.NotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,11 @@ public class RestExceptionHandler {
         String message = "Erro de validação: " + errors;
         return new RestResponseMessage(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.value(),
                 message);
+    }
+
+    @ExceptionHandler(InvalidEntityAttributesException.class)
+    public RestResponseMessage handleInvalidEntityAttrs(InvalidEntityAttributesException ex) {
+        return new RestResponseMessage(ex.getErrors(), HttpStatus.BAD_REQUEST.value(), ex.getMessage());        
     }
 
     /**

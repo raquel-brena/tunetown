@@ -1,7 +1,7 @@
 package com.imd.backend.app.service;
 
 import com.imd.backend.domain.exception.BusinessException;
-import com.imd.backend.infra.persistence.jpa.entity.User;
+import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import com.imd.backend.infra.security.TuneUserDetailsService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +33,8 @@ public class AuthService {
         return jwtService.generateAccessToken(tuneUserDetails);
     }
 
-    public User register(String username, String email, String password) throws BusinessException {
+    public UserEntity register(String username, String email, String password) throws BusinessException {
         var encryptedPassword = passwordEncoder.encode(password);
-        return userService.createUser(new User(email, username, encryptedPassword));
+        return userService.createUser(new UserEntity(email, username, encryptedPassword));
     }
 }

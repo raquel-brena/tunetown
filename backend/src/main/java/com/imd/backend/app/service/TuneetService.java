@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
 import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TuneetResume;
 import com.imd.backend.domain.entities.TunableItem.TunableItem;
 import com.imd.backend.domain.entities.TunableItem.TunableItemType;
 import com.imd.backend.domain.exception.BusinessException;
@@ -42,15 +41,15 @@ public class TuneetService {
     String textContent    
   ) {
     final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
-    final Tuneet tuneetToSave = new Tuneet(textContent, tunableItem);
+    final Tuneet tuneetToSave = Tuneet.createNew(textContent, tunableItem);
     
     this.tuneetRepository.save(tuneetToSave);
     return tuneetToSave;
   }
 
   @Transactional(rollbackOn = Exception.class)
-  public TuneetResume deleteById(UUID tuneetId) {
-    final Optional<TuneetResume> findedTuneet = this.tuneetRepository.findById(tuneetId);
+  public Tuneet deleteById(UUID tuneetId) {
+    final Optional<Tuneet> findedTuneet = this.tuneetRepository.findById(tuneetId);
 
     if(findedTuneet.isEmpty())
       throw new NotFoundException("Não foi encontrado nenhum tuneet com esse ID");
@@ -60,13 +59,13 @@ public class TuneetService {
   }
 
   @Transactional(rollbackOn = Exception.class)
-  public TuneetResume updateTuneet(
+  public Tuneet updateTuneet(
     UUID tuneetId,
     String textContent,
     String tunableItemId,
     TunableItemType tunableItemType
   ) {
-    final TuneetResume tuneet = this.tuneetRepository.findById(tuneetId)
+    final Tuneet tuneet = this.tuneetRepository.findById(tuneetId)
       .orElseThrow(() -> new NotFoundException("Não foi encontrado nenhum tuneet com o ID fornecido"));
     
     final boolean hasTextContent = textContent != null && !textContent.isBlank();

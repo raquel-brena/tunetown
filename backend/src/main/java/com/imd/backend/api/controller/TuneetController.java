@@ -7,7 +7,6 @@ import com.imd.backend.api.dto.CreateTuneetDTO;
 import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TuneetResume;
 import com.imd.backend.domain.entities.TunableItem.TunableItem;
 import com.imd.backend.domain.entities.TunableItem.TunableItemType;
 
@@ -59,20 +58,20 @@ public class TuneetController {
   }
 
   @DeleteMapping(value = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<TuneetResume> deleteTuneet(
+  public ResponseEntity<Tuneet> deleteTuneet(
     @PathVariable(required = true) String tuneetId
   ) {
-    final TuneetResume deletedTuneet = this.tuneetService.deleteById(UUID.fromString(tuneetId));
+    final Tuneet deletedTuneet = this.tuneetService.deleteById(UUID.fromString(tuneetId));
 
     return ResponseEntity.ok(deletedTuneet);
   }
 
   @PatchMapping(value = "/{tuneetId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<TuneetResume> updateTuneet(
+  public ResponseEntity<Tuneet> updateTuneet(
     @PathVariable(required = true) String tuneetId,
     @Valid @RequestBody UpdateTuneetDTO updateTuneetDTO
   ) {
-    final TuneetResume updatedTuneet = this.tuneetService.updateTuneet(
+    final Tuneet updatedTuneet = this.tuneetService.updateTuneet(
       UUID.fromString(tuneetId), 
       updateTuneetDTO.textContent(), 
       updateTuneetDTO.itemId(),

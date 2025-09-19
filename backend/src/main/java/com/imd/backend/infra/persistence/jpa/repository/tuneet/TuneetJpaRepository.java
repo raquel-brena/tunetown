@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TuneetResume;
 import com.imd.backend.domain.exception.RepositoryException;
 import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
@@ -28,10 +27,8 @@ public class TuneetJpaRepository implements TuneetRepository {
   }
 
   @Override
-  public void update(TuneetResume tuneetResume) {
-    final TuneetEntity entityToUpdate = tuneetJpaMapper.fromTuneetResumeDomain(tuneetResume);
-
-    this.tuneetJPA.save(entityToUpdate);
+  public void update(Tuneet tuneet) {
+    this.save(tuneet);
   }  
 
   @Override
@@ -40,14 +37,14 @@ public class TuneetJpaRepository implements TuneetRepository {
   }
 
   @Override
-  public Optional<TuneetResume> findById(UUID id){
+  public Optional<Tuneet> findById(UUID id){
     final Optional<TuneetEntity> opEntity = this.tuneetJPA.findById(id.toString());
 
     try {
       if(opEntity.isPresent()) {
         final TuneetEntity entity = opEntity.get();
 
-        return Optional.of(tuneetJpaMapper.resumeFromTuneetJpaEntity(entity));
+        return Optional.of(tuneetJpaMapper.tuneetFromJpaEntity(entity));
       }  
 
       return Optional.empty();
