@@ -15,7 +15,7 @@ import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 public class Tuneet {
   private final UUID id;
   private String textContent;
-  // private User author;
+  //private UUID author;
   private TunableItem tunableItem;
 
   private Tuneet(UUID id, String textContent, TunableItem tunableItem) {
@@ -87,7 +87,7 @@ public class Tuneet {
   // Private methods
   private void validateAttributes() {
     final Map<String, String> errors = new HashMap<>();
-
+    
     if (id == null)
       errors.put("id", "O ID não pode ser nulo");
 

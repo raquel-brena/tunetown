@@ -1,8 +1,11 @@
 package com.imd.backend.app.service;
 
 import com.imd.backend.domain.exception.BusinessException;
+import com.imd.backend.domain.repository.UserRepository;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
-import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
+import com.imd.backend.infra.persistence.jpa.repository.user.UserJPA;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,7 +15,9 @@ public class UserService implements CrudService<String, UserEntity> {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(
+        @Qualifier("UserJpaRepository") UserRepository userRepository
+    ) {
         this.userRepository = userRepository;
     }
 

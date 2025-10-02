@@ -1,5 +1,6 @@
 package com.imd.backend.app.service;
 
+import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import com.imd.backend.infra.security.TuneUserDetailsService;
@@ -34,7 +35,8 @@ public class AuthService {
     }
 
     public UserEntity register(String username, String email, String password) throws BusinessException {
-        var encryptedPassword = passwordEncoder.encode(password);
-        return userService.createUser(new UserEntity(email, username, encryptedPassword));
+        final var encryptedPassword = passwordEncoder.encode(password);
+        final User userToCreate = User.createNew(email, username, encryptedPassword, null);
+        return userService.createUser(userToCreate);
     }
 }

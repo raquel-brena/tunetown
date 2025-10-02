@@ -12,8 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     @Column(unique = true)
     private String email;
@@ -26,9 +25,17 @@ public class UserEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ProfileEntity profile;
 
-    public UserEntity(String email, String username, String password) {
+    public UserEntity(String id, String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.profile = null;
     }
+
+    public UserEntity(String id, String email, String username, String password, ProfileEntity profile) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.profile = profile;
+    }    
 }
