@@ -62,8 +62,6 @@ public class User {
       errors.put("username", "O username não pode ser vazio");
     if(password == null || password.isBlank())
       errors.put("password", "O password deve possuir no mínimo 1 caractere");
-    if(profileId == null || profileId.isBlank())
-      errors.put("profileId", "O ID do profile não pode ser vazio");
     
     if(!errors.isEmpty())
       throw new InvalidEntityAttributesException("Atributos inválidos", errors);    

@@ -26,6 +26,7 @@ public class UserEntity {
     private ProfileEntity profile;
 
     public UserEntity(String id, String email, String username, String password) {
+        this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -33,6 +34,7 @@ public class UserEntity {
     }
 
     public UserEntity(String id, String email, String username, String password, ProfileEntity profile) {
+        this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;

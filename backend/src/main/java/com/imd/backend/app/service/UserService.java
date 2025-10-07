@@ -1,17 +1,17 @@
 package com.imd.backend.app.service;
 
+import com.imd.backend.domain.entities.PageResult;
+import com.imd.backend.domain.entities.Pagination;
+import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.repository.UserRepository;
-import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
-import com.imd.backend.infra.persistence.jpa.repository.user.UserJPA;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService implements CrudService<String, UserEntity> {
+public class UserService {
 
     private final UserRepository userRepository;
 
@@ -21,7 +21,8 @@ public class UserService implements CrudService<String, UserEntity> {
         this.userRepository = userRepository;
     }
 
-    public UserEntity createUser(UserEntity user) throws BusinessException {
+    @Transactional(rollbackFor = Exception.class)
+    public User createUser(User user) throws BusinessException {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new BusinessException("Username já registrado");
         }
@@ -30,31 +31,11 @@ public class UserService implements CrudService<String, UserEntity> {
             throw new BusinessException("Email já registrado");
         }
 
-        return userRepository.save(user);
+        userRepository.create(user);
+        return user;
     }
 
-    @Override
-    public Page<UserEntity> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
-
-    @Override
-    public UserEntity findById(String s) {
-        return null;
-    }
-
-    @Override
-    public UserEntity create(UserEntity user) {
-        return null;
-    }
-
-    @Override
-    public UserEntity update(UserEntity user) {
-        return null;
-    }
-
-    @Override
-    public void delete(String s) {
-
+    public PageResult<User> findAllUsers(Pagination pageable) {
+        return userRepository.findAll(pageable); 
     }
 }

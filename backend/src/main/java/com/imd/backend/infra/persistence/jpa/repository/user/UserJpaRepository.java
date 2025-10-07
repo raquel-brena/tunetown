@@ -1,10 +1,14 @@
 package com.imd.backend.infra.persistence.jpa.repository.user;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import com.imd.backend.domain.entities.PageResult;
+import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.repository.UserRepository;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
@@ -25,12 +29,20 @@ public class UserJpaRepository implements UserRepository{
   }
 
   @Override
-  public List<User> findAll() {
-    final List<UserEntity> findedUsers = this.userJPA.findAll();
+  public PageResult<User> findAll(Pagination pageQuery) {
+    final Sort.Direction direction = Sort.Direction.fromString(pageQuery.orderDirection());
+    final Sort sort = Sort.by(direction, pageQuery.orderBy());
+    final Pageable pageable = PageRequest.of(pageQuery.page(), pageQuery.size(), sort); 
+
+    final var findedUsers = this.userJPA.findAll(pageable);
     
-    return findedUsers.stream()
-      .map(entity -> UserMapper.entityToDomain(entity))
-      .toList();
+    return new PageResult<User>(
+      findedUsers.getContent().stream().map(entity -> UserMapper.entityToDomain(entity)).toList(), 
+      findedUsers.getNumberOfElements(),
+      findedUsers.getSize(),
+      findedUsers.getTotalElements(),
+      findedUsers.getTotalPages()
+    );
   }
 
   @Override

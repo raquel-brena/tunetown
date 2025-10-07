@@ -28,17 +28,17 @@ public class UserMapper {
             entity.getEmail(),
             entity.getUsername(),
             entity.getPassword(),
-            entity.getProfile().getId()
+            entity.getProfile() != null ? entity.getProfile().getId() : null
         );
     }
 
-    public static UserDTO toDTO(UserEntity user) {
+    public static UserDTO toDTO(User user) {
         if (user == null) return null;
         return new UserDTO(
-            user.getId(),
+            user.getId().toString(),
             user.getEmail(),
             user.getUsername(),
-            user.getProfile() != null ? user.getProfile().getId() : null
+            user.getProfileId()
         );
     }
 }

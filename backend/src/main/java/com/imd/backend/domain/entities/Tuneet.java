@@ -15,7 +15,7 @@ import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 public class Tuneet {
   private final UUID id;
   private String textContent;
-  //private UUID author;
+  private UUID authorId;
   private TunableItem tunableItem;
 
   private Tuneet(UUID id, String textContent, TunableItem tunableItem) {
