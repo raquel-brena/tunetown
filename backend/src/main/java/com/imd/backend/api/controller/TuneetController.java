@@ -7,6 +7,7 @@ import com.imd.backend.api.dto.CreateTuneetDTO;
 import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.Tuneet;
+import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
@@ -24,6 +25,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -154,25 +156,39 @@ public class TuneetController {
 
   @DeleteMapping(value = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Tuneet> deleteTuneet(
-    @PathVariable(required = true) String tuneetId
-  ) {
-    final Tuneet deletedTuneet = this.tuneetService.deleteById(UUID.fromString(tuneetId));
+      @PathVariable UUID tuneetId,
+      @AuthenticationPrincipal TuneUserDetails loggedUser) {
+    final Optional<Tuneet> tuneetOp = tuneetService.findTuneetById(tuneetId);
 
-    return ResponseEntity.ok(deletedTuneet);
+    if(tuneetOp.isEmpty())
+      throw new NotFoundException("Não foi encontrado nenhum tuneet com esse ID");
+
+    if (!tuneetOp.get().getAuthorId().equals(loggedUser.user().getId())) 
+      throw new AccessDeniedException("Você não pode deletar um tuneet que não é seu");
+
+    tuneetService.deleteById(tuneetId);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @PatchMapping(value = "/{tuneetId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Tuneet> updateTuneet(
-    @PathVariable(required = true) String tuneetId,
-    @Valid @RequestBody UpdateTuneetDTO updateTuneetDTO
-  ) {
-    final Tuneet updatedTuneet = this.tuneetService.updateTuneet(
-      UUID.fromString(tuneetId), 
-      updateTuneetDTO.textContent(), 
-      updateTuneetDTO.itemId(),
-      updateTuneetDTO.itemType()
-    );
+      @PathVariable UUID tuneetId,
+      @Valid @RequestBody UpdateTuneetDTO updateTuneetDTO,
+      @AuthenticationPrincipal TuneUserDetails loggedUser) {
+    final Optional<Tuneet> tuneetOp = tuneetService.findTuneetById(tuneetId);
 
-    return ResponseEntity.ok(updatedTuneet);
+    if (tuneetOp.isEmpty())
+      throw new NotFoundException("Não foi encontrado nenhum tuneet com esse ID");
+
+    if (!tuneetOp.get().getAuthorId().equals(loggedUser.user().getId()))
+      throw new AccessDeniedException("Você não pode deletar um tuneet que não é seu");
+
+    final Tuneet updated = tuneetService.updateTuneet(
+        tuneetId,
+        updateTuneetDTO.textContent(),
+        updateTuneetDTO.itemId(),
+        updateTuneetDTO.itemType());
+
+    return ResponseEntity.ok(updated);
   }
 }
