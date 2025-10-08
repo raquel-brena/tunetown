@@ -21,13 +21,16 @@ import jakarta.transaction.Transactional;
 public class TuneetService {
   private final TunablePlataformGateway plataformGateway;
   private final TuneetRepository tuneetRepository;
+  private final UserService userService;
 
   public TuneetService(
     @Qualifier("SpotifyGateway") TunablePlataformGateway plataformGateway,
-    @Qualifier("TuneetJpaRepository") TuneetRepository tuneetRepository
+    @Qualifier("TuneetJpaRepository") TuneetRepository tuneetRepository,
+    UserService userService
   ) {
     this.plataformGateway = plataformGateway;
     this.tuneetRepository = tuneetRepository;
+    this.userService = userService;
   }
 
   public List<TunableItem> searchTunableItems(String query, TunableItemType itemType) {
@@ -37,11 +40,15 @@ public class TuneetService {
   @Transactional(rollbackOn = Exception.class)
   public Tuneet createTuneet(
     String tunableItemId,
+    UUID authorId,
     TunableItemType tunableItemType,
     String textContent    
   ) {
+    if(!this.userService.userExistsById(authorId)) // Se o usuário não existir
+      throw new BusinessException("Não existe nenhum usuário com esse ID");
+
     final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
-    final Tuneet tuneetToSave = Tuneet.createNew(textContent, tunableItem);
+    final Tuneet tuneetToSave = Tuneet.createNew(authorId, textContent, tunableItem);
     
     this.tuneetRepository.save(tuneetToSave);
     return tuneetToSave;

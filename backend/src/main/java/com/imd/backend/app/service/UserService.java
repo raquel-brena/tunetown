@@ -6,6 +6,8 @@ import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.repository.UserRepository;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,5 +39,9 @@ public class UserService {
 
     public PageResult<User> findAllUsers(Pagination pageable) {
         return userRepository.findAll(pageable); 
+    }
+
+    public boolean userExistsById(UUID id) {
+        return this.userRepository.existsById(id);
     }
 }

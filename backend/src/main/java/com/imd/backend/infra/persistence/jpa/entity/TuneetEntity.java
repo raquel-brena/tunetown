@@ -20,6 +20,9 @@ public class TuneetEntity {
   @Id
   private String id;
 
+  @Column(nullable = false)
+  private String authorId;
+
   @Column(columnDefinition = "TEXT")
   private String contentText;
 
