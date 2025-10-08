@@ -8,6 +8,7 @@ import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 import com.imd.backend.domain.exception.NotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -89,7 +90,7 @@ public class RestExceptionHandler {
      * Lida com exceções de acesso negado.
      * Retorna HTTP 403 (Forbidden).
      */
-    @ExceptionHandler({ ForbiddenException.class, InvalidCsrfTokenException.class })
+    @ExceptionHandler({ ForbiddenException.class, InvalidCsrfTokenException.class, AccessDeniedException.class })
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public RestResponseMessage handleForbiddenException(Exception ex) {
         return new RestResponseMessage(HttpStatus.FORBIDDEN.getReasonPhrase(), HttpStatus.FORBIDDEN.value(),

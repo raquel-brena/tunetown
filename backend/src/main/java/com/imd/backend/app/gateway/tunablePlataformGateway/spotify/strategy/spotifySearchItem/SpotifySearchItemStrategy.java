@@ -2,7 +2,7 @@ package com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spo
 
 import java.util.List;
 
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 
 public interface SpotifySearchItemStrategy {
   public List<TunableItem> execute(String query);

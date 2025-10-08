@@ -1,4 +1,4 @@
-package com.imd.backend.domain.entities;
+package com.imd.backend.domain.valueObjects;
 
 public record Pagination (
     int page,

@@ -1,16 +1,17 @@
 package com.imd.backend.infra.persistence.jpa.repository.user;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import com.imd.backend.domain.entities.PageResult;
-import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.repository.UserRepository;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Repository("UserJpaRepository")
 @RequiredArgsConstructor
 public class UserJpaRepository implements UserRepository{
+
   private final UserJPA userJPA;
 
   @Override
@@ -62,5 +64,10 @@ public class UserJpaRepository implements UserRepository{
   @Override
   public boolean existsByUsername(String username) {
     return userJPA.existsByUsername(username);
+  }
+
+  @Override
+  public boolean existsById(UUID id) {
+    return userJPA.existsById(id.toString());
   }
 }

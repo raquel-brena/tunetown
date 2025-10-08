@@ -1,10 +1,11 @@
 package com.imd.backend.domain.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
-import com.imd.backend.domain.entities.PageResult;
-import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.User;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
 
 public interface UserRepository {
   public void create(User user);
@@ -12,4 +13,5 @@ public interface UserRepository {
   public Optional<User> findByUsername(String username);
   public boolean existsByEmail(String email);
   public boolean existsByUsername(String username);
+  public boolean existsById(UUID id);
 }

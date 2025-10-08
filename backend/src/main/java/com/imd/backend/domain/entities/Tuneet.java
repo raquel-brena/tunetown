@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
 import com.imd.backend.domain.exception.InvalidEntityAttributesException;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 /**
  * Representa um "post" (tuneet) de um usuário
@@ -18,31 +18,37 @@ public class Tuneet {
   private UUID authorId;
   private TunableItem tunableItem;
 
-  private Tuneet(UUID id, String textContent, TunableItem tunableItem) {
+  private Tuneet(UUID id, UUID authorId, String textContent, TunableItem tunableItem) {
 
     this.id = id;
+    this.authorId = authorId;
     this.textContent = textContent;
     this.tunableItem = tunableItem;
     this.validateAttributes();
   }
 
-  public static Tuneet createNew(String textContent, TunableItem item) {
+  public static Tuneet createNew(UUID authorId, String textContent, TunableItem item) {
     final UUID id = UUID.randomUUID();
     
-    return new Tuneet(id, textContent, item);
+    return new Tuneet(id, authorId, textContent, item);
   }
 
   public static Tuneet rebuild(
     UUID id,
+    UUID authorId,
     String textContent,
     TunableItem item
   ) {
-    return new Tuneet(id, textContent, item);
+    return new Tuneet(id, authorId, textContent, item);
   }
 
   // Getters
   public UUID getId() {
     return this.id;
+  }
+
+  public UUID getAuthorId() {
+    return this.authorId;
   }
 
   public String getTextContent() {

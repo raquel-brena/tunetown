@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.AlbumResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.ShowResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.TrackResponseDTO;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
 import com.imd.backend.domain.exception.TunableItemConvertionException;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 @Component
 public class TunableItemSpotifyMapper {
