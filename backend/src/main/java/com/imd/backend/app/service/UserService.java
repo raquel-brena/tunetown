@@ -1,10 +1,10 @@
 package com.imd.backend.app.service;
 
-import com.imd.backend.domain.entities.PageResult;
-import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.repository.UserRepository;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
 
 import java.util.UUID;
 

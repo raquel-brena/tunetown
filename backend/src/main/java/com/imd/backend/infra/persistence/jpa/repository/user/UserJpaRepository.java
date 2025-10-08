@@ -7,10 +7,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-import com.imd.backend.domain.entities.PageResult;
-import com.imd.backend.domain.entities.Pagination;
+
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.repository.UserRepository;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
 

@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 
 @Component

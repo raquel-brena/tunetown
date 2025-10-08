@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imd.backend.api.dto.CreateTuneetDTO;
 import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
-import com.imd.backend.domain.entities.PageResult;
-import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.security.TuneUserDetails;
 
 import jakarta.validation.Valid;

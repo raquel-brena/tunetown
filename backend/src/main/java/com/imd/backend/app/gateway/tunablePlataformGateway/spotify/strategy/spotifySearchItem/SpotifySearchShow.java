@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.SpotifyApiClient;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.mapper.TunableItemSpotifyMapper;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 
 import lombok.RequiredArgsConstructor;
 

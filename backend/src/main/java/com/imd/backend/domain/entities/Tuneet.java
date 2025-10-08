@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
 import com.imd.backend.domain.exception.InvalidEntityAttributesException;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 /**
  * Representa um "post" (tuneet) de um usuário

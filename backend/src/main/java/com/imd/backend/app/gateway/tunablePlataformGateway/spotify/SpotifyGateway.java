@@ -10,8 +10,8 @@ import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.factory.Spoti
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.factory.SpotifySearchItemStrategyFactory;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifyItemById.SpotifyItemByIdStrategy;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifySearchItem.SpotifySearchItemStrategy;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 import lombok.RequiredArgsConstructor;
 

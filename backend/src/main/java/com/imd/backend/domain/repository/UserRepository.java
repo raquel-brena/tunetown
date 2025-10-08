@@ -3,9 +3,9 @@ package com.imd.backend.domain.repository;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.imd.backend.domain.entities.PageResult;
-import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.User;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
 
 public interface UserRepository {
   public void create(User user);

@@ -1,6 +1,6 @@
 package com.imd.backend.api.dto;
 
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

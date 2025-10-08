@@ -8,11 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import com.imd.backend.domain.entities.PageResult;
-import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.exception.RepositoryException;
 import com.imd.backend.domain.repository.TuneetRepository;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
 

@@ -3,8 +3,8 @@ package com.imd.backend.domain.entities;
 import java.net.URI;
 import java.util.UUID;
 
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

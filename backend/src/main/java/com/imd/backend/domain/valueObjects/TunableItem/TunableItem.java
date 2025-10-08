@@ -1,4 +1,4 @@
-package com.imd.backend.domain.entities.TunableItem;
+package com.imd.backend.domain.valueObjects.TunableItem;
 
 import java.net.URI;
 
