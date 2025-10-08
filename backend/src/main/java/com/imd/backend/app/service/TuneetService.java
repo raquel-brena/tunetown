@@ -35,6 +35,10 @@ public class TuneetService {
     this.userService = userService;
   }
 
+  public Optional<Tuneet> findTuneetById(UUID id) {
+    return this.tuneetRepository.findById(id);
+  }
+
   public PageResult<Tuneet> findAllTuneets(Pagination pagination) {
     return this.tuneetRepository.findAll(pagination);
   }

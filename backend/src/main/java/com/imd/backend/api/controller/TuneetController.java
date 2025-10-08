@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class TuneetController {
   private final TuneetService tuneetService;
+
+  @GetMapping(path = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Tuneet> getById(
+    @PathVariable(required = true) UUID tuneetId
+  ) {
+    final Optional<Tuneet> tuneetOp = this.tuneetService.findTuneetById(tuneetId);
+
+    return ResponseEntity.of(tuneetOp);
+  }
+  
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PageResult<Tuneet>> getAllTuneets(
