@@ -9,6 +9,7 @@ import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.TrendingTuneResult;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.security.TuneUserDetails;
@@ -112,6 +113,15 @@ public class TuneetController {
     final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetByTunableItemArtistContaining(word, pagination);
 
     return ResponseEntity.ok(tuneets);
+  }  
+
+  @GetMapping("/trending")
+  public ResponseEntity<List<TrendingTuneResult>> getTrending(
+      @RequestParam(defaultValue = "music") TunableItemType type,
+      @RequestParam(defaultValue = "10") int limit
+  ) {
+    List<TrendingTuneResult> trending = tuneetService.getTrendingTunes(type, limit);
+    return ResponseEntity.ok(trending);
   }  
   
 

@@ -1,5 +1,7 @@
 package com.imd.backend.infra.persistence.jpa.repository.tuneet;
 
+import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,6 +15,8 @@ import com.imd.backend.domain.exception.RepositoryException;
 import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.TrendingTuneResult;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
 
@@ -141,5 +145,23 @@ public class TuneetJpaRepository implements TuneetRepository {
         findedTuneets.getSize(),
         findedTuneets.getTotalElements(),
         findedTuneets.getTotalPages());
+  }
+
+  @Override
+  public List<TrendingTuneResult> findTrendingTunesByType(TunableItemType type, int limit) {
+    final Pageable pageable = PageRequest.of(0, limit); // pegar top 10
+    final var result = this.tuneetJPA.findTrendingTunesByType(type.toString(), pageable);
+
+    return result.stream()
+      .map(p -> new TrendingTuneResult(
+        p.getItemId(),
+        p.getTitle(),
+        p.getArtist(),
+        p.getPlatformId(),
+        TunableItemType.fromString(p.getItemType()),
+        p.getArtworkUrl() != null ? URI.create(p.getArtworkUrl()) : null,
+        p.getTuneetCount()
+      ))
+      .toList();    
   }  
 }

@@ -14,6 +14,7 @@ import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.TrendingTuneResult;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
@@ -68,6 +69,10 @@ public class TuneetService {
   public List<TunableItem> searchTunableItems(String query, TunableItemType itemType) {
     return plataformGateway.searchItem(query, itemType);
   } 
+
+  public List<TrendingTuneResult> getTrendingTunes(TunableItemType type,int limit) {
+    return this.tuneetRepository.findTrendingTunesByType(type, limit);
+  }
 
   @Transactional(rollbackOn = Exception.class)
   public Tuneet createTuneet(
