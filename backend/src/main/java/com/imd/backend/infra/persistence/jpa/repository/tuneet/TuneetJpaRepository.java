@@ -3,8 +3,13 @@ package com.imd.backend.infra.persistence.jpa.repository.tuneet;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import com.imd.backend.domain.entities.PageResult;
+import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.exception.RepositoryException;
 import com.imd.backend.domain.repository.TuneetRepository;
@@ -52,4 +57,89 @@ public class TuneetJpaRepository implements TuneetRepository {
       throw new RepositoryException("Erro ao retornar dados da camada de persistência: " + e.getLocalizedMessage());
     }
   }
+
+  @Override
+  public PageResult<Tuneet> findAll(Pagination pagination) {
+    final Sort.Direction direction = Sort.Direction.fromString(pagination.orderDirection());
+    final Sort sort = Sort.by(direction, pagination.orderBy());
+    final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), sort);
+
+    final var findedTuneets = this.tuneetJPA.findAll(pageable);
+
+    return new PageResult<Tuneet>(
+      findedTuneets.getContent().stream().map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity)).toList(), 
+      findedTuneets.getNumberOfElements(),
+      findedTuneets.getSize(),
+      findedTuneets.getTotalElements(),
+      findedTuneets.getTotalPages()
+    );    
+  }
+
+  @Override
+  public PageResult<Tuneet> findByAuthorId(UUID authorId, Pagination pagination) {
+    final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
+        Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
+
+    final var findedTuneets = tuneetJPA.findByAuthorId(authorId.toString(), pageable);
+
+    return new PageResult<>(
+        findedTuneets.getContent().stream()
+            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+            .toList(),
+        findedTuneets.getNumberOfElements(),
+        findedTuneets.getSize(),
+        findedTuneets.getTotalElements(),
+        findedTuneets.getTotalPages());
+  }  
+
+  @Override
+  public PageResult<Tuneet> findByTunableItemId(String tunableItemId, Pagination pagination) {
+    Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
+        Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
+
+    var findedTuneets = tuneetJPA.findByTunableItemId(tunableItemId, pageable);
+
+    return new PageResult<>(
+        findedTuneets.getContent().stream()
+            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+            .toList(),
+        findedTuneets.getNumberOfElements(),
+        findedTuneets.getSize(),
+        findedTuneets.getTotalElements(),
+        findedTuneets.getTotalPages());
+  }  
+
+  @Override
+  public PageResult<Tuneet> findByTunableItemTitleContaining(String word, Pagination pagination) {
+    Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
+        Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
+
+    var findedTuneets = tuneetJPA.findByTunableItemTitleContainingIgnoreCase(word, pageable);
+
+    return new PageResult<>(
+        findedTuneets.getContent().stream()
+            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+            .toList(),
+        findedTuneets.getNumberOfElements(),
+        findedTuneets.getSize(),
+        findedTuneets.getTotalElements(),
+        findedTuneets.getTotalPages());
+  }  
+
+  @Override
+  public PageResult<Tuneet> findByTunableItemArtistContaining(String word, Pagination pagination) {
+    Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
+        Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
+
+    var findedTuneets = tuneetJPA.findByTunableItemArtistContainingIgnoreCase(word, pageable);
+
+    return new PageResult<>(
+        findedTuneets.getContent().stream()
+            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+            .toList(),
+        findedTuneets.getNumberOfElements(),
+        findedTuneets.getSize(),
+        findedTuneets.getTotalElements(),
+        findedTuneets.getTotalPages());
+  }  
 }

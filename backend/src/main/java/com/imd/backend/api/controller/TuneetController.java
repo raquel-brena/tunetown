@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imd.backend.api.dto.CreateTuneetDTO;
 import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
+import com.imd.backend.domain.entities.PageResult;
+import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.entities.TunableItem.TunableItem;
 import com.imd.backend.domain.entities.TunableItem.TunableItemType;
@@ -35,6 +37,72 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class TuneetController {
   private final TuneetService tuneetService;
+
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<PageResult<Tuneet>> getAllTuneets(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @RequestParam(defaultValue = "id") String orderBy,
+      @RequestParam(defaultValue = "ASC") String orderDirection
+  ) {
+    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+    final PageResult<Tuneet> tuneets = this.tuneetService.findAllTuneets(pagination);
+
+    return ResponseEntity.ok(tuneets);
+  }
+
+  @GetMapping(path = "author/{authorId}" , produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<PageResult<Tuneet>> getTuneetsByAuthorId(
+      @PathVariable(required = true) UUID authorId,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @RequestParam(defaultValue = "id") String orderBy,
+      @RequestParam(defaultValue = "ASC") String orderDirection) {
+    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetsByAuthorId(authorId, pagination);
+
+    return ResponseEntity.ok(tuneets);
+  }  
+
+  @GetMapping(path = "tunable-item/{tunableItemId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<PageResult<Tuneet>> getTuneetsByTunableItem(
+      @PathVariable(required = true) String tunableItemId,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @RequestParam(defaultValue = "id") String orderBy,
+      @RequestParam(defaultValue = "ASC") String orderDirection) {
+    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetByTunableItem(tunableItemId, pagination);
+
+    return ResponseEntity.ok(tuneets);
+  }  
+
+  @GetMapping(path = "tunable-item/search-by-title/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<PageResult<Tuneet>> getTuneetsByTunableItemTitleContaining(
+      @PathVariable(required = true) String word,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @RequestParam(defaultValue = "id") String orderBy,
+      @RequestParam(defaultValue = "ASC") String orderDirection) {
+    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetByTunableItemTitleContaining(word, pagination);
+
+    return ResponseEntity.ok(tuneets);
+  }  
+
+  @GetMapping(path = "tunable-item/search-by-artist/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<PageResult<Tuneet>> getTuneetsByTunableItemArtistContaining(
+      @PathVariable(required = true) String word,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @RequestParam(defaultValue = "id") String orderBy,
+      @RequestParam(defaultValue = "ASC") String orderDirection) {
+    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetByTunableItemArtistContaining(word, pagination);
+
+    return ResponseEntity.ok(tuneets);
+  }  
+  
 
   @GetMapping("/search-tunable-item")
   public ResponseEntity<List<TunableItem>> searchTunableItem(

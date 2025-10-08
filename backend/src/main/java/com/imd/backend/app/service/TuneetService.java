@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
+import com.imd.backend.domain.entities.PageResult;
+import com.imd.backend.domain.entities.Pagination;
 import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.entities.TunableItem.TunableItem;
 import com.imd.backend.domain.entities.TunableItem.TunableItemType;
@@ -32,6 +34,32 @@ public class TuneetService {
     this.tuneetRepository = tuneetRepository;
     this.userService = userService;
   }
+
+  public PageResult<Tuneet> findAllTuneets(Pagination pagination) {
+    return this.tuneetRepository.findAll(pagination);
+  }
+
+  public PageResult<Tuneet> findTuneetsByAuthorId(UUID authorId, Pagination pagination) {
+    if(!this.userService.userExistsById(authorId))
+      throw new NotFoundException("Não existe nenhum autor com esse ID");
+
+    return this.tuneetRepository.findByAuthorId(authorId, pagination);
+  }
+
+  public PageResult<Tuneet> findTuneetByTunableItem(
+    String tunableItemId, 
+    Pagination pagination
+  ) {    
+    return this.tuneetRepository.findByTunableItemId(tunableItemId, pagination);
+  }
+
+  public PageResult<Tuneet> findTuneetByTunableItemTitleContaining(String word, Pagination pagination) {
+    return this.tuneetRepository.findByTunableItemTitleContaining(word, pagination);
+  }
+
+  public PageResult<Tuneet> findTuneetByTunableItemArtistContaining(String word, Pagination pagination) {
+    return this.tuneetRepository.findByTunableItemArtistContaining(word, pagination);
+  }  
 
   public List<TunableItem> searchTunableItems(String query, TunableItemType itemType) {
     return plataformGateway.searchItem(query, itemType);
