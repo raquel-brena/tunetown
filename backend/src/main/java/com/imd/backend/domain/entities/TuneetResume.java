@@ -6,15 +6,16 @@ import java.util.UUID;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TuneetResume {
   private UUID id;
+  private UUID authorId;
   private String textContent;
   private TunableItem tunableItem;
 
