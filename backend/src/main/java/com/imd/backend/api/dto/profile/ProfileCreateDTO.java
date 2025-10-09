@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record ProfileCreateDTO(
         @NotNull
-        String userId,
+        Long userId,
         String bio,
         String favoriteSong
 ) {

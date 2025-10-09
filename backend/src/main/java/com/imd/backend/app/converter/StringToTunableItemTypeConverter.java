@@ -1,9 +1,8 @@
 package com.imd.backend.app.converter;
 
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 @Component
 public class StringToTunableItemTypeConverter implements Converter<String, TunableItemType>{

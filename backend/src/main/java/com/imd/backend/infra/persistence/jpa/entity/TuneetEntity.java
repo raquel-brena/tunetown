@@ -35,4 +35,5 @@ public class TuneetEntity {
   private String tunableItemArtist;
   private String tunableItemType;
   private String tunableItemArtworkUrl;
+
 }

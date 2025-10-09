@@ -1,77 +1,36 @@
 package com.imd.backend.infra.persistence.jpa.mapper;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
-import com.imd.backend.domain.entities.TuneetResume;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 
 @Component
 public class TuneetJpaMapper {
-  public TuneetEntity fromTuneetDomain(Tuneet tuneet) {
-      return TuneetEntity.builder()
-              .id(tuneet.getId().toString())
-              .contentText(tuneet.getTextContent())
-              .tunableItemId(tuneet.getItemId())
-              .tunableItemPlataform(tuneet.getItemPlataform())
-              .tunableItemTitle(tuneet.getItemTitle())
-              .tunableItemArtist(tuneet.getItemArtist())
-              .tunableItemType(tuneet.getItemType().toString())
-              .tunableItemArtworkUrl(tuneet.getItemArtworkUrl().toString())
-              .build();
+
+    public static TuneetEntity fromTuneetDomain(Tuneet tuneet) {
+        if (tuneet == null) return null;
+
+    return new TuneetEntity(
+      tuneet.getId().toString(),
+      tuneet.getAuthorId().toString(),
+      tuneet.getTextContent(),
+      tuneet.getItemId(),
+      tuneet.getItemPlataform(),
+      tuneet.getItemTitle(),
+      tuneet.getItemArtist(),
+      tuneet.getItemType().toString(),
+      tuneet.getItemArtworkUrl().toString()
+    );
   }
 
-  public static TuneetEntity fromTuneetResumeDomain(TuneetResume tuneetResume) {
-      return TuneetEntity.builder()
-              .id(tuneetResume.getId().toString())
-              .contentText(tuneetResume.getTextContent())
-              .tunableItemId(tuneetResume.getItemId())
-              .tunableItemPlataform(tuneetResume.getItemPlataform())
-              .tunableItemTitle(tuneetResume.getItemTitle())
-              .tunableItemArtist(tuneetResume.getItemArtist())
-              .tunableItemType(tuneetResume.getItemType().toString())
-              .tunableItemArtworkUrl(tuneetResume.getItemArtworkUrl().toString())
-              .build();
-  }
-
-
-    // public TuneetEntity fromTuneetResumeDomain(TuneetResume tuneetResume) {
-  //   if(tuneetResume == null) return null;
-
-  //   return new TuneetEntity(
-  //     tuneetResume.getId().toString(),
-  //     tuneetResume.getTextContent(),
-  //     tuneetResume.getItemId(),
-  //     tuneetResume.getItemPlataform(),
-  //     tuneetResume.getItemTitle(),
-  //     tuneetResume.getItemArtist(),
-  //     tuneetResume.getItemType().toString(),
-  //     tuneetResume.getItemArtworkUrl().toString()
-  //   );
-  // }
-
-  // public TuneetResume resumeFromTuneetJpaEntity(TuneetEntity entity) throws URISyntaxException {
-  //   if(entity == null) return null;
-
-  //   return new TuneetResume(
-  //     UUID.fromString(entity.getId()),
-  //     entity.getContentText(),
-  //     new TunableItem(
-  //       entity.getTunableItemId(),
-  //       entity.getTunableItemPlataform(),
-  //       entity.getTunableItemTitle(),
-  //       entity.getTunableItemArtist(),
-  //       new URI(entity.getTunableItemArtworkUrl()),
-  //       TunableItemType.fromString(entity.getTunableItemType())
-  //     )
-  //   );
-  // }
   public Tuneet tuneetFromJpaEntity(TuneetEntity entity) {
     return Tuneet.rebuild(
       UUID.fromString(entity.getId()),

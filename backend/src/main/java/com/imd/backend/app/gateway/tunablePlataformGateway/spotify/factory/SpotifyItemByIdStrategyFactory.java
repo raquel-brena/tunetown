@@ -1,5 +1,6 @@
 package com.imd.backend.app.gateway.tunablePlataformGateway.spotify.factory;
 
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.SpotifyApiClient;
@@ -8,7 +9,6 @@ import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spot
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifyItemById.SpotifyShowById;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifyItemById.SpotifyTrackById;
 import com.imd.backend.domain.exception.BusinessException;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 import lombok.RequiredArgsConstructor;
 

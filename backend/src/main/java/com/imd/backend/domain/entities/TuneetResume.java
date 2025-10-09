@@ -1,11 +1,9 @@
 package com.imd.backend.domain.entities;
 
 import java.net.URI;
-import java.util.UUID;
 
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
-
 import lombok.*;
 
 @Setter
@@ -14,13 +12,13 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class TuneetResume {
-  private UUID id;
-  private UUID authorId;
+  private String id;
+  private String authorId;
   private String textContent;
   private TunableItem tunableItem;
 
   // Getters
-  public UUID getId() {
+  public String getId() {
     return this.id;
   }
 

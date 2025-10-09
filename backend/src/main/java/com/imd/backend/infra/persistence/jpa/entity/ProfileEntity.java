@@ -33,7 +33,7 @@ public class ProfileEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private User user;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
     private List<Follow> following = new ArrayList<>();

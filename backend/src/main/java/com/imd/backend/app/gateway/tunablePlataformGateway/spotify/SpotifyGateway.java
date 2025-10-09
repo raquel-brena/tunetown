@@ -19,20 +19,20 @@ import lombok.RequiredArgsConstructor;
 @Qualifier("SpotifyGateway")
 @RequiredArgsConstructor
 public class SpotifyGateway implements TunablePlataformGateway {
-  private final SpotifyItemByIdStrategyFactory itemByIdStrategyFactory;
-  private final SpotifySearchItemStrategyFactory searchItemStrategyFactory;
+    private final SpotifyItemByIdStrategyFactory itemByIdStrategyFactory;
+    private final SpotifySearchItemStrategyFactory searchItemStrategyFactory;
 
-  @Override
-  public List<TunableItem> searchItem(String query, TunableItemType itemType) {
-    final SpotifySearchItemStrategy searchItemStrategy = this.searchItemStrategyFactory.create(itemType);
+    @Override
+    public List<TunableItem> searchItem(String query, TunableItemType itemType) {
+        final SpotifySearchItemStrategy searchItemStrategy = this.searchItemStrategyFactory.create(itemType);
 
-    return searchItemStrategy.execute(query);
-  }
+        return searchItemStrategy.execute(query);
+    }
 
-  @Override
-  public TunableItem getItemById(String id, TunableItemType itemType){
-    final SpotifyItemByIdStrategy findByIdStrategy = this.itemByIdStrategyFactory.create(itemType);
+    @Override
+    public TunableItem getItemById(String id, TunableItemType itemType){
+        final SpotifyItemByIdStrategy findByIdStrategy = this.itemByIdStrategyFactory.create(itemType);
 
-    return findByIdStrategy.execute(id);
-  }
+        return findByIdStrategy.execute(id);
+    }
 }

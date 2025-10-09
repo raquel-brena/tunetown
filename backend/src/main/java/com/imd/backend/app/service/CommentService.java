@@ -17,8 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 
 @Service
 public class CommentService {
@@ -44,8 +42,8 @@ public class CommentService {
     }
 
     public Comment create(CommentCreateDTO dto) {
-        Tuneet tuneet = tuneetRepository.findById(UUID.fromString(dto.getTuneetId()))
-                .orElseThrow();
+        TuneetResume tuneet = tuneetRepository.findById(dto.getTuneetId())
+                .orElseThrow(() -> new NotFoundException("Tuneet não encontrado."));
         ProfileEntity author = profileRepository.findById(dto.getAuthorId())
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado."));
         CommentEntity entity = CommentMapper.toEntity(dto);

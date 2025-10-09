@@ -6,7 +6,7 @@ import com.imd.backend.api.dto.profile.ProfileUpdateDTO;
 import com.imd.backend.domain.entities.Profile;
 import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
 import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
-import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
+import com.imd.backend.infra.persistence.jpa.entity.User;
 
 import java.util.Date;
 
@@ -31,7 +31,7 @@ public class ProfileMapper {
         entity.setCreatedAt(new Date());
 
         if (dto.userId() != null) {
-            UserEntity user = new UserEntity();
+            User user = new User();
             user.setId(dto.userId());
             entity.setUser(user);
         }
