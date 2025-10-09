@@ -106,4 +106,12 @@ public class Tuneet {
     if (!errors.isEmpty())
       throw new InvalidEntityAttributesException("Atributos inválidos", errors);    
   }
+
+    public String getTunableContent() {
+      return String.format("%s by %s (%s)",
+        tunableItem.getTitle(),
+        tunableItem.getArtist(),
+        tunableItem.getItemType()
+      );
+    }
 }
