@@ -3,7 +3,9 @@ package com.imd.backend.api.controller;
 import com.imd.backend.api.dto.tunescore.TuneScoreRequest;
 import com.imd.backend.api.dto.tunescore.TuneScoreResponse;
 import com.imd.backend.app.service.TuneScoreService;
+import com.imd.backend.domain.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +26,13 @@ public class TuneScoreController {
 
     @PostMapping(path="/calculate")
     public ResponseEntity<TuneScoreResponse>  calculateTuneScore(@RequestBody TuneScoreRequest request) {
-        var tunescore = tuneScoreService.calculateTuneScore(UUID.fromString(request.originUserId()), UUID.fromString(request.destinationUserId()));
-        return ResponseEntity.ok(tunescore);
+        try {
+            var tunescore = tuneScoreService.calculateTuneScore(UUID.fromString(request.originUserId()), UUID.fromString(request.destinationUserId()));
+            return ResponseEntity.ok(tunescore);
+        } catch (BusinessException e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+        }
+
     }
 
 

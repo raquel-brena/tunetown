@@ -3,12 +3,15 @@ spring:
     name: TuneTown - Backend
   main:
     allow-bean-definition-overriding: true
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
 
 # Configurações da API do Spotify
 spotify:
-  client-id: ${SPOTIFY_CLIENT_ID:client_id} 
+  client-id: ${SPOTIFY_CLIENT_ID:client_id}
   client-secret: ${SPOTIFY_CLIENT_SECRET:client_secret}
-  
+
   # URLs da API
   auth:
     url: http://googleusercontent.com/spotify.com/4
