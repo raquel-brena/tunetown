@@ -1,6 +1,6 @@
 package com.imd.backend.infra.security;
 
-import com.imd.backend.domain.entities.User;
+import com.imd.backend.infra.persistence.jpa.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final ProfileService profileService;
 
-    public void follow(String idFollower, String idFollowed) {
+    public void follow(UUID idFollower, UUID idFollowed) {
 
         ProfileEntity follower = this.profileService.findEntityById(idFollower);
         ProfileEntity followed = this.profileService.findEntityById(idFollowed);
@@ -35,14 +36,14 @@ public class FollowService {
         followRepository.save(follow);
     }
 
-    public void unfollow(String idFollower, String idFollowed) {
+    public void unfollow(UUID idFollower, UUID idFollowed) {
         ProfileEntity follower = this.profileService.findEntityById(idFollower);
         ProfileEntity followed = this.profileService.findEntityById(idFollowed);
 
         followRepository.deleteByFollowerAndFollowed(follower, followed);
     }
 
-    public boolean isFriend(String idFollower, String idFollowed) {
+    public boolean isFriend(UUID idFollower, UUID idFollowed) {
         ProfileEntity follower = this.profileService.findEntityById(idFollower);
         ProfileEntity followed = this.profileService.findEntityById(idFollowed);
 
@@ -50,7 +51,7 @@ public class FollowService {
                 followRepository.existsByFollowerAndFollowed(followed, follower);
     }
 
-    public List<Profile> getFriends(String idProfile) {
+    public List<Profile> getFriends(UUID idProfile) {
         ProfileEntity profile = profileService.findEntityById(idProfile);
         return followRepository.findByFollower(profile)
                 .stream()
@@ -59,7 +60,7 @@ public class FollowService {
                 .toList();
     }
 
-    public List<ProfileEntity> getFollowing(String idProfile) {
+    public List<ProfileEntity> getFollowing(UUID idProfile) {
         ProfileEntity profile = profileService.findEntityById(idProfile);
         return followRepository.findByFollower(profile)
                 .stream()
@@ -67,7 +68,7 @@ public class FollowService {
                 .toList();
     }
 
-    public List<ProfileEntity> getFollowers(String idProfile) {
+    public List<ProfileEntity> getFollowers(UUID idProfile) {
         ProfileEntity profile = profileService.findEntityById(idProfile);
         return followRepository.findByFollowed(profile)
                 .stream()

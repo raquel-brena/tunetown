@@ -1,7 +1,10 @@
 package com.imd.backend.domain.valueObjects.TunableItem;
 
+import lombok.Builder;
+
 import java.net.URI;
 
+@Builder
 public final class TunableItem {
   private final String id;
   private final String plataformId;

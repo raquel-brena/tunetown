@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class ProfileService {
@@ -25,7 +26,7 @@ public class ProfileService {
         this.fileService = fileService;
     }
 
-    public Profile findById(String id) {
+    public Profile findById(UUID id) {
         ProfileEntity entity = findEntityById(id);
         fileService.applyPresignedUrl(entity);
         return ProfileMapper.toDomain(entity);
@@ -54,14 +55,14 @@ public class ProfileService {
         return ProfileMapper.toDomain(updated);
     }
 
-    public void delete(String id) {
+    public void delete(UUID id) {
         if (!profileRepository.existsById(id)) {
             throw new NotFoundException("ProfileEntity not found");
         }
         profileRepository.deleteById(id);
     }
 
-    public Profile updatePhoto(String id, MultipartFile file) throws IOException {
+    public Profile updatePhoto(UUID id, MultipartFile file) throws IOException {
         ProfileEntity profile = findEntityById(id);
 
         if (profile.getPhoto() != null) {
@@ -77,7 +78,7 @@ public class ProfileService {
         return ProfileMapper.toDomain(savedProfile);
     }
 
-    public Profile deletePhoto(String id) throws IOException {
+    public Profile deletePhoto(UUID id) throws IOException {
         ProfileEntity profile = findEntityById(id);
 
         if (profile.getPhoto() != null) {
@@ -89,7 +90,7 @@ public class ProfileService {
         return ProfileMapper.toDomain(profile);
     }
 
-    public ProfileEntity findEntityById(String id) {
+    public ProfileEntity findEntityById(UUID id) {
         return profileRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Profile de id " + id + " não encontrado."));
     }

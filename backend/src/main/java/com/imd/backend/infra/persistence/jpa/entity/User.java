@@ -10,9 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity {
+public class User {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(unique = true)
     private String email;
@@ -25,19 +26,9 @@ public class UserEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ProfileEntity profile;
 
-    public UserEntity(String id, String email, String username, String password) {
-        this.id = id;
+    public User(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.profile = null;
     }
-
-    public UserEntity(String id, String email, String username, String password, ProfileEntity profile) {
-        this.id = id;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.profile = profile;
-    }    
 }

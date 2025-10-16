@@ -1,11 +1,11 @@
 package com.imd.backend.api.dto.auth;
 
-import com.imd.backend.domain.entities.User;
+import com.imd.backend.infra.persistence.jpa.entity.User;
 
 public record RegisterResponse(
-   String id, String username, String email
+   Long id, String username, String email
 ) {
     public static RegisterResponse fromUser(User user) {
-        return new RegisterResponse(user.getId().toString(), user.getUsername(), user.getEmail());
+        return new RegisterResponse(user.getId(), user.getUsername(), user.getEmail());
     }
 }

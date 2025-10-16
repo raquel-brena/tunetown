@@ -5,28 +5,20 @@ import java.util.UUID;
 
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TuneetResume {
   private UUID id;
+  private UUID authorId;
   private String textContent;
   private TunableItem tunableItem;
 
   // Getters
-  public UUID getId() {
-    return this.id;
-  }
-
-  public String getTextContent() {
-    return this.textContent;
-  }
-
   public String getItemId() {
     return this.tunableItem.getItemId();
   }

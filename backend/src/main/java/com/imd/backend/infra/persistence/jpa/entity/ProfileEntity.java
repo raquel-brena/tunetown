@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
@@ -20,7 +21,7 @@ public class ProfileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     private String bio;
 
@@ -33,7 +34,7 @@ public class ProfileEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private User user;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
     private List<Follow> following = new ArrayList<>();

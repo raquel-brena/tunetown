@@ -3,6 +3,21 @@ spring:
     name: TuneTown - Backend
   main:
     allow-bean-definition-overriding: true
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tunetown_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
@@ -18,11 +33,18 @@ spotify:
   api:
     url: https://api.spotify.com/v1
 
+# Configurações AWS S3
 cloud:
   aws:
     credentials:
-      access-key: ${AWS_ACCESS_KEY:aws_access_key}
-      secret-key: ${AWS_SECRET_KEY:aws_secret_key}
+      access-key: ${AWS_ACCESS_KEY_ID:aws_access_key}
+      secret-key: ${AWS_SECRET_ACCESS_KEY:aws_secret_key}
     region: ${AWS_REGION:us-east-2}
     s3:
-      bucket: ${AWS_BUCKET:aws_bucket}
+      bucket: ${AWS_S3_BUCKET:aws_bucket}
+
+# Token da API
+api:
+  security:
+    token:
+      secret: ${API_SECURITY_TOKEN_SECRET:key}

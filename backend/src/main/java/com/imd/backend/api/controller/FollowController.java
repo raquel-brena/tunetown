@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("api/follows")
@@ -20,8 +22,8 @@ public class FollowController {
 
     @PostMapping("/{followerId}/follow/{followedId}")
     public ResponseEntity<RestResponseMessage> follow(
-            @PathVariable String followerId,
-            @PathVariable String followedId
+            @PathVariable UUID followerId,
+            @PathVariable UUID followedId
     ) {
         followService.follow(followerId, followedId);
         return ResponseEntity.ok(new RestResponseMessage(null, HttpStatus.OK.value(), "Follow realizado com sucesso!"));
@@ -29,15 +31,15 @@ public class FollowController {
 
     @DeleteMapping("/{followerId}/unfollow/{followedId}")
     public ResponseEntity<RestResponseMessage> unfollow(
-            @PathVariable String followerId,
-            @PathVariable String followedId
+            @PathVariable UUID followerId,
+            @PathVariable UUID followedId
     ) {
         followService.unfollow(followerId, followedId);
         return ResponseEntity.ok(new RestResponseMessage(null, HttpStatus.OK.value(), "Unfollow realizado com sucesso!"));
     }
 
     @GetMapping("/{profileId}/following")
-    public ResponseEntity<RestResponseMessage> getFollowing(@PathVariable String profileId) {
+    public ResponseEntity<RestResponseMessage> getFollowing(@PathVariable UUID profileId) {
         var following = followService.getFollowing(profileId)
                 .stream()
                 .map(FollowerMapper::toDTO)
@@ -46,7 +48,7 @@ public class FollowController {
     }
 
     @GetMapping("/{profileId}/followers")
-    public ResponseEntity<RestResponseMessage> getFollowers(@PathVariable String profileId) {
+    public ResponseEntity<RestResponseMessage> getFollowers(@PathVariable UUID profileId) {
         var followers = followService.getFollowers(profileId)
                 .stream()
                 .map(FollowerMapper::toDTO)

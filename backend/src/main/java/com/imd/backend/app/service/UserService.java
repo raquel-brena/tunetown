@@ -1,29 +1,21 @@
 package com.imd.backend.app.service;
 
-import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.exception.BusinessException;
-import com.imd.backend.domain.repository.UserRepository;
-import com.imd.backend.domain.valueObjects.PageResult;
-import com.imd.backend.domain.valueObjects.Pagination;
-
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.imd.backend.infra.persistence.jpa.entity.User;
+import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService {
+public class UserService implements CrudService<String, User> {
 
     private final UserRepository userRepository;
 
-    public UserService(
-        @Qualifier("UserJpaRepository") UserRepository userRepository
-    ) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public User createUser(User user) throws BusinessException {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new BusinessException("Username já registrado");
@@ -33,15 +25,31 @@ public class UserService {
             throw new BusinessException("Email já registrado");
         }
 
-        userRepository.create(user);
-        return user;
+        return userRepository.save(user);
     }
 
-    public PageResult<User> findAllUsers(Pagination pageable) {
-        return userRepository.findAll(pageable); 
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
-    public boolean userExistsById(UUID id) {
-        return this.userRepository.existsById(id);
+    @Override
+    public User findById(String s) {
+        return null;
+    }
+
+    @Override
+    public User create(User user) {
+        return null;
+    }
+
+    @Override
+    public User update(User user) {
+        return null;
+    }
+
+    @Override
+    public void delete(String s) {
+
     }
 }

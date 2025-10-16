@@ -4,6 +4,7 @@ import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
 import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,9 +13,9 @@ import java.util.Date;
 @Builder
 @EqualsAndHashCode(of = "id")
 public class Profile {
-    private String id;
+    private UUID id;
     private String bio;
-    private String userId;
+    private Long userId;
     private FileEntity photo;
     private String favoriteSong;
     private Date createdAt;
