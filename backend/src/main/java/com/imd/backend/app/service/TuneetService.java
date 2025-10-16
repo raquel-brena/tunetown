@@ -2,6 +2,7 @@ package com.imd.backend.app.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
@@ -48,7 +49,7 @@ public class TuneetService {
   }
 
   @Transactional(rollbackOn = Exception.class)
-  public TuneetResume deleteById(String tuneetId) {
+  public TuneetResume deleteById(UUID tuneetId) {
     final Optional<TuneetResume> findedTuneet = this.tuneetRepository.findById(tuneetId);
 
     if(findedTuneet.isEmpty())
@@ -60,7 +61,7 @@ public class TuneetService {
 
   @Transactional(rollbackOn = Exception.class)
   public TuneetResume updateTuneet(
-          String tuneetId,
+          UUID tuneetId,
     String textContent,
     String tunableItemId,
     TunableItemType tunableItemType

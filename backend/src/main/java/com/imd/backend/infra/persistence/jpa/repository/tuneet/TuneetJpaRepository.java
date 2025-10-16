@@ -1,6 +1,7 @@
 package com.imd.backend.infra.persistence.jpa.repository.tuneet;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -34,12 +35,12 @@ public class TuneetJpaRepository implements TuneetRepository {
   }  
 
   @Override
-  public void deleteById(String id) {
+  public void deleteById(UUID id) {
     tuneetJPA.deleteById(id);
   }
 
   @Override
-  public Optional<TuneetResume> findById(String id){
+  public Optional<TuneetResume> findById(UUID id){
     final Optional<TuneetEntity> opEntity = this.tuneetJPA.findById(id);
 
     try {

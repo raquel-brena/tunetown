@@ -18,10 +18,11 @@ public class CommentMapper {
                 .build();
     }
 
+
     public static Comment toDomain(CommentCreateDTO dto) {
         return new Comment(
                 null,
-                dto.getTuneetId().toString(),
+                dto.getTuneetId(),
                 dto.getAuthorId(),
                 dto.getContentText(),
                 new java.util.Date()
@@ -49,12 +50,23 @@ public class CommentMapper {
     }
 
     public static CommentEntity toEntity(Comment domain) {
-        return CommentEntity.builder()
+        if (domain == null) return null;
+
+        CommentEntity commentEntity = CommentEntity.builder()
                 .id(domain.getId())
                 .contentText(domain.getContentText())
                 .createdAt(domain.getCreatedAt())
                 .build();
+
+        if (domain.getAuthorId() != null) {
+            var author = new com.imd.backend.infra.persistence.jpa.entity.ProfileEntity();
+            author.setId(domain.getAuthorId());
+            commentEntity.setAuthor(author);
+        }
+
+        return commentEntity;
     }
+
 
     public static CommentEntity toEntity(CommentCreateDTO domain) {
         return CommentEntity.builder()

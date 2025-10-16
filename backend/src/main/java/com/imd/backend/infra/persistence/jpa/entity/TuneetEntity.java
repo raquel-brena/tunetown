@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tuneets")
@@ -15,10 +16,10 @@ import java.util.List;
 @Builder
 public class TuneetEntity {
   @Id
-  private String id;
+  private UUID id;
 
   @Column(nullable = false)
-  private String authorId;
+  private UUID authorId;
 
   @Column(columnDefinition = "TEXT")
   private String contentText;

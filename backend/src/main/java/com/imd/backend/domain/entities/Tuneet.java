@@ -2,22 +2,34 @@ package com.imd.backend.domain.entities;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.imd.backend.infra.persistence.jpa.entity.CommentEntity;
+import com.imd.backend.infra.persistence.jpa.entity.LikeEntity;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import lombok.Getter;
 
 /**
  * Representa um "post" (tuneet) de um usuário
  */
+@Getter
 public class Tuneet {
-    private String id;
+    private UUID id;
     private String textContent;
-    private String authorId;
+    private UUID authorId;
     private TunableItem tunableItem;
+    private List<Comment> comments;
+    private List<Like> likes;
 
-    public Tuneet(String id, String authorId, String textContent, TunableItem tunableItem) {
+
+    public Tuneet(UUID id, UUID authorId, String textContent, TunableItem tunableItem) {
 
         this.id = id;
         this.authorId = authorId;
@@ -31,15 +43,15 @@ public class Tuneet {
         this.textContent = textContent;
     }
 
-    public Tuneet (String authorId, String textContent, TunableItem item) {
+    public Tuneet (UUID authorId, String textContent, TunableItem item) {
         this.authorId = authorId;
         this.textContent = textContent;
         this.tunableItem = item;
     }
 
     public static Tuneet rebuild(
-            String id,
-            String authorId,
+            UUID id,
+            UUID authorId,
             String textContent,
             TunableItem item
     ) {
@@ -47,18 +59,6 @@ public class Tuneet {
     }
 
     // Getters
-    public String getId() {
-        return this.id;
-    }
-
-    public String getAuthorId() {
-        return this.authorId;
-    }
-
-    public String getTextContent() {
-        return this.textContent;
-    }
-
     public String getItemId() {
         return this.tunableItem.getItemId();
     }

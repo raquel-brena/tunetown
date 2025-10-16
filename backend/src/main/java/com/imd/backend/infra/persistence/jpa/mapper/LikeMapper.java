@@ -7,6 +7,8 @@ import com.imd.backend.infra.persistence.jpa.entity.LikeEntity;
 import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 
+import java.util.UUID;
+
 public class LikeMapper {
 
     public static LikeResponseDTO toDTO(Like like) {
@@ -33,13 +35,13 @@ public class LikeMapper {
                 .build();
     }
 
-    public static TuneetEntity toTuneetEntity(String tuneetId) {
+    public static TuneetEntity toTuneetEntity(UUID tuneetId) {
         TuneetEntity t = new TuneetEntity();
         t.setId(tuneetId);
         return t;
     }
 
-    public static ProfileEntity toProfileEntity(String profileId) {
+    public static ProfileEntity toProfileEntity(UUID profileId) {
         ProfileEntity p = new ProfileEntity();
         p.setId(profileId);
         return p;

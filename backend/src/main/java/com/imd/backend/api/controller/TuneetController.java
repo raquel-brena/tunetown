@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,7 +60,7 @@ public class TuneetController {
 
   @DeleteMapping(value = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<TuneetResume> deleteTuneet(
-    @PathVariable(required = true) String tuneetId
+    @PathVariable(required = true) UUID tuneetId
   ) {
     final TuneetResume deletedTuneet = this.tuneetService.deleteById(tuneetId);
 
@@ -68,7 +69,7 @@ public class TuneetController {
 
   @PatchMapping(value = "/{tuneetId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<TuneetResume> updateTuneet(
-    @PathVariable(required = true) String tuneetId,
+    @PathVariable(required = true) UUID tuneetId,
     @Valid @RequestBody UpdateTuneetDTO updateTuneetDTO
   ) {
     final TuneetResume updatedTuneet = this.tuneetService.updateTuneet(

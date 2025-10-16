@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 
-public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
+import java.util.UUID;
+
+public interface TuneetJPA extends JpaRepository<TuneetEntity, UUID> {
   
 }

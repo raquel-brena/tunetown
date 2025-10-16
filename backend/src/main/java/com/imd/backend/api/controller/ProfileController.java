@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/profile")
@@ -39,7 +40,7 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestResponseMessage> findById(@PathVariable String id) {
+    public ResponseEntity<RestResponseMessage> findById(@PathVariable UUID id) {
         Profile profile = profileService.findById(id);
         return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(profile), HttpStatus.OK.value()));
     }
@@ -58,14 +59,14 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         profileService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/photo")
     public ResponseEntity<RestResponseMessage> updatePhoto(
-            @PathVariable String id,
+            @PathVariable UUID id,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         Profile updated = profileService.updatePhoto(id, file);
@@ -74,7 +75,7 @@ public class ProfileController {
 
     @DeleteMapping("/{id}/photo")
     public ResponseEntity<RestResponseMessage> deletePhoto(
-            @PathVariable String id
+            @PathVariable UUID id
     ) throws IOException {
         Profile updated = profileService.deletePhoto(id);
         return ResponseEntity.ok(new RestResponseMessage(ProfileMapper.toDTO(updated), HttpStatus.OK.value()));
