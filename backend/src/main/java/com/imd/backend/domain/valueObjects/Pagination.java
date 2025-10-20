@@ -11,10 +11,9 @@ public record Pagination (
   public Pagination {
     if (size <= 0) size = DEFAULT_PAGE_SIZE;
     if (page < 0) page = 0;
+
     if(
-      orderDirection == null || 
-      !orderDirection.equals("ASC") || 
-      !orderDirection.equals("DESC")
+      orderDirection == null || !(orderDirection.equals("ASC") || orderDirection.equals("DESC"))
     )
       orderDirection = "ASC";
   }

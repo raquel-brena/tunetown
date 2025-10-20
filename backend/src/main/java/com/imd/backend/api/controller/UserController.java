@@ -35,9 +35,10 @@ public class UserController {
         
         final PageResult<UserDTO> dtoPage = new PageResult<UserDTO>(
             profiles.itens().stream().map(UserMapper::toDTO).toList(),
+            profiles.pageItens(),
+            profiles.totalItens(),
             profiles.currentPage(),
             profiles.pageSize(),
-            profiles.itensCount(),
             profiles.totalPages()
         );
         
