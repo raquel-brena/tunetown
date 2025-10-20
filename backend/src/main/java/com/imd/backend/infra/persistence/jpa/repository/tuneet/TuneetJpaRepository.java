@@ -73,8 +73,9 @@ public class TuneetJpaRepository implements TuneetRepository {
     return new PageResult<Tuneet>(
       findedTuneets.getContent().stream().map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity)).toList(), 
       findedTuneets.getNumberOfElements(),
-      findedTuneets.getSize(),
       findedTuneets.getTotalElements(),
+      findedTuneets.getNumber(),
+      findedTuneets.getSize(),
       findedTuneets.getTotalPages()
     );    
   }
@@ -87,13 +88,15 @@ public class TuneetJpaRepository implements TuneetRepository {
     final var findedTuneets = tuneetJPA.findByAuthorId(authorId.toString(), pageable);
 
     return new PageResult<>(
-        findedTuneets.getContent().stream()
-            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
-            .toList(),
-        findedTuneets.getNumberOfElements(),
-        findedTuneets.getSize(),
-        findedTuneets.getTotalElements(),
-        findedTuneets.getTotalPages());
+      findedTuneets.getContent().stream()
+          .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+          .toList(),
+      findedTuneets.getNumberOfElements(),
+      findedTuneets.getTotalElements(),
+      findedTuneets.getNumber(),
+      findedTuneets.getSize(),
+      findedTuneets.getTotalPages()
+    );
   }  
 
   @Override
@@ -104,13 +107,15 @@ public class TuneetJpaRepository implements TuneetRepository {
     var findedTuneets = tuneetJPA.findByTunableItemId(tunableItemId, pageable);
 
     return new PageResult<>(
-        findedTuneets.getContent().stream()
-            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
-            .toList(),
-        findedTuneets.getNumberOfElements(),
-        findedTuneets.getSize(),
-        findedTuneets.getTotalElements(),
-        findedTuneets.getTotalPages());
+      findedTuneets.getContent().stream()
+          .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+          .toList(),
+      findedTuneets.getNumberOfElements(),
+      findedTuneets.getTotalElements(),
+      findedTuneets.getNumber(),
+      findedTuneets.getSize(),
+      findedTuneets.getTotalPages()
+    );
   }  
 
   @Override
@@ -121,13 +126,15 @@ public class TuneetJpaRepository implements TuneetRepository {
     var findedTuneets = tuneetJPA.findByTunableItemTitleContainingIgnoreCase(word, pageable);
 
     return new PageResult<>(
-        findedTuneets.getContent().stream()
-            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
-            .toList(),
-        findedTuneets.getNumberOfElements(),
-        findedTuneets.getSize(),
-        findedTuneets.getTotalElements(),
-        findedTuneets.getTotalPages());
+      findedTuneets.getContent().stream()
+          .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+          .toList(),
+      findedTuneets.getNumberOfElements(),
+      findedTuneets.getTotalElements(),
+      findedTuneets.getNumber(),
+      findedTuneets.getSize(),
+      findedTuneets.getTotalPages()
+      );
   }  
 
   @Override
@@ -138,13 +145,15 @@ public class TuneetJpaRepository implements TuneetRepository {
     var findedTuneets = tuneetJPA.findByTunableItemArtistContainingIgnoreCase(word, pageable);
 
     return new PageResult<>(
-        findedTuneets.getContent().stream()
-            .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
-            .toList(),
-        findedTuneets.getNumberOfElements(),
-        findedTuneets.getSize(),
-        findedTuneets.getTotalElements(),
-        findedTuneets.getTotalPages());
+      findedTuneets.getContent().stream()
+          .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+          .toList(),
+      findedTuneets.getNumberOfElements(),
+      findedTuneets.getTotalElements(),
+      findedTuneets.getNumber(),
+      findedTuneets.getSize(),
+      findedTuneets.getTotalPages()
+    );
   }
 
   @Override

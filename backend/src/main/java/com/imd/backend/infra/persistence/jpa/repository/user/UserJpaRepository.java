@@ -41,8 +41,9 @@ public class UserJpaRepository implements UserRepository{
     return new PageResult<User>(
       findedUsers.getContent().stream().map(entity -> UserMapper.entityToDomain(entity)).toList(), 
       findedUsers.getNumberOfElements(),
-      findedUsers.getSize(),
       findedUsers.getTotalElements(),
+      findedUsers.getNumber(),
+      findedUsers.getSize(),
       findedUsers.getTotalPages()
     );
   }
