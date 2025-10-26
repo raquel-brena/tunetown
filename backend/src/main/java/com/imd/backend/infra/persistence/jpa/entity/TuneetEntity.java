@@ -1,14 +1,10 @@
 package com.imd.backend.infra.persistence.jpa.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "tuneets")
@@ -16,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor 
 @EqualsAndHashCode(of = "id")
+@Builder
 public class TuneetEntity {
   @Id
   private String id;
@@ -25,6 +22,12 @@ public class TuneetEntity {
 
   @Column(columnDefinition = "TEXT")
   private String contentText;
+
+  @OneToMany(mappedBy = "tuneet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<CommentEntity> comments;
+
+  @OneToMany(mappedBy = "tuneet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<LikeEntity> likes;
 
   private String tunableItemId;
   private String tunableItemPlataform;
