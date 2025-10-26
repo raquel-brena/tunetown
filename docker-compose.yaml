@@ -16,7 +16,7 @@ services:
     command: ./mvnw spring-boot:run
 
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:15'
     container_name: postgres
     environment:
       - POSTGRES_DB=tunetown_db
