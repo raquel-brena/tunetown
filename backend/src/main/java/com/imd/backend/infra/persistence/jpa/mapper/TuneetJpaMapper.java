@@ -14,7 +14,7 @@ import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 
 @Component
 public class TuneetJpaMapper {
-  public TuneetEntity fromTuneetDomain(Tuneet tuneet) {
+  public static TuneetEntity fromTuneetDomain(Tuneet tuneet) {
       return TuneetEntity.builder()
               .id(tuneet.getId().toString())
               .contentText(tuneet.getTextContent())

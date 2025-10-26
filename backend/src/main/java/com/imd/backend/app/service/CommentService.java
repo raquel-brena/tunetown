@@ -50,7 +50,7 @@ public class CommentService {
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado."));
         CommentEntity entity = CommentMapper.toEntity(dto);
         entity.setAuthor(author);
-        entity.setTuneet(TuneetJpaMapper.fromTuneetResumeDomain(tuneet));
+        entity.setTuneet(TuneetJpaMapper.fromTuneetDomain(tuneet));
         return toDomain(repository.save(entity));
     }
 
