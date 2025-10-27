@@ -71,7 +71,7 @@ public class CommentController {
 
     @GetMapping("/tuneet/{tuneetId}")
     public ResponseEntity<Page<CommentResponseDTO>> findByTuneetId(
-            @PathVariable Long tuneetId,
+            @PathVariable String tuneetId,
             Pageable pageable
     ) {
         Page<Comment> comments = commentService.findByTuneetId(tuneetId, pageable);

@@ -17,7 +17,7 @@ public class TuneetEntity {
   @Id
   private String id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, name = "author_id")
   private String authorId;
 
   @Column(columnDefinition = "TEXT")

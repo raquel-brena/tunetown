@@ -27,7 +27,7 @@ public class TuneScoreController {
     @PostMapping(path="/calculate")
     public ResponseEntity<TuneScoreResponse>  calculateTuneScore(@RequestBody TuneScoreRequest request) {
         try {
-            var tunescore = tuneScoreService.calculateTuneScore(UUID.fromString(request.originUserId()), UUID.fromString(request.destinationUserId()));
+            var tunescore = tuneScoreService.calculateTuneScore(request.originUserId(),request.destinationUserId());
             return ResponseEntity.ok(tunescore);
         } catch (BusinessException e) {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();

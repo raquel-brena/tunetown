@@ -29,7 +29,6 @@ public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
       t.tunableItemArtworkUrl as artworkUrl,
       COUNT(t) as tuneetCount
     FROM TuneetEntity t
-    WHERE t.tunableItemType = :itemType
     GROUP BY t.tunableItemId, t.tunableItemTitle, t.tunableItemArtist,
       t.tunableItemPlataform, t.tunableItemType, t.tunableItemArtworkUrl
     ORDER BY COUNT(t) DESC

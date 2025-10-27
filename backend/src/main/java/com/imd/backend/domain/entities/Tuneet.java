@@ -8,17 +8,21 @@ import java.util.UUID;
 import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Representa um "post" (tuneet) de um usuário
  */
+@Getter
+@Setter
 public class Tuneet {
   private final UUID id;
   private String textContent;
-  private UUID authorId;
+  private String authorId;
   private TunableItem tunableItem;
 
-  private Tuneet(UUID id, UUID authorId, String textContent, TunableItem tunableItem) {
+  private Tuneet(UUID id, String authorId, String textContent, TunableItem tunableItem) {
 
     this.id = id;
     this.authorId = authorId;
@@ -27,7 +31,7 @@ public class Tuneet {
     this.validateAttributes();
   }
 
-  public static Tuneet createNew(UUID authorId, String textContent, TunableItem item) {
+  public static Tuneet createNew(String authorId, String textContent, TunableItem item) {
     final UUID id = UUID.randomUUID();
     
     return new Tuneet(id, authorId, textContent, item);
@@ -35,7 +39,7 @@ public class Tuneet {
 
   public static Tuneet rebuild(
     UUID id,
-    UUID authorId,
+    String authorId,
     String textContent,
     TunableItem item
   ) {
@@ -43,18 +47,6 @@ public class Tuneet {
   }
 
   // Getters
-  public UUID getId() {
-    return this.id;
-  }
-
-  public UUID getAuthorId() {
-    return this.authorId;
-  }
-
-  public String getTextContent() {
-    return this.textContent;
-  }
-
   public String getItemId() {
     return this.tunableItem.getItemId();
   }

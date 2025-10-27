@@ -67,7 +67,7 @@ public class TuneetController {
 
   @GetMapping(path = "author/{authorId}" , produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PageResult<Tuneet>> getTuneetsByAuthorId(
-      @PathVariable(required = true) UUID authorId,
+      @PathVariable(required = true) String authorId,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "20") int size,
       @RequestParam(defaultValue = "id") String orderBy,
@@ -142,7 +142,7 @@ public class TuneetController {
     @Valid @RequestBody CreateTuneetDTO createTuneetDTO,
     @AuthenticationPrincipal TuneUserDetails userDetails
   ) {
-    final UUID userId = userDetails.user().getId();
+    final String userId = userDetails.user().getId().toString();
     
     final Tuneet createdTuneet = this.tuneetService.createTuneet(
       createTuneetDTO.itemId(),

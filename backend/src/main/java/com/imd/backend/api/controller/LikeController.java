@@ -70,7 +70,7 @@ public class LikeController implements CrudController<Long, LikeCreateDTO> {
     }
 
     @GetMapping("/tuneet/{tuneetId}")
-    public ResponseEntity<Page<LikeResponseDTO>> findByTuneetId(@PathVariable Long tuneetId, Pageable pageable) {
+    public ResponseEntity<Page<LikeResponseDTO>> findByTuneetId(@PathVariable String tuneetId, Pageable pageable) {
         Page<Like> likes = likeService.findByTuneetId(tuneetId, pageable);
         Page<LikeResponseDTO> dtoPage = likes.map(LikeMapper::toDTO);
 

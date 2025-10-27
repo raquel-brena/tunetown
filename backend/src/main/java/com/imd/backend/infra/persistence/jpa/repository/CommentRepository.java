@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
-    Page<CommentEntity> findByTuneetId(Long tuneetId, Pageable pageable);
+    Page<CommentEntity> findByTuneetId(String tuneetId, Pageable pageable);
 }

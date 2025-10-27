@@ -44,7 +44,7 @@ public class TuneetService {
     return this.tuneetRepository.findAll(pagination);
   }
 
-  public PageResult<Tuneet> findTuneetsByAuthorId(UUID authorId, Pagination pagination) {
+  public PageResult<Tuneet> findTuneetsByAuthorId(String authorId, Pagination pagination) {
     if(!this.userService.userExistsById(authorId))
       throw new NotFoundException("Não existe nenhum autor com esse ID");
 
@@ -77,7 +77,7 @@ public class TuneetService {
   @Transactional(rollbackOn = Exception.class)
   public Tuneet createTuneet(
     String tunableItemId,
-    UUID authorId,
+    String authorId,
     TunableItemType tunableItemType,
     String textContent    
   ) {
@@ -86,7 +86,9 @@ public class TuneetService {
 
     final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
     final Tuneet tuneetToSave = Tuneet.createNew(authorId, textContent, tunableItem);
-    
+
+    System.out.println(tuneetToSave.getAuthorId());
+
     this.tuneetRepository.save(tuneetToSave);
     return tuneetToSave;
   }

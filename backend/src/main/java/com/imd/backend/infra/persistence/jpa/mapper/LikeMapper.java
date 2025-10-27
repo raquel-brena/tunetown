@@ -10,6 +10,9 @@ import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 public class LikeMapper {
 
     public static LikeResponseDTO toDTO(Like like) {
+        if (like == null) {
+            return null;
+        }
         return LikeResponseDTO.builder()
                 .id(like.getId())
                 .tuneetId(like.getTuneetId())

@@ -17,6 +17,7 @@ public class TuneetJpaMapper {
   public static TuneetEntity fromTuneetDomain(Tuneet tuneet) {
       return TuneetEntity.builder()
               .id(tuneet.getId().toString())
+              .authorId(tuneet.getAuthorId())
               .contentText(tuneet.getTextContent())
               .tunableItemId(tuneet.getItemId())
               .tunableItemPlataform(tuneet.getItemPlataform())
@@ -75,7 +76,7 @@ public class TuneetJpaMapper {
   public Tuneet tuneetFromJpaEntity(TuneetEntity entity) {
     return Tuneet.rebuild(
       UUID.fromString(entity.getId()),
-      UUID.fromString(entity.getAuthorId()),
+      entity.getAuthorId(),
       entity.getContentText(),
       new TunableItem(
         entity.getTunableItemId(),

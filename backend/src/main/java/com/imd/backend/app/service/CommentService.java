@@ -68,7 +68,7 @@ public class CommentService {
         repository.deleteById(id);
     }
 
-    public Page<Comment> findByTuneetId(Long tuneetId, Pageable pageable) {
+    public Page<Comment> findByTuneetId(String tuneetId, Pageable pageable) {
         Page<CommentEntity> entities = repository.findByTuneetId(tuneetId, pageable);
 
         if (!entities.hasContent()) {

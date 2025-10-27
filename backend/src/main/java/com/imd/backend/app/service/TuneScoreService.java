@@ -21,7 +21,7 @@ public class TuneScoreService {
         this.openAiGateway = openAiGateway;
     }
 
-    public TuneScoreResponse calculateTuneScore(UUID firstUserId, UUID secondUserId) {
+    public TuneScoreResponse calculateTuneScore(String firstUserId, String secondUserId) {
         var pagination = new Pagination(0, 50, "id", "DESC");
 
         var firstUserTuneets = tuneetService.findTuneetsByAuthorId(firstUserId, pagination);

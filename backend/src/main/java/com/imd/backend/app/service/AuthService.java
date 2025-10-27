@@ -1,7 +1,10 @@
 package com.imd.backend.app.service;
 
+import com.imd.backend.api.dto.auth.LoginResponse;
+import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.exception.BusinessException;
+import com.imd.backend.infra.security.TuneUserDetails;
 import com.imd.backend.infra.security.TuneUserDetailsService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,10 +30,16 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String login(String username, String password) {
+    public LoginResponse login(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        var tuneUserDetails = tuneUserDetailsService.loadUserByUsername(username);
-        return jwtService.generateAccessToken(tuneUserDetails);
+        TuneUserDetails tuneUserDetails = tuneUserDetailsService.loadUserByUsername(username);
+
+        User user = this.userService.findUserByUsername(tuneUserDetails.getUsername());
+
+        String accessToken = jwtService.generateAccessToken(tuneUserDetails);
+        UserDTO userReponse = new UserDTO(user.getId().toString(), user.getUsername(), user.getEmail(), user.getProfileId());
+
+        return new LoginResponse(accessToken, userReponse);
     }
 
     public User register(String username, String email, String password) throws BusinessException {

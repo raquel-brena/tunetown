@@ -6,7 +6,7 @@ import com.imd.backend.domain.repository.UserRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 
-import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -37,11 +37,19 @@ public class UserService {
         return user;
     }
 
+    public User findUserByUsername (String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new BusinessException("User not found");
+        }
+        return user.get();
+    }
+
     public PageResult<User> findAllUsers(Pagination pageable) {
         return userRepository.findAll(pageable); 
     }
 
-    public boolean userExistsById(UUID id) {
+    public boolean userExistsById(String id) {
         return this.userRepository.existsById(id);
     }
 }

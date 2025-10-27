@@ -81,11 +81,12 @@ public class TuneetJpaRepository implements TuneetRepository {
   }
 
   @Override
-  public PageResult<Tuneet> findByAuthorId(UUID authorId, Pagination pagination) {
+  public PageResult<Tuneet> findByAuthorId(String authorId, Pagination pagination) {
+
     final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
         Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
 
-    final var findedTuneets = tuneetJPA.findByAuthorId(authorId.toString(), pageable);
+    final var findedTuneets = tuneetJPA.findByAuthorId(authorId, pageable);
 
     return new PageResult<>(
       findedTuneets.getContent().stream()

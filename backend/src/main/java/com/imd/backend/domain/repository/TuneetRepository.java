@@ -12,7 +12,7 @@ import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 public interface TuneetRepository {
     public PageResult<Tuneet> findAll(Pagination pagination);
-    public PageResult<Tuneet> findByAuthorId(UUID authorId, Pagination pagination); 
+    public PageResult<Tuneet> findByAuthorId(String authorId, Pagination pagination);
     public PageResult<Tuneet> findByTunableItemId(String tunableItemId, Pagination pagination);
     public PageResult<Tuneet> findByTunableItemTitleContaining(String word, Pagination pagination);
     public PageResult<Tuneet> findByTunableItemArtistContaining(String word, Pagination pagination);

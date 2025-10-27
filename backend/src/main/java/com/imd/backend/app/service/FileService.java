@@ -40,11 +40,12 @@ public class FileService {
         if (entity != null && entity.getPhoto() != null) {
             String avatarUrl = s3Service.generatePresignedUrl(
                     entity.getPhoto().getFileName(),
-                    Duration.ofHours(1)
+                    Duration.ofHours(36)
             );
             entity.getPhoto().setUrl(avatarUrl);
         }
     }
+
     private void validateAvatar(MultipartFile file) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("O arquivo do avatar não pode estar vazio.");

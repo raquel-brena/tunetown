@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LikeService {
 
@@ -30,8 +32,18 @@ public class LikeService {
 
     public Like create(Like like) {
         LikeEntity entity = LikeMapper.toEntity(like);
-        LikeEntity saved = repository.save(entity);
-        return LikeMapper.toDomain(saved);
+        Optional<LikeEntity> existLike = repository.findByProfileIdAndTuneetId(like.getProfileId(), like.getTuneetId());
+
+        System.out.println(like.getProfileId() + "\t" + like.getTuneetId());
+
+        if (existLike.isPresent()) {
+            LikeEntity likeEntity = existLike.get();
+            repository.delete(likeEntity);
+            return null;
+        } else {
+            LikeEntity saved = repository.save(entity);
+            return LikeMapper.toDomain(saved);
+        }
     }
 
     public Like update(Like like) {
@@ -50,7 +62,7 @@ public class LikeService {
         repository.deleteById(id);
     }
 
-    public Page<Like> findByTuneetId(Long tuneetId, Pageable pageable) {
+    public Page<Like> findByTuneetId(String tuneetId, Pageable pageable) {
         Page<LikeEntity> entities = repository.findByTuneetId(tuneetId, pageable);
         if (!entities.hasContent()) {
             throw new NotFoundException("Nenhum like encontrado para este tuneet.");
