@@ -25,6 +25,10 @@ public class UserService {
 
     @Transactional(rollbackFor = Exception.class)
     public User createUser(User user) throws BusinessException {
+        if ("tuto".equalsIgnoreCase(user.getUsername())) {
+            throw new BusinessException("O username 'tuto' é reservado e não pode ser usado");
+        }
+
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new BusinessException("Username já registrado");
         }
