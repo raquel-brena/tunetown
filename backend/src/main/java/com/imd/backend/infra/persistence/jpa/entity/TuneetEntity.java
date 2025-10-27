@@ -3,7 +3,10 @@ package com.imd.backend.infra.persistence.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -35,4 +38,12 @@ public class TuneetEntity {
   private String tunableItemArtist;
   private String tunableItemType;
   private String tunableItemArtworkUrl;
+
+  @CreationTimestamp
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private LocalDateTime createdAt;
+
+  @UpdateTimestamp
+  @Column(name = "updated_at", nullable = false)
+  private LocalDateTime updatedAt;
 }

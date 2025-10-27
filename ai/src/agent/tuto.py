@@ -18,12 +18,16 @@ def get_tuneets_by_username(username: str) -> str:
     try:
         sql = """
         SELECT 
-            content_text, 
-            tunable_item_artist, 
-            tunable_item_title 
+            users.username,
+            tuneets.content_text, 
+            tuneets.tunable_item_artist, 
+            tuneets.tunable_item_title,
+            tuneets.created_at,
+            tuneets.updated_at
         FROM tuneets 
         JOIN users ON tuneets.author_id = users.id 
         WHERE users.username = %s
+        ORDER BY tuneets.created_at DESC
         """
         conn = _get_database_connection()
         db_cursor = conn.cursor()
@@ -35,9 +39,9 @@ def get_tuneets_by_username(username: str) -> str:
 
         result = f"Found {len(rows)} posts for user {username}:\n"
         for row in rows:
-            content, artist, title = row[0], row[1], row[2]
+            username_col, content, artist, title, created_at, updated_at = row[0], row[1], row[2], row[3], row[4], row[5]
             snippet = (content[:100] + "...") if content and len(content) > 100 else (content or "")
-            result += f"- Title: {title}, Artist: {artist}, {username} said: {snippet}\n"
+            result += f"- Title: {title}, Artist: {artist}, {username_col} said: {snippet} (posted: {created_at})\n"
 
         return result
     except Exception as e:
