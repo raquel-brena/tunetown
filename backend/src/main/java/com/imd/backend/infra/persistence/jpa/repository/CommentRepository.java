@@ -1,7 +1,6 @@
 package com.imd.backend.infra.persistence.jpa.repository;
 
 import com.imd.backend.infra.persistence.jpa.entity.CommentEntity;
-import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

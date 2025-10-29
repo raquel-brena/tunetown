@@ -3,7 +3,6 @@ package com.imd.backend.app.service;
 import com.imd.backend.api.dto.comment.CommentCreateDTO;
 import com.imd.backend.domain.entities.Comment;
 import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TuneetResume;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.infra.persistence.jpa.entity.CommentEntity;
 import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
@@ -17,21 +16,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.UUID;
 
-
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository repository;
     private final TuneetJpaRepository tuneetRepository;
     private final ProfileRepository profileRepository;
-
-    public CommentService(CommentRepository repository, TuneetJpaRepository tuneetRepository, ProfileRepository profileRepository) {
-        this.repository = repository;
-        this.tuneetRepository = tuneetRepository;
-        this.profileRepository = profileRepository;
-    }
+    private final TutoResponder tutoResponder;
 
     public Page<Comment> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(this::toDomain);
@@ -48,17 +43,38 @@ public class CommentService {
                 .orElseThrow();
         ProfileEntity author = profileRepository.findById(dto.getAuthorId())
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado."));
+
         CommentEntity entity = CommentMapper.toEntity(dto);
         entity.setAuthor(author);
         entity.setTuneet(TuneetJpaMapper.fromTuneetDomain(tuneet));
-        return toDomain(repository.save(entity));
+        entity.setCreatedAt(new Date());
+
+        CommentEntity savedComment = repository.save(entity);
+
+        if (containsTutoMention(dto.getContentText())) {
+            String tunableSummary;
+            try {
+                tunableSummary = tuneet.getTunableContent();
+            } catch (Exception ex) {
+                tunableSummary = null;
+            }
+            tutoResponder.generateResponseAsync(
+                    savedComment.getTuneet().getId(),
+                    tuneet.getTextContent(),
+                    tunableSummary,
+                    dto.getContentText()
+            );
+        }
+
+        return toDomain(savedComment);
     }
 
     public Comment update(Comment comment) {
-        var entity = repository.findById(comment.getId())
+        CommentEntity entity = repository.findById(comment.getId())
                 .orElseThrow(() -> new NotFoundException("Comentário não encontrado."));
         entity.setContentText(comment.getContentText());
-        return toDomain(repository.save(entity));
+        CommentEntity saved = repository.save(entity);
+        return toDomain(saved);
     }
 
     public void delete(Long id) {
@@ -70,12 +86,10 @@ public class CommentService {
 
     public Page<Comment> findByTuneetId(String tuneetId, Pageable pageable) {
         Page<CommentEntity> entities = repository.findByTuneetId(tuneetId, pageable);
-
         if (!entities.hasContent()) {
             throw new NotFoundException("Nenhum comentário encontrado para este tuneet.");
         }
-
-        return entities.map(CommentMapper::toDomain);
+        return entities.map(this::toDomain);
     }
 
     private Comment toDomain(CommentEntity entity) {
@@ -86,5 +100,9 @@ public class CommentService {
                 entity.getContentText(),
                 entity.getCreatedAt()
         );
+    }
+
+    private boolean containsTutoMention(String content) {
+        return content != null && content.toLowerCase().contains("@tuto");
     }
 }
