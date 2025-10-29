@@ -40,6 +40,6 @@ public class TuneetEntity {
   private String tunableItemArtworkUrl;
 
   @CreationTimestamp
-  @Column(name = "created_at", updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+  @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
 }

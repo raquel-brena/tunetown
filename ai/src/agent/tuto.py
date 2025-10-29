@@ -22,8 +22,7 @@ def get_tuneets_by_username(username: str) -> str:
             tuneets.content_text, 
             tuneets.tunable_item_artist, 
             tuneets.tunable_item_title,
-            tuneets.created_at,
-            tuneets.updated_at
+            tuneets.created_at
         FROM tuneets 
         JOIN users ON tuneets.author_id = users.id 
         WHERE users.username = %s
@@ -39,7 +38,7 @@ def get_tuneets_by_username(username: str) -> str:
 
         result = f"Found {len(rows)} posts for user {username}:\n"
         for row in rows:
-            username_col, content, artist, title, created_at, updated_at = row[0], row[1], row[2], row[3], row[4], row[5]
+            username_col, content, artist, title, created_at = row[0], row[1], row[2], row[3], row[4]
             snippet = (content[:100] + "...") if content and len(content) > 100 else (content or "")
             result += f"- Title: {title}, Artist: {artist}, {username_col} said: {snippet} (posted: {created_at})\n"
 
