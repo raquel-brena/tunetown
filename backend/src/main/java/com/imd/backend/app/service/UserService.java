@@ -2,6 +2,7 @@ package com.imd.backend.app.service;
 
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.exception.BusinessException;
+import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.repository.UserRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
@@ -58,11 +59,31 @@ public class UserService {
         return this.userRepository.existsById(id);
     }
 
-    public Optional<UserWithProfile> findUserWithProfileByUsername(String username) {
-        return this.userRepository.findUserWithProfileByUsername(username);
+    public UserWithProfile findUserWithProfileByUsername(String username) {
+        final var userOp = this.userRepository.findUserWithProfileByUsername(username);
+
+        if(userOp.isEmpty())
+            throw new NotFoundException("Usuário não encontrado!");
+
+        final UserWithProfile user = userOp.get();
+
+        if(user.getPhotoFileName() != null) {
+            final String presignedUrl = FileService.applyPresignedUrl(user.getPhotoFileName());
+            user.setPhotoUrl(presignedUrl);
+        }
+
+        return user;
     }
 
     public PageResult<UserWithProfile> searchUsersWithProfileByUsernamePart(String usernamePart, Pagination pageable) {
-        return this.userRepository.searchUsersWithProfileByUsernamePart(usernamePart, pageable);
+        final PageResult<UserWithProfile> users = this.userRepository.searchUsersWithProfileByUsernamePart(usernamePart, pageable);
+        users.itens().forEach(u -> {
+            if(u.getPhotoFileName() == null || u.getPhotoFileName().isBlank()) return;
+
+            final String presignedUrl = FileService.applyPresignedUrl(u.getPhotoFileName());
+            u.setPhotoUrl(presignedUrl);
+        });
+
+        return users;
     }
 }

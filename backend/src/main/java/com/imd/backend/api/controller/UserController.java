@@ -3,13 +3,10 @@ package com.imd.backend.api.controller;
 import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.app.service.UserService;
 import com.imd.backend.domain.entities.User;
-import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.UserWithProfile;
 import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
-
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,11 +58,9 @@ public class UserController {
     public ResponseEntity<UserWithProfile> findUserWithProfileByUsername(
         @PathVariable(required = true) String username
     ) {
-        final Optional<UserWithProfile> userOp = this.service.findUserWithProfileByUsername(username);
-
-        if(userOp.isEmpty()) throw new NotFoundException("Usuário não encontrado");
+        final UserWithProfile user = this.service.findUserWithProfileByUsername(username);
         
-        return ResponseEntity.ok(userOp.get());
+        return ResponseEntity.ok(user);
     }    
 
     @GetMapping("/with-profile/search-by-username-part/{username}")

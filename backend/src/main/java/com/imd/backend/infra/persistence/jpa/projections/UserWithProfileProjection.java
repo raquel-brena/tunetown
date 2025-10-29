@@ -16,4 +16,6 @@ public interface UserWithProfileProjection {
   String getFavoriteSong();
 
   Date getCreatedAt();
+
+  String getFileName();
 }

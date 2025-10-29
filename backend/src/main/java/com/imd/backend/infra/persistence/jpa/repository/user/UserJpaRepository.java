@@ -90,7 +90,8 @@ public class UserJpaRepository implements UserRepository{
         p.getProfileId(), 
         p.getBio(), 
         p.getFavoriteSong(), 
-        p.getCreatedAt())).toList(),
+        p.getCreatedAt(),
+        p.getFileName())).toList(),
       page.getNumberOfElements(),
       page.getTotalElements(),
       page.getNumber(),
@@ -114,7 +115,8 @@ public class UserJpaRepository implements UserRepository{
       projection.getProfileId(),
       projection.getBio(),
       projection.getFavoriteSong(),
-      projection.getCreatedAt()
+      projection.getCreatedAt(), 
+      projection.getFileName()
     ));
   }
 }

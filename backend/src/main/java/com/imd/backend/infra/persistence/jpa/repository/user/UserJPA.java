@@ -25,10 +25,12 @@ public interface UserJPA extends JpaRepository<UserEntity, String> {
         "  p.id as profileId, " +
         "  p.bio as bio, " +
         "  p.favoriteSong as favoriteSong, " +
-        "  p.createdAt as createdAt " +
+        "  p.createdAt as createdAt, " +
+        "  ph.fileName as fileName " +
         "FROM UserEntity u " +
-        // O JOIN funciona por causa da relação @OneToOne
-        "JOIN u.profile p " + 
+        // O JOIN funciona por causa da relação estabelecida na entity
+        "JOIN u.profile p " +
+        "LEFT JOIN p.photo ph " + 
         "WHERE u.username = :username"
     )
     public Optional<UserWithProfileProjection> findUserWithProfileByUsername(@Param("username") String username);  
@@ -40,10 +42,12 @@ public interface UserJPA extends JpaRepository<UserEntity, String> {
         "  p.id as profileId, " +
         "  p.bio as bio, " +
         "  p.favoriteSong as favoriteSong, " +
-        "  p.createdAt as createdAt " +
+        "  p.createdAt as createdAt, " +
+        "  ph.fileName as fileName " +
         "FROM UserEntity u " +
-        // O JOIN funciona por causa da relação @OneToOne
+        // O JOIN funciona por causa da relação estabelecida na entity
         "JOIN u.profile p " +
+        "LEFT JOIN p.photo ph " +
         "WHERE UPPER(u.username) LIKE UPPER(CONCAT('%', :username, '%'))"
     )
     public Page<UserWithProfileProjection> searchUsersWithProfileByUsernameContaining(@Param("username") String username, Pageable pageable);    
