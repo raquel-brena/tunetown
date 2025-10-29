@@ -15,5 +15,7 @@ class Question(BaseModel):
 
 @app.post("/tuto")
 async def tuto(question: Question):
+    print("Received question:", question.question)
     response = ask_tuto(question.question)
+    print("Tuto response:", response)
     return {"response": response}
