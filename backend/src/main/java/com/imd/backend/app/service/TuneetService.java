@@ -47,7 +47,7 @@ public class TuneetService {
 
   public PageResult<Tuneet> findTuneetsByAuthorId(String authorId, Pagination pagination) {
     if(this.userService.findUserByUsername(authorId) == null)
-      throw new NotFoundException("Não existe nenhum autor com esse ID");
+      throw new NotFoundException("Não existe nenhum autor com esse username");
 
     return this.tuneetRepository.findByAuthorId(authorId, pagination);
   }

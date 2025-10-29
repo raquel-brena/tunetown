@@ -8,8 +8,6 @@ import com.imd.backend.domain.valueObjects.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class TuneScoreService {
     private final TuneetService tuneetService;
@@ -21,11 +19,11 @@ public class TuneScoreService {
         this.openAiGateway = openAiGateway;
     }
 
-    public TuneScoreResponse calculateTuneScore(String firstUserId, String secondUserId) {
+    public TuneScoreResponse calculateTuneScore(String firstUsername, String secondUsername) {
         var pagination = new Pagination(0, 50, "id", "DESC");
 
-        var firstUserTuneets = tuneetService.findTuneetsByAuthorId(firstUserId, pagination);
-        var secondUserTuneets = tuneetService.findTuneetsByAuthorId(secondUserId, pagination);
+        var firstUserTuneets = tuneetService.findTuneetsByAuthorId(firstUsername, pagination);
+        var secondUserTuneets = tuneetService.findTuneetsByAuthorId(secondUsername, pagination);
 
         var firstUserTunableItems = firstUserTuneets.itens().stream()
                 .map(Tuneet::getTunableContent).toList();
@@ -105,8 +103,8 @@ public class TuneScoreService {
             """.formatted(firstUserTunableItems, secondUserTunableItems), TuneScoreStructuredResponse.class);
 
         return new TuneScoreResponse(
-                firstUserId.toString(),
-                secondUserId.toString(),
+                firstUsername,
+                secondUsername,
                 response.score(),
                 response.message()
         );
