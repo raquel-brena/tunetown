@@ -30,3 +30,7 @@ cloud:
     region: ${AWS_REGION:us-east-2}
     s3:
       bucket: ${AWS_BUCKET:aws_bucket}
+
+ai:
+  service:
+    url: ${AI_SERVICE_URL:http://ai:5000}

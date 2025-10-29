@@ -25,9 +25,22 @@ services:
     networks:
       - spring-postgres
     ports:
-      - '5432:5432'
+      - '5434:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  ai:
+    container_name: tunetown-ai
+    build: ai
+    ports:
+      - '5000:5000'
+    env_file:
+      - ./ai/.env
+    networks:
+      - spring-postgres
+    depends_on:
+      - postgres
+
 
 volumes:
   postgres_data:
