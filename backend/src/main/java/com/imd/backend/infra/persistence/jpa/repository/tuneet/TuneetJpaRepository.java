@@ -1,10 +1,13 @@
 package com.imd.backend.infra.persistence.jpa.repository.tuneet;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.imd.backend.api.dto.TuneetResumoDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +35,7 @@ public class TuneetJpaRepository implements TuneetRepository {
   public void save(Tuneet tuneet) {
     final TuneetEntity entityToSave = tuneetJpaMapper.fromTuneetDomain(tuneet);
 
+    entityToSave.setCreatedAt(LocalDateTime.now());
     this.tuneetJPA.save(entityToSave);
   }
 
@@ -47,13 +51,13 @@ public class TuneetJpaRepository implements TuneetRepository {
 
   @Override
   public Optional<Tuneet> findById(UUID id){
-    final Optional<TuneetEntity> opEntity = this.tuneetJPA.findById(id.toString());
+    final Optional<TuneetResumoDTO> opEntity = tuneetJPA.findResumoById(id.toString());
 
     try {
       if(opEntity.isPresent()) {
-        final TuneetEntity entity = opEntity.get();
+        final TuneetResumoDTO entity = opEntity.get();
 
-        return Optional.of(tuneetJpaMapper.tuneetFromJpaEntity(entity));
+        return Optional.of(tuneetJpaMapper.tuneetFromResumoDTO(entity));
       }  
 
       return Optional.empty();
@@ -86,11 +90,11 @@ public class TuneetJpaRepository implements TuneetRepository {
     final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
         Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
 
-    final var findedTuneets = tuneetJPA.findByAuthorId(authorId, pageable);
+    final Page<TuneetResumoDTO> findedTuneets = tuneetJPA.findResumoByAuthorId(authorId, pageable);
 
     return new PageResult<>(
       findedTuneets.getContent().stream()
-          .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
+          .map(entity -> tuneetJpaMapper.tuneetFromResumoDTO(entity))
           .toList(),
       findedTuneets.getNumberOfElements(),
       findedTuneets.getTotalElements(),

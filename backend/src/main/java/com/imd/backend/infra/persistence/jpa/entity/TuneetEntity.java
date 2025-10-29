@@ -20,6 +20,10 @@ public class TuneetEntity {
   @Id
   private String id;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author", nullable = false)
+  private UserEntity author;
+
   @Column(nullable = false, name = "author_id")
   private String authorId;
 
@@ -42,4 +46,14 @@ public class TuneetEntity {
   @CreationTimestamp
   @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
+
+  @Transient
+  private String authorName;
+
+  @Transient
+  private long totalComments;
+
+  @Transient
+  private long totalLikes;
+
 }

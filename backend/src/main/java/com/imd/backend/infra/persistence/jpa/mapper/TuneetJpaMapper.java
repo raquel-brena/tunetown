@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+import com.imd.backend.api.dto.TuneetResumoDTO;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.domain.entities.Tuneet;
@@ -18,6 +19,7 @@ public class TuneetJpaMapper {
       return TuneetEntity.builder()
               .id(tuneet.getId().toString())
               .authorId(tuneet.getAuthorId())
+              .author(tuneet.getAuthor())
               .contentText(tuneet.getTextContent())
               .tunableItemId(tuneet.getItemId())
               .tunableItemPlataform(tuneet.getItemPlataform())
@@ -73,10 +75,34 @@ public class TuneetJpaMapper {
   //     )
   //   );
   // }
-  public Tuneet tuneetFromJpaEntity(TuneetEntity entity) {
+
+  public Tuneet tuneetFromResumoDTO(TuneetResumoDTO dto) {
+      return Tuneet.rebuild(
+              UUID.fromString(dto.id()),
+              dto.authorName(),
+              dto.authorId(),
+              dto.contentText(),
+              new TunableItem(
+                      dto.tunableItemId(),
+                      dto.tunableItemPlataform(),
+                      dto.tunableItemTitle(),
+                      dto.tunableItemArtist(),
+                      URI.create(dto.tunableItemArtworkUrl()),
+                      TunableItemType.fromString(dto.tunableItemType())
+              ),
+              dto.createdAt(),
+              dto.totalComments(),
+              dto.totalLikes()
+      );
+  }
+
+
+
+    public Tuneet tuneetFromJpaEntity(TuneetEntity entity) {
     return Tuneet.rebuild(
       UUID.fromString(entity.getId()),
       entity.getAuthorId(),
+      entity.getAuthorName(),
       entity.getContentText(),
       new TunableItem(
         entity.getTunableItemId(),
@@ -84,8 +110,12 @@ public class TuneetJpaMapper {
         entity.getTunableItemTitle(),
         entity.getTunableItemArtist(),
         URI.create((entity.getTunableItemArtworkUrl())),
-        TunableItemType.fromString(entity.getTunableItemType()))
-    );
+        TunableItemType.fromString(entity.getTunableItemType()
+      )
+    ),
+            entity.getCreatedAt(),
+            entity.getTotalComments(),
+            entity.getTotalLikes());
   }
 
   // public TuneetEntity fromTuneetResumeDomain(TuneetResume tuneetResume) {

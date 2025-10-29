@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,8 @@ public class TuneetService {
   public TuneetService(
     @Qualifier("SpotifyGateway") TunablePlataformGateway plataformGateway,
     @Qualifier("TuneetJpaRepository") TuneetRepository tuneetRepository,
-    UserService userService
-  ) {
+    UserService userService,
+    ProfileService profileService) {
     this.plataformGateway = plataformGateway;
     this.tuneetRepository = tuneetRepository;
     this.userService = userService;
@@ -45,7 +46,7 @@ public class TuneetService {
   }
 
   public PageResult<Tuneet> findTuneetsByAuthorId(String authorId, Pagination pagination) {
-    if(!this.userService.userExistsById(authorId))
+    if(this.userService.findUserByUsername(authorId) == null)
       throw new NotFoundException("Não existe nenhum autor com esse ID");
 
     return this.tuneetRepository.findByAuthorId(authorId, pagination);
@@ -77,17 +78,15 @@ public class TuneetService {
   @Transactional(rollbackOn = Exception.class)
   public Tuneet createTuneet(
     String tunableItemId,
-    String authorId,
+    UserEntity user,
     TunableItemType tunableItemType,
     String textContent    
   ) {
-    if(!this.userService.userExistsById(authorId)) // Se o usuário não existir
+    if(!this.userService.userExistsById(user.getId().toString())) // Se o usuário não existir
       throw new BusinessException("Não existe nenhum usuário com esse ID");
 
     final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
-    final Tuneet tuneetToSave = Tuneet.createNew(authorId, textContent, tunableItem);
-
-    System.out.println(tuneetToSave.getAuthorId());
+    final Tuneet tuneetToSave = Tuneet.createNew(user, textContent, tunableItem);
 
     this.tuneetRepository.save(tuneetToSave);
     return tuneetToSave;

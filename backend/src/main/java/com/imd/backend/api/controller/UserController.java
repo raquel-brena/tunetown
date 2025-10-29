@@ -27,7 +27,7 @@ public class UserController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "20") int size,
         @RequestParam(defaultValue = "id") String orderBy,
-        @RequestParam(defaultValue = "ASC") String orderDirection        
+        @RequestParam(defaultValue = "ASC") String orderDirection
     ) {
         final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
 
@@ -43,5 +43,11 @@ public class UserController {
         );
         
         return ResponseEntity.ok(dtoPage);
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<User> findUserByUsername(String username) {
+        final User user = service.findUserByUsername(username);
+        return ResponseEntity.ok(user);
     }
 }

@@ -1,6 +1,7 @@
 package com.imd.backend.domain.entities;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,10 +22,14 @@ public class Tuneet {
   private final UUID id;
   private String textContent;
   private String authorId;
+  private String authorName;
+  private UserEntity author;
   private TunableItem tunableItem;
+  private long totalComments;
+  private long totalLikes;
+  LocalDateTime createdAt;
 
   private Tuneet(UUID id, String authorId, String textContent, TunableItem tunableItem) {
-
     this.id = id;
     this.authorId = authorId;
     this.textContent = textContent;
@@ -31,22 +37,49 @@ public class Tuneet {
     this.validateAttributes();
   }
 
-  public static Tuneet createNew(String authorId, String textContent, TunableItem item) {
+    public Tuneet(
+            String id,
+            String contentText,
+            LocalDateTime createdAt,
+            String authorName,
+            long totalComments,
+            long totalLikes
+    ) {
+        this.id =  UUID.fromString(id);
+        this.textContent = contentText;
+        this.createdAt = createdAt;
+        this.authorName = authorName;
+        this.totalComments = totalComments;
+        this.totalLikes = totalLikes;
+    }
+
+
+    public static Tuneet createNew(UserEntity user, String textContent, TunableItem item) {
     final UUID id = UUID.randomUUID();
-    
-    return new Tuneet(id, authorId, textContent, item);
+       Tuneet tuneet =  new Tuneet(id, user.getId(),  textContent, item);
+       tuneet.setAuthor(user);
+        return tuneet;
   }
 
-  public static Tuneet rebuild(
-    UUID id,
-    String authorId,
-    String textContent,
-    TunableItem item
-  ) {
-    return new Tuneet(id, authorId, textContent, item);
-  }
+    public static Tuneet rebuild(
+            UUID id,
+            String authorId,
+            String authorName,
+            String textContent,
+            TunableItem item,
+            LocalDateTime createdAt,
+            long totalComments,
+            long totalLikes
+    ) {
+        Tuneet tuneet = new Tuneet(id, authorId, textContent, item);
+        tuneet.setAuthorName(authorName);
+        tuneet.setCreatedAt(createdAt);
+        tuneet.setTotalComments(totalComments);
+        tuneet.setTotalLikes(totalLikes);
+        return tuneet;
+    }
 
-  // Getters
+    // Getters
   public String getItemId() {
     return this.tunableItem.getItemId();
   }
