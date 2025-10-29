@@ -5,9 +5,12 @@ import com.imd.backend.app.service.UserService;
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.UserWithProfile;
 import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,4 +53,28 @@ public class UserController {
         final User user = service.findUserByUsername(username);
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping("/with-profile/username/{username}")
+    public ResponseEntity<UserWithProfile> findUserWithProfileByUsername(
+        @PathVariable(required = true) String username
+    ) {
+        final UserWithProfile user = this.service.findUserWithProfileByUsername(username);
+        
+        return ResponseEntity.ok(user);
+    }    
+
+    @GetMapping("/with-profile/search-by-username-part/{username}")
+    public ResponseEntity<PageResult<UserWithProfile>> searchUserWithProfileByUsernamePart(
+        @PathVariable(required = true) String username,     
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "20") int size,
+        @RequestParam(defaultValue = "id") String orderBy,
+        @RequestParam(defaultValue = "ASC") String orderDirection
+    ) {
+        final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+
+        final PageResult<UserWithProfile> users = service.searchUsersWithProfileByUsernamePart(username, pagination);
+
+        return ResponseEntity.ok(users);
+    }    
 }
