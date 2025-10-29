@@ -5,6 +5,7 @@ import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.repository.UserRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.UserWithProfile;
 
 import java.util.Optional;
 
@@ -55,5 +56,13 @@ public class UserService {
 
     public boolean userExistsById(String id) {
         return this.userRepository.existsById(id);
+    }
+
+    public Optional<UserWithProfile> findUserWithProfileByUsername(String username) {
+        return this.userRepository.findUserWithProfileByUsername(username);
+    }
+
+    public PageResult<UserWithProfile> searchUsersWithProfileByUsernamePart(String usernamePart, Pagination pageable) {
+        return this.userRepository.searchUsersWithProfileByUsernamePart(usernamePart, pageable);
     }
 }

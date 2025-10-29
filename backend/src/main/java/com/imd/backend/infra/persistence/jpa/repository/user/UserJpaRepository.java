@@ -3,6 +3,7 @@ package com.imd.backend.infra.persistence.jpa.repository.user;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,8 +13,10 @@ import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.repository.UserRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.UserWithProfile;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
+import com.imd.backend.infra.persistence.jpa.projections.UserWithProfileProjection;
 
 import lombok.RequiredArgsConstructor;
 
@@ -70,5 +73,48 @@ public class UserJpaRepository implements UserRepository{
   @Override
   public boolean existsById(String id) {
     return userJPA.existsById(id);
+  }
+
+  @Override
+  public PageResult<UserWithProfile> searchUsersWithProfileByUsernamePart(String username, Pagination pageQuery) {
+    final Sort.Direction direction = Sort.Direction.fromString(pageQuery.orderDirection());
+    final Sort sort = Sort.by(direction, pageQuery.orderBy());
+    final Pageable pageable = PageRequest.of(pageQuery.page(), pageQuery.size(), sort);
+
+    final Page<UserWithProfileProjection> page = userJPA.searchUsersWithProfileByUsernameContaining(username, pageable);
+    return new PageResult<UserWithProfile>(
+      page.getContent().stream().map(p -> new UserWithProfile(
+        UUID.fromString(p.getUserId()), 
+        p.getUserEmail(), 
+        p.getUsername(), 
+        p.getProfileId(), 
+        p.getBio(), 
+        p.getFavoriteSong(), 
+        p.getCreatedAt())).toList(),
+      page.getNumberOfElements(),
+      page.getTotalElements(),
+      page.getNumber(),
+      page.getSize(),
+      page.getTotalPages()
+    );
+  }
+
+  @Override
+  public Optional<UserWithProfile> findUserWithProfileByUsername(String username) {
+    final Optional<UserWithProfileProjection> projectionOp = userJPA.findUserWithProfileByUsername(username);
+
+    if (projectionOp.isEmpty()) return Optional.empty();
+
+    final var projection = projectionOp.get();
+    return Optional.of(new UserWithProfile(
+      UUID.fromString(
+      projection.getUserId()),
+      projection.getUserEmail(),
+      projection.getUsername(),
+      projection.getProfileId(),
+      projection.getBio(),
+      projection.getFavoriteSong(),
+      projection.getCreatedAt()
+    ));
   }
 }
