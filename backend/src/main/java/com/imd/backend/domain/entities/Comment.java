@@ -10,6 +10,7 @@ public class Comment {
     private final Long id;
     private final String tuneetId;
     private final String authorId;
+    private final String authorUsername;
     private String contentText;
     private final Date createdAt;
 }

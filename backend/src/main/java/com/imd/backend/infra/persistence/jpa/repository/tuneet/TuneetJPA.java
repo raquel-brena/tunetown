@@ -66,7 +66,8 @@ public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
     Page<TuneetResumoDTO> findResumoByAuthorId(@Param("authorId") String authorId, Pageable pageable);
 
     @Query("""
-    SELECT t.id,
+    SELECT new com.imd.backend.api.dto.TuneetResumoDTO(
+        t.id,
         t.contentText,
         t.tunableItemArtist,
         t.tunableItemTitle,
@@ -80,17 +81,36 @@ public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
         u.email,
         u.id,
         COUNT(DISTINCT c.id),
-        COUNT(DISTINCT l.id)
+        COUNT(DISTINCT l.id),
+        p.bio,
+        COUNT(DISTINCT f1.id),
+        COUNT(DISTINCT f2.id),
+        f.fileName
+    )
     FROM TuneetEntity t
     LEFT JOIN t.author u
     LEFT JOIN t.comments c
     LEFT JOIN t.likes l
+    LEFT JOIN u.profile p
+    LEFT JOIN p.photo f
+    LEFT JOIN p.following f1
+    LEFT JOIN p.followers f2
     WHERE t.id = :id
-    GROUP BY t.id, t.contentText, t.tunableItemArtist, t.tunableItemArtworkUrl,
-             t.tunableItemId, t.tunableItemPlataform, t.tunableItemType, t.createdAt,  u.id,
+    GROUP BY t.id,
+        t.contentText,
+        t.tunableItemArtist,
+        t.tunableItemTitle,
+        t.tunableItemArtworkUrl,
+        t.tunableItemId,
+        t.tunableItemPlataform,
+        t.tunableItemType,
+        t.createdAt,
+        u.id,
         u.username,
         u.email,
-        u.profile.id
+        u.profile.id,
+        p.bio,
+        f.fileName
 """)
     Optional<TuneetResumoDTO> findResumoById(@Param("id") String id);
 

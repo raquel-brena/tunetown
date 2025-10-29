@@ -93,10 +93,12 @@ public class CommentService {
     }
 
     private Comment toDomain(CommentEntity entity) {
+        ProfileEntity author = entity.getAuthor();
         return new Comment(
                 entity.getId(),
                 entity.getTuneet().getId(),
-                entity.getAuthor().getId(),
+                author != null ? author.getId() : null,
+                author != null && author.getUser() != null ? author.getUser().getUsername() : null,
                 entity.getContentText(),
                 entity.getCreatedAt()
         );

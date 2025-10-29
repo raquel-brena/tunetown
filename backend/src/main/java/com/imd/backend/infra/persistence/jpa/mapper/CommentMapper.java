@@ -5,6 +5,7 @@ import com.imd.backend.api.dto.comment.CommentResponseDTO;
 import com.imd.backend.api.dto.comment.CommentUpdateDTO;
 import com.imd.backend.domain.entities.Comment;
 import com.imd.backend.infra.persistence.jpa.entity.CommentEntity;
+import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
 
 public class CommentMapper {
 
@@ -12,7 +13,7 @@ public class CommentMapper {
         return CommentResponseDTO.builder()
                 .id(comment.getId())
                 .tuneetId(comment.getTuneetId())
-                .authorId(comment.getAuthorId())
+                .authorUsername(comment.getAuthorUsername())
                 .contentText(comment.getContentText())
                 .createdAt(comment.getCreatedAt())
                 .build();
@@ -23,6 +24,7 @@ public class CommentMapper {
                 null,
                 dto.getTuneetId().toString(),
                 dto.getAuthorId(),
+                null,
                 dto.getContentText(),
                 new java.util.Date()
         );
@@ -33,16 +35,19 @@ public class CommentMapper {
                 dto.getId(),
                 null,
                 null,
+                null,
                 dto.getContentText(),
                 null
         );
     }
 
     public static Comment toDomain(CommentEntity entity) {
+        ProfileEntity author = entity.getAuthor();
         return new Comment(
                 entity.getId(),
                 entity.getTuneet().getId(),
-                entity.getAuthor().getId(),
+                author != null ? author.getId() : null,
+                author != null && author.getUser() != null ? author.getUser().getUsername() : null,
                 entity.getContentText(),
                 entity.getCreatedAt()
         );
