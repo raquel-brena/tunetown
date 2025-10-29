@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 
 import com.imd.backend.api.dto.TuneetResumoDTO;
+import com.imd.backend.app.service.FileService;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.domain.entities.Tuneet;
@@ -15,7 +16,8 @@ import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 
 @Component
 public class TuneetJpaMapper {
-  public static TuneetEntity fromTuneetDomain(Tuneet tuneet) {
+
+    public static TuneetEntity fromTuneetDomain(Tuneet tuneet) {
       return TuneetEntity.builder()
               .id(tuneet.getId().toString())
               .authorId(tuneet.getAuthorId())
@@ -80,6 +82,8 @@ public class TuneetJpaMapper {
       return Tuneet.rebuild(
               UUID.fromString(dto.id()),
               dto.authorName(),
+              dto.profileId(),
+              dto.email(),
               dto.authorId(),
               dto.contentText(),
               new TunableItem(
@@ -92,7 +96,11 @@ public class TuneetJpaMapper {
               ),
               dto.createdAt(),
               dto.totalComments(),
-              dto.totalLikes()
+              dto.totalLikes(),
+              dto.bio(),
+              dto.totalFollowers(),
+              dto.totalFollowing(),
+              FileService.applyPresignedUrl(dto.urlPhoto())
       );
   }
 
@@ -101,8 +109,10 @@ public class TuneetJpaMapper {
     public Tuneet tuneetFromJpaEntity(TuneetEntity entity) {
     return Tuneet.rebuild(
       UUID.fromString(entity.getId()),
-      entity.getAuthorId(),
-      entity.getAuthorName(),
+      entity.getAuthor().getUsername(),
+      entity.getAuthor().getProfile().getId(),
+      entity.getAuthor().getEmail(),
+      entity.getAuthor().getId(),
       entity.getContentText(),
       new TunableItem(
         entity.getTunableItemId(),
@@ -115,7 +125,11 @@ public class TuneetJpaMapper {
     ),
             entity.getCreatedAt(),
             entity.getTotalComments(),
-            entity.getTotalLikes());
+            entity.getTotalLikes(),
+            entity.getAuthor().getProfile().getBio(),
+            entity.getAuthor().getProfile().getTotalFollowers(),
+            entity.getAuthor().getProfile().getTotalFollowing(),
+            entity.getAuthor().getProfile().getPhoto().getUrl());
   }
 
   // public TuneetEntity fromTuneetResumeDomain(TuneetResume tuneetResume) {

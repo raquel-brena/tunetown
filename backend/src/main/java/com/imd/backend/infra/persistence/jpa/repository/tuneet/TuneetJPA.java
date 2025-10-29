@@ -15,7 +15,8 @@ import com.imd.backend.infra.persistence.jpa.projections.TrendingTuneProjection;
 
 public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
     @Query("""
-    SELECT t.id,
+    SELECT new com.imd.backend.api.dto.TuneetResumoDTO(
+        t.id,
         t.contentText,
         t.tunableItemArtist,
         t.tunableItemTitle,
@@ -24,16 +25,43 @@ public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
         t.tunableItemPlataform,
         t.tunableItemType,
         t.createdAt,
-        t.authorId,
-        (SELECT u.username FROM UserEntity u WHERE u.id = t.authorId),
+        u.username,
+        u.profile.id,
+        u.email,
+        u.id,
         COUNT(DISTINCT c.id),
-        COUNT(DISTINCT l.id)
+        COUNT(DISTINCT l.id),
+        p.bio,
+        COUNT(DISTINCT f1.id),
+        COUNT(DISTINCT f2.id),
+        f.fileName
+    )
     FROM TuneetEntity t
+    LEFT JOIN t.author u
     LEFT JOIN t.comments c
     LEFT JOIN t.likes l
-    WHERE t.authorId = :authorId
-    GROUP BY t.id, t.contentText, t.tunableItemArtist, t.tunableItemArtworkUrl,
-             t.tunableItemId, t.tunableItemPlataform, t.tunableItemType, t.createdAt
+    LEFT JOIN u.profile p
+    LEFT JOIN p.photo f
+    LEFT JOIN p.following f1
+    LEFT JOIN p.followers f2
+    WHERE u.username = :authorId
+    GROUP BY
+        t.id,
+        t.contentText,
+        t.tunableItemArtist,
+        t.tunableItemTitle,
+        t.tunableItemArtworkUrl,
+        t.tunableItemId,
+        t.tunableItemPlataform,
+        t.tunableItemType,
+        t.createdAt,
+        u.id,
+        u.username,
+        u.email,
+        u.profile.id,
+        p.bio,
+        f.fileName
+    ORDER BY t.createdAt DESC
 """)
     Page<TuneetResumoDTO> findResumoByAuthorId(@Param("authorId") String authorId, Pageable pageable);
 
@@ -47,16 +75,22 @@ public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
         t.tunableItemPlataform,
         t.tunableItemType,
         t.createdAt,
-        t.authorId,
-        (SELECT u.username FROM UserEntity u WHERE u.id = t.author.username),
+        u.username,
+        u.profile.id,
+        u.email,
+        u.id,
         COUNT(DISTINCT c.id),
         COUNT(DISTINCT l.id)
     FROM TuneetEntity t
+    LEFT JOIN t.author u
     LEFT JOIN t.comments c
     LEFT JOIN t.likes l
     WHERE t.id = :id
     GROUP BY t.id, t.contentText, t.tunableItemArtist, t.tunableItemArtworkUrl,
-             t.tunableItemId, t.tunableItemPlataform, t.tunableItemType, t.createdAt
+             t.tunableItemId, t.tunableItemPlataform, t.tunableItemType, t.createdAt,  u.id,
+        u.username,
+        u.email,
+        u.profile.id
 """)
     Optional<TuneetResumoDTO> findResumoById(@Param("id") String id);
 
@@ -74,11 +108,10 @@ public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
       t.tunableItemPlataform as platformId,
       t.tunableItemType as itemType,
       t.tunableItemArtworkUrl as artworkUrl,
-       t.createdAt as createdAt,
       COUNT(t) as tuneetCount
     FROM TuneetEntity t
     GROUP BY t.tunableItemId, t.tunableItemTitle, t.tunableItemArtist,
-      t.tunableItemPlataform, t.tunableItemType, t.tunableItemArtworkUrl, t.createdAt
+      t.tunableItemPlataform, t.tunableItemType, t.tunableItemArtworkUrl
     ORDER BY COUNT(t) DESC
   """)
   List<TrendingTuneProjection> findTrendingTunesByType(

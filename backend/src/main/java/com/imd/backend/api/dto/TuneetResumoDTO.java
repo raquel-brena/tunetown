@@ -1,5 +1,7 @@
 package com.imd.backend.api.dto;
 
+import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
+
 import java.time.LocalDateTime;
 
 public record TuneetResumoDTO(
@@ -12,8 +14,14 @@ public record TuneetResumoDTO(
         String tunableItemPlataform,
         String tunableItemType,
         LocalDateTime createdAt,
-        String authorId,
         String authorName,
+        String profileId,
+        String email,
+        String authorId,
         long totalComments,
-        long totalLikes
+        long totalLikes,
+        String bio,
+        long totalFollowers,
+        long totalFollowing,
+        String urlPhoto
 ) {}

@@ -90,7 +90,7 @@ public class TuneetJpaRepository implements TuneetRepository {
     final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
         Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
 
-    final Page<TuneetResumoDTO> findedTuneets = tuneetJPA.findResumoByAuthorId(authorId, pageable);
+     Page<TuneetResumoDTO> findedTuneets = tuneetJPA.findResumoByAuthorId(authorId, pageable);
 
     return new PageResult<>(
       findedTuneets.getContent().stream()

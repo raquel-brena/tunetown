@@ -9,6 +9,8 @@ import java.util.UUID;
 import com.imd.backend.domain.exception.InvalidEntityAttributesException;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
+import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +31,8 @@ public class Tuneet {
   private long totalLikes;
   LocalDateTime createdAt;
 
-  private Tuneet(UUID id, String authorId, String textContent, TunableItem tunableItem) {
+  private Tuneet(UUID id, String textContent, TunableItem tunableItem) {
     this.id = id;
-    this.authorId = authorId;
     this.textContent = textContent;
     this.tunableItem = tunableItem;
     this.validateAttributes();
@@ -56,23 +57,47 @@ public class Tuneet {
 
     public static Tuneet createNew(UserEntity user, String textContent, TunableItem item) {
     final UUID id = UUID.randomUUID();
-       Tuneet tuneet =  new Tuneet(id, user.getId(),  textContent, item);
+       Tuneet tuneet =  new Tuneet(id, textContent, item);
        tuneet.setAuthor(user);
         return tuneet;
   }
 
     public static Tuneet rebuild(
             UUID id,
-            String authorId,
             String authorName,
+            String profileId,
+            String email,
+            String authorId,
             String textContent,
             TunableItem item,
             LocalDateTime createdAt,
             long totalComments,
-            long totalLikes
+            long totalLikes,
+            String bio,
+            long totalFollowers,
+            long totalFollowing,
+            String urlPhoto
     ) {
-        Tuneet tuneet = new Tuneet(id, authorId, textContent, item);
-        tuneet.setAuthorName(authorName);
+        Tuneet tuneet = new Tuneet(id, textContent, item);
+        UserEntity user = new UserEntity();
+        user.setUsername(authorName);
+        user.setEmail(email);
+        user.setId(authorId);
+
+        ProfileEntity profile = new ProfileEntity();
+        profile.setId(profileId);
+        profile.setBio(bio);
+        profile.setTotalFollowers(totalFollowers);
+        profile.setTotalFollowing(totalFollowing);
+
+        FileEntity  file = new FileEntity();
+        file.setUrl(urlPhoto);
+
+        profile.setPhoto(file);
+
+        user.setProfile(profile);
+
+        tuneet.setAuthor(user);
         tuneet.setCreatedAt(createdAt);
         tuneet.setTotalComments(totalComments);
         tuneet.setTotalLikes(totalLikes);
