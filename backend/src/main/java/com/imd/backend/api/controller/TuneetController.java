@@ -1,5 +1,7 @@
 package com.imd.backend.api.controller;
 
+import com.imd.backend.domain.entities.User;
+import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -142,11 +144,11 @@ public class TuneetController {
     @Valid @RequestBody CreateTuneetDTO createTuneetDTO,
     @AuthenticationPrincipal TuneUserDetails userDetails
   ) {
-    final String userId = userDetails.user().getId().toString();
-    
+    final User user = userDetails.user();
+
     final Tuneet createdTuneet = this.tuneetService.createTuneet(
       createTuneetDTO.itemId(),
-      userId,
+            UserMapper.domainToEntity(user),
       createTuneetDTO.itemType(),
       createTuneetDTO.textContent()
     );

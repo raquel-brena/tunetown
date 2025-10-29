@@ -44,4 +44,10 @@ public class ProfileEntity {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    @Transient
+    private Long totalFollowers;
+
+    @Transient
+    private Long totalFollowing;
 }

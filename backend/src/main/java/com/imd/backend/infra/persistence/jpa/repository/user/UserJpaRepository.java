@@ -37,7 +37,7 @@ public class UserJpaRepository implements UserRepository{
     final Pageable pageable = PageRequest.of(pageQuery.page(), pageQuery.size(), sort); 
 
     final var findedUsers = this.userJPA.findAll(pageable);
-    
+
     return new PageResult<User>(
       findedUsers.getContent().stream().map(entity -> UserMapper.entityToDomain(entity)).toList(), 
       findedUsers.getNumberOfElements(),
