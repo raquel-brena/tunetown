@@ -59,6 +59,7 @@ public class Tuneet {
     final UUID id = UUID.randomUUID();
        Tuneet tuneet =  new Tuneet(id, textContent, item);
        tuneet.setAuthor(user);
+       tuneet.setAuthorId(user.getId());
         return tuneet;
   }
 
