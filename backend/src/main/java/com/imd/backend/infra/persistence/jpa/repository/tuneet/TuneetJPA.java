@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
+import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TrendingTuneProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 
@@ -125,4 +126,58 @@ public interface TuneetJPA extends JpaRepository<TuneetEntity, String> {
   ); 
 
   Page<TuneetEntity> findByAuthorId(String authorId, Pageable pageable);
+
+  @Query("""
+    SELECT
+      t.id as tuneetId,
+      t.contentText as textContent,
+      t.createdAt as createdAt,
+      t.tunableItemTitle as tunableItemTitle,
+      t.tunableItemArtist as tunableItemArtist,
+      t.tunableItemArtworkUrl as tunableItemArtworkUrl,
+      t.tunableItemType as tunableItemType,
+      u.id as authorId,
+      u.username as authorUsername,
+      f.url as authorAvatarUrl,
+      f.fileName as authorAvatarFileName,
+      SIZE(t.comments) as totalComments,
+      SIZE(t.likes) as totalLikes
+    FROM TuneetEntity t
+    JOIN t.author u
+    LEFT JOIN u.profile p ON u.id = p.user.id
+    LEFT JOIN p.photo f
+  """)
+  Page<TimelineItemProjection> findGlobalTimeline(Pageable pageable);  
+
+  @Query("""
+    SELECT
+      t.id as tuneetId,
+      t.contentText as textContent,
+      t.createdAt as createdAt,
+      t.tunableItemTitle as tunableItemTitle,
+      t.tunableItemArtist as tunableItemArtist,
+      t.tunableItemArtworkUrl as tunableItemArtworkUrl,
+      t.tunableItemType as tunableItemType,
+      u.id as authorId,
+      u.username as authorUsername,
+      f.url as authorAvatarUrl,
+      f.fileName as authorAvatarFileName,
+      SIZE(t.comments) as totalComments,
+      SIZE(t.likes) as totalLikes
+    FROM TuneetEntity t
+    JOIN t.author u
+    LEFT JOIN u.profile p
+    LEFT JOIN p.photo f
+    WHERE p IN (
+      SELECT fol.followed
+      FROM ProfileEntity p_current
+      JOIN p_current.following fol
+      WHERE p_current.user.id = :currentUserId
+    )
+    OR u.id = :currentUserId
+  """)
+  Page<TimelineItemProjection> findHomeTimeline(
+    @Param("currentUserId") String currentUserId,
+    Pageable pageable
+  );  
 }
