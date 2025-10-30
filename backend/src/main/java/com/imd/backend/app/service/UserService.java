@@ -9,6 +9,7 @@ import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.UserWithProfile;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class UserService {
         return userRepository.findAll(pageable); 
     }
 
-    public boolean userExistsById(String id) {
+    public boolean userExistsById(UUID id) {
         return this.userRepository.existsById(id);
     }
 

@@ -1,6 +1,7 @@
 package com.imd.backend.domain.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import com.imd.backend.domain.entities.User;
 import com.imd.backend.domain.valueObjects.PageResult;
@@ -13,7 +14,7 @@ public interface UserRepository {
   public Optional<User> findByUsername(String username);
   public boolean existsByEmail(String email);
   public boolean existsByUsername(String username);
-  public boolean existsById(String id);
+  public boolean existsById(UUID id);
   public Optional<UserWithProfile> findUserWithProfileByUsername(String username);
   public PageResult<UserWithProfile> searchUsersWithProfileByUsernamePart(String username,Pagination pageQuery);
 }

@@ -1,7 +1,5 @@
 package com.imd.backend.api.controller;
 
-import com.imd.backend.domain.entities.User;
-import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +11,7 @@ import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
+import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.security.TuneUserDetails;
@@ -75,7 +74,7 @@ public class TuneetController {
       @RequestParam(defaultValue = "id") String orderBy,
       @RequestParam(defaultValue = "ASC") String orderDirection) {
     final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
-    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetsByAuthorId(authorId, pagination);
+    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetsByAuthorId(UUID.fromString(authorId), pagination);
 
     return ResponseEntity.ok(tuneets);
   }  
@@ -139,16 +138,50 @@ public class TuneetController {
     return ResponseEntity.ok(items);
   }
 
+  @GetMapping("/resume")
+  public ResponseEntity<PageResult<TuneetResume>> getAllTuneetResume(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @RequestParam(defaultValue = "createdAt") String orderBy,
+      @RequestParam(defaultValue = "ASC") String orderDirection) {
+    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+    final var resumes = this.tuneetService.findAllTuneetResume(pagination);
+
+    return ResponseEntity.ok(resumes);
+  }  
+
+  @GetMapping("author/{authorId}/resume")
+  public ResponseEntity<PageResult<TuneetResume>> getTuneetResumeByAuthorId(
+      @PathVariable(required = true) String authorId,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @RequestParam(defaultValue = "createdAt") String orderBy,
+      @RequestParam(defaultValue = "ASC") String orderDirection) {
+    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+    final var resumes = this.tuneetService.findTuneetResumeByAuthorId(UUID.fromString(authorId), pagination);
+
+    return ResponseEntity.ok(resumes);
+  }  
+
+  @GetMapping("/{id}/resume")
+  public ResponseEntity<TuneetResume> getTuneetResumeById(
+      @PathVariable(required = true) String id
+  ) {
+    final var resumes = this.tuneetService.findTuneetResumeById(UUID.fromString(id));
+
+    return ResponseEntity.ok(resumes);
+  }  
+
+
   @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Tuneet> createTuneet(
     @Valid @RequestBody CreateTuneetDTO createTuneetDTO,
     @AuthenticationPrincipal TuneUserDetails userDetails
   ) {
-    final User user = userDetails.user();
-
+    final UUID userId = userDetails.user().getId();
     final Tuneet createdTuneet = this.tuneetService.createTuneet(
       createTuneetDTO.itemId(),
-            UserMapper.domainToEntity(user),
+      userId,
       createTuneetDTO.itemType(),
       createTuneetDTO.textContent()
     );

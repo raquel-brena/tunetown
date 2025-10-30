@@ -5,7 +5,9 @@ import com.imd.backend.api.dto.tunescore.TuneScoreStructuredResponse;
 import com.imd.backend.app.gateway.llmGateway.OpenAiGateway;
 import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.valueObjects.Pagination;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,6 @@ public class TuneScoreService {
     private final TuneetService tuneetService;
     private final OpenAiGateway openAiGateway;
 
-    @Autowired
     public TuneScoreService(TuneetService tuneetService, OpenAiGateway openAiGateway) {
         this.tuneetService = tuneetService;
         this.openAiGateway = openAiGateway;
@@ -22,8 +23,8 @@ public class TuneScoreService {
     public TuneScoreResponse calculateTuneScore(String firstUsername, String secondUsername) {
         var pagination = new Pagination(0, 50, "id", "DESC");
 
-        var firstUserTuneets = tuneetService.findTuneetsByAuthorId(firstUsername, pagination);
-        var secondUserTuneets = tuneetService.findTuneetsByAuthorId(secondUsername, pagination);
+        var firstUserTuneets = tuneetService.findTuneetsByAuthorId(UUID.fromString(firstUsername), pagination);
+        var secondUserTuneets = tuneetService.findTuneetsByAuthorId(UUID.fromString(secondUsername), pagination);
 
         var firstUserTunableItems = firstUserTuneets.itens().stream()
                 .map(Tuneet::getTunableContent).toList();

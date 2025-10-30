@@ -71,8 +71,8 @@ public class UserJpaRepository implements UserRepository{
   }
 
   @Override
-  public boolean existsById(String id) {
-    return userJPA.existsById(id);
+  public boolean existsById(UUID id) {
+    return userJPA.existsById(id.toString());
   }
 
   @Override

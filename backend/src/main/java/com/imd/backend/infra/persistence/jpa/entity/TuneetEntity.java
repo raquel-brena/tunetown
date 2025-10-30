@@ -3,8 +3,6 @@ package com.imd.backend.infra.persistence.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,12 +18,9 @@ public class TuneetEntity {
   @Id
   private String id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "author", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY) 
+  @JoinColumn(name = "author_id", nullable = false) // Mapeia para a coluna FK
   private UserEntity author;
-
-  @Column(nullable = false, name = "author_id")
-  private String authorId;
 
   @Column(columnDefinition = "TEXT")
   private String contentText;
@@ -43,17 +38,6 @@ public class TuneetEntity {
   private String tunableItemType;
   private String tunableItemArtworkUrl;
 
-  @CreationTimestamp
-  @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+  @Column(name = "created_at", updatable = false)
   private LocalDateTime createdAt;
-
-  @Transient
-  private String authorName;
-
-  @Transient
-  private long totalComments;
-
-  @Transient
-  private long totalLikes;
-
 }
