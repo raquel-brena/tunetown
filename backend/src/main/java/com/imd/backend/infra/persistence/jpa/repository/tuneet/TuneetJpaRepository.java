@@ -1,12 +1,10 @@
 package com.imd.backend.infra.persistence.jpa.repository.tuneet;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.imd.backend.api.dto.TuneetResumoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +17,11 @@ import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
+import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
+import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,8 +34,6 @@ public class TuneetJpaRepository implements TuneetRepository {
   @Override
   public void save(Tuneet tuneet) {
     final TuneetEntity entityToSave = tuneetJpaMapper.fromTuneetDomain(tuneet);
-
-    entityToSave.setCreatedAt(LocalDateTime.now());
     this.tuneetJPA.save(entityToSave);
   }
 
@@ -51,13 +49,13 @@ public class TuneetJpaRepository implements TuneetRepository {
 
   @Override
   public Optional<Tuneet> findById(UUID id){
-    final Optional<TuneetResumoDTO> opEntity = tuneetJPA.findResumoById(id.toString());
+    final Optional<TuneetEntity> opEntity = tuneetJPA.findById(id.toString());
 
     try {
       if(opEntity.isPresent()) {
-        final TuneetResumoDTO entity = opEntity.get();
+        final TuneetEntity entity = opEntity.get();
 
-        return Optional.of(tuneetJpaMapper.tuneetFromResumoDTO(entity));
+        return Optional.of(tuneetJpaMapper.tuneetFromJpaEntity(entity));
       }  
 
       return Optional.empty();
@@ -85,16 +83,16 @@ public class TuneetJpaRepository implements TuneetRepository {
   }
 
   @Override
-  public PageResult<Tuneet> findByAuthorId(String authorId, Pagination pagination) {
+  public PageResult<Tuneet> findByAuthorId(UUID authorId, Pagination pagination) {
 
     final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
         Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
 
-     Page<TuneetResumoDTO> findedTuneets = tuneetJPA.findResumoByAuthorId(authorId, pageable);
+     Page<TuneetEntity> findedTuneets = tuneetJPA.findByAuthorId(authorId.toString(), pageable);
 
     return new PageResult<>(
       findedTuneets.getContent().stream()
-          .map(entity -> tuneetJpaMapper.tuneetFromResumoDTO(entity))
+          .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
           .toList(),
       findedTuneets.getNumberOfElements(),
       findedTuneets.getTotalElements(),
@@ -177,5 +175,50 @@ public class TuneetJpaRepository implements TuneetRepository {
         p.getTuneetCount()
       ))
       .toList();    
+  }
+
+  @Override
+  public PageResult<TuneetResume> findTuneetResumeByAuthorId(UUID authorId, Pagination pagination) {
+    Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
+        Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));    
+    
+    final Page<TuneetResumeProjection> projection = this.tuneetJPA.findTuneetResumeByAuthorId(authorId.toString(), pageable);
+
+    return new PageResult<TuneetResume>(
+        projection.getContent().stream()
+            .map(p -> tuneetJpaMapper.resumeFromProjection(p))
+            .toList(),
+        projection.getNumberOfElements(),
+        projection.getTotalElements(),
+        projection.getNumber(),
+        projection.getSize(),
+        projection.getTotalPages());
+  }
+
+  @Override
+  public PageResult<TuneetResume> findAllTuneetResume(Pagination pagination) {
+    Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
+        Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
+
+    final Page<TuneetResumeProjection> projection = this.tuneetJPA.findAllTuneetResume(pageable);
+    
+    return new PageResult<TuneetResume>(
+        projection.getContent().stream()
+            .map(p -> tuneetJpaMapper.resumeFromProjection(p))
+            .toList(),
+        projection.getNumberOfElements(),
+        projection.getTotalElements(),
+        projection.getNumber(),
+        projection.getSize(),
+        projection.getTotalPages());    
+  }
+
+  @Override
+  public Optional<TuneetResume> findTuneetResumeById(UUID id) {
+    final Optional<TuneetResumeProjection> op = this.tuneetJPA.findTuneetResumeById(id.toString());
+
+    if(op.isEmpty()) return Optional.empty();
+    
+    return Optional.of(this.tuneetJpaMapper.resumeFromProjection(op.get()));
   }  
 }

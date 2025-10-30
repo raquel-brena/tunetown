@@ -8,11 +8,12 @@ import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
+import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 public interface TuneetRepository {
     public PageResult<Tuneet> findAll(Pagination pagination);
-    public PageResult<Tuneet> findByAuthorId(String authorId, Pagination pagination);
+    public PageResult<Tuneet> findByAuthorId(UUID authorId, Pagination pagination);
     public PageResult<Tuneet> findByTunableItemId(String tunableItemId, Pagination pagination);
     public PageResult<Tuneet> findByTunableItemTitleContaining(String word, Pagination pagination);
     public PageResult<Tuneet> findByTunableItemArtistContaining(String word, Pagination pagination);
@@ -21,4 +22,7 @@ public interface TuneetRepository {
     public void update(Tuneet tuneet);
     public void deleteById(UUID id);
     public Optional<Tuneet> findById(UUID id);
+    public PageResult<TuneetResume> findTuneetResumeByAuthorId(UUID authorId, Pagination pagination);
+    public Optional<TuneetResume> findTuneetResumeById(UUID id);     
+    public PageResult<TuneetResume> findAllTuneetResume(Pagination pagination);
 }

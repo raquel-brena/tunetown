@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +15,7 @@ import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
+import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
@@ -45,10 +45,7 @@ public class TuneetService {
     return this.tuneetRepository.findAll(pagination);
   }
 
-  public PageResult<Tuneet> findTuneetsByAuthorId(String authorId, Pagination pagination) {
-    if(this.userService.findUserByUsername(authorId) == null)
-      throw new NotFoundException("Não existe nenhum autor com esse username");
-
+  public PageResult<Tuneet> findTuneetsByAuthorId(UUID authorId, Pagination pagination) {
     return this.tuneetRepository.findByAuthorId(authorId, pagination);
   }
 
@@ -75,19 +72,60 @@ public class TuneetService {
     return this.tuneetRepository.findTrendingTunesByType(type, limit);
   }
 
+  public PageResult<TuneetResume> findAllTuneetResume(Pagination pagination) {
+    final var result = this.tuneetRepository.findAllTuneetResume(pagination);
+    result.itens().forEach(t -> {
+      if (t.getFileNamePhoto() == null || t.getFileNamePhoto().isBlank())
+        return;
+
+      final String presignedUrl = FileService.applyPresignedUrl(t.getFileNamePhoto());
+      t.setUrlPhoto(presignedUrl);      
+    });
+
+    return result;
+  }
+
+  public PageResult<TuneetResume> findTuneetResumeByAuthorId(UUID authorId, Pagination pagination) {
+    final var result = this.tuneetRepository.findTuneetResumeByAuthorId(authorId, pagination);
+
+    result.itens().forEach(t -> {
+      if (t.getFileNamePhoto() == null || t.getFileNamePhoto().isBlank())
+        return;
+
+      final String presignedUrl = FileService.applyPresignedUrl(t.getFileNamePhoto());
+      t.setUrlPhoto(presignedUrl);
+    });
+
+    return result;    
+  }
+
+  public TuneetResume findTuneetResumeById(UUID id) {
+    final var op = this.tuneetRepository.findTuneetResumeById(id);
+
+    if(op.isEmpty()) throw new NotFoundException("Nenhum tuneet foi encontrado com esse ID");
+    
+    final var tuneetResume = op.get();
+
+    if (tuneetResume.getFileNamePhoto() != null) {
+      final String presignedUrl = FileService.applyPresignedUrl(tuneetResume.getFileNamePhoto());
+      tuneetResume.setUrlPhoto(presignedUrl);
+    }    
+    
+    return tuneetResume;
+  }
+
   @Transactional(rollbackOn = Exception.class)
   public Tuneet createTuneet(
     String tunableItemId,
-    UserEntity user,
+    UUID userId,
     TunableItemType tunableItemType,
     String textContent    
   ) {
-    if(!this.userService.userExistsById(user.getId().toString())) // Se o usuário não existir
+    if(!this.userService.userExistsById(userId)) // Se o usuário não existir
       throw new BusinessException("Não existe nenhum usuário com esse ID");
 
     final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
-    final Tuneet tuneetToSave = Tuneet.createNew(user, textContent, tunableItem);
-
+    final Tuneet tuneetToSave = Tuneet.createNew(userId, textContent, tunableItem);
     this.tuneetRepository.save(tuneetToSave);
     return tuneetToSave;
   }

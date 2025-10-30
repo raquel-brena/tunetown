@@ -27,6 +27,7 @@ public class CommentService {
     private final TuneetJpaRepository tuneetRepository;
     private final ProfileRepository profileRepository;
     private final TutoResponder tutoResponder;
+    private final TuneetJpaMapper tuneetJpaMapper;
 
     public Page<Comment> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(this::toDomain);
@@ -46,7 +47,7 @@ public class CommentService {
 
         CommentEntity entity = CommentMapper.toEntity(dto);
         entity.setAuthor(author);
-        entity.setTuneet(TuneetJpaMapper.fromTuneetDomain(tuneet));
+        entity.setTuneet(tuneetJpaMapper.fromTuneetDomain(tuneet));
         entity.setCreatedAt(new Date());
 
         CommentEntity savedComment = repository.save(entity);
@@ -60,7 +61,7 @@ public class CommentService {
             }
             tutoResponder.generateResponseAsync(
                     savedComment.getTuneet().getId(),
-                    tuneet.getTextContent(),
+                    tuneet.getTunableContent(),
                     tunableSummary,
                     dto.getContentText()
             );
