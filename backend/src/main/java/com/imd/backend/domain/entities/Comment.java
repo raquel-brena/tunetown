@@ -1,16 +1,21 @@
 package com.imd.backend.domain.entities;
 
-import lombok.*;
-
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-public class Comment {
-    private final Long id;
-    private final String tuneetId;
-    private final String authorId;
-    private final String authorUsername;
-    private String contentText;
-    private final Date createdAt;
+public class Comment extends BaseComment {
+
+    public Comment() {
+        super();
+    }
+
+    public Comment(
+            Long id,
+            String tuneetId,
+            String authorId,
+            String authorUsername,
+            String contentText,
+            Date createdAt
+    ) {
+        super(id, tuneetId, authorId, authorUsername, contentText, createdAt);
+    }
 }

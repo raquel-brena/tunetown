@@ -3,8 +3,13 @@ package com.imd.backend.domain.entities;
 import lombok.Data;
 
 @Data
-public class Like {
-    private final Long id;
-    private final String tuneetId;
-    private final String profileId;
+public class Like extends BaseLike {
+    public Like(){
+        super();
+    }
+
+    public Like(Long id, String tuneetId, String profileId) {
+        super(id, tuneetId, profileId);
+
+    }
 }

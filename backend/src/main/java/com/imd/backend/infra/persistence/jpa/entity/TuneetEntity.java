@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor 
 @EqualsAndHashCode(of = "id")
 @Builder
-public class TuneetEntity {
+public class TuneetEntity implements Commentable{
   @Id
   private String id;
 
@@ -40,4 +40,14 @@ public class TuneetEntity {
 
   @Column(name = "created_at", updatable = false)
   private LocalDateTime createdAt;
+
+    @Override
+    public String getCommentTargetId() {
+        return this.id;
+    }
+
+    @Override
+    public boolean isCommentsEnabled() {
+        return true;
+    }
 }
