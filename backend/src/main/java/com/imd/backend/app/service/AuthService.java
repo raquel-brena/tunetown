@@ -2,7 +2,7 @@ package com.imd.backend.app.service;
 
 import com.imd.backend.api.dto.auth.LoginResponse;
 import com.imd.backend.api.dto.user.UserDTO;
-import com.imd.backend.domain.entities.User;
+import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.infra.security.TuneUserDetails;
 import com.imd.backend.infra.security.TuneUserDetailsService;

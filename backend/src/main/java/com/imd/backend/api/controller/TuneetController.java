@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imd.backend.api.dto.CreateTuneetDTO;
 import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
-import com.imd.backend.domain.entities.Tuneet;
+import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
