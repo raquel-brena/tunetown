@@ -10,6 +10,7 @@ import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
 import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
@@ -170,6 +171,32 @@ public class TuneetController {
     final var resumes = this.tuneetService.findTuneetResumeById(UUID.fromString(id));
 
     return ResponseEntity.ok(resumes);
+  }  
+
+  @GetMapping("/global")
+  public ResponseEntity<PageResult<TimeLineItem>> getGlobalTimeline(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size
+  ) {
+    Pagination pagination = new Pagination(page, size, "createdAt", "DESC");
+    PageResult<TimeLineItem> result = this.tuneetService.getGlobalTimeLine(pagination);
+    return ResponseEntity.ok(result);
+  }  
+
+  @GetMapping("/home")
+  public ResponseEntity<PageResult<TimeLineItem>> getHomeTimeline(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size,
+      @AuthenticationPrincipal TuneUserDetails userDetails) {
+    if (userDetails == null || userDetails.user() == null || userDetails.user().getId() == null) {
+      return ResponseEntity.status(401).build();
+    }
+
+    UUID currentUserId = userDetails.user().getId();
+    Pagination pagination = new Pagination(page, size, "createdAt", "DESC");
+
+    PageResult<TimeLineItem> result = this.tuneetService.getHomeTimeLine(currentUserId, pagination);
+    return ResponseEntity.ok(result);
   }  
 
 

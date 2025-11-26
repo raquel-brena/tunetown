@@ -16,11 +16,13 @@ import com.imd.backend.domain.exception.RepositoryException;
 import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
 import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
+import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 
 import lombok.RequiredArgsConstructor;
@@ -220,5 +222,45 @@ public class TuneetJpaRepository implements TuneetRepository {
     if(op.isEmpty()) return Optional.empty();
     
     return Optional.of(this.tuneetJpaMapper.resumeFromProjection(op.get()));
+  }
+
+  @Override
+  public PageResult<TimeLineItem> getGlobalTimeline(Pagination pagination) {
+    // Timelines são SEMPRE ordenadas por data, do mais novo para o mais antigo.
+    // Ignoramos a ordenação que vem da paginação.
+    Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+    Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), sort);
+
+    Page<TimelineItemProjection> pageResult = tuneetJPA.findGlobalTimeline(pageable);
+
+    return new PageResult<>(
+        pageResult.getContent().stream()
+        .map(tuneetJpaMapper::fromTimelineProjection)
+        .toList(),
+        pageResult.getNumberOfElements(),
+        pageResult.getTotalElements(),
+        pageResult.getNumber(),
+        pageResult.getSize(),
+        pageResult.getTotalPages());    
+  }
+
+  @Override
+  public PageResult<TimeLineItem> getHomeTimeline(UUID currentUserId, Pagination pagination) {
+    Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+    Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), sort);
+
+    Page<TimelineItemProjection> pageResult = tuneetJPA.findHomeTimeline(
+        currentUserId.toString(),
+        pageable);
+
+    return new PageResult<>(
+        pageResult.getContent().stream()
+            .map(tuneetJpaMapper::fromTimelineProjection)
+            .toList(),
+        pageResult.getNumberOfElements(),
+        pageResult.getTotalElements(),
+        pageResult.getNumber(),
+        pageResult.getSize(),
+        pageResult.getTotalPages());
   }  
 }

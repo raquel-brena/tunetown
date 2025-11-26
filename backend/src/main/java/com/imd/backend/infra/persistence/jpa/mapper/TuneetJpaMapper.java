@@ -6,11 +6,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.domain.entities.Tuneet;
+import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
 import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
+import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 import com.imd.backend.infra.persistence.jpa.repository.user.UserJPA;
 
@@ -107,4 +109,23 @@ public class TuneetJpaMapper {
         projection.getFileNamePhoto()
     );
   }
+
+  public TimeLineItem fromTimelineProjection(TimelineItemProjection p) {
+    if (p == null) return null;
+
+    return new TimeLineItem(
+        p.getTuneetId() != null ? UUID.fromString(p.getTuneetId()) : null,
+        p.getTextContent(),
+        p.getCreatedAt(),
+        p.getTotalComments(),
+        p.getTotalLikes(),
+        p.getTunableItemTitle(),
+        p.getTunableItemArtist(),
+        p.getTunableItemArtworkUrl() != null ? URI.create(p.getTunableItemArtworkUrl()) : null,
+        p.getTunableItemType() != null ? TunableItemType.fromString(p.getTunableItemType()) : null,
+        p.getAuthorId() != null ? UUID.fromString(p.getAuthorId()) : null,
+        p.getAuthorUsername(),
+        p.getAuthorAvatarUrl() != null ? URI.create(p.getAuthorAvatarUrl()) : null
+    );
+  }  
 }

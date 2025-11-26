@@ -14,6 +14,7 @@ import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
+import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TrendingTuneResult;
 import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
@@ -113,6 +114,14 @@ public class TuneetService {
     
     return tuneetResume;
   }
+
+  public PageResult<TimeLineItem> getGlobalTimeLine(Pagination pagination) {
+    return this.tuneetRepository.getGlobalTimeline(pagination);
+  }
+
+  public PageResult<TimeLineItem> getHomeTimeLine(UUID userId, Pagination pagination) {
+    return this.tuneetRepository.getHomeTimeline(userId, pagination);
+  }  
 
   @Transactional(rollbackOn = Exception.class)
   public Tuneet createTuneet(
