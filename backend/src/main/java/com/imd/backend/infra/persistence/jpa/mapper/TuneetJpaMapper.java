@@ -3,58 +3,33 @@ package com.imd.backend.infra.persistence.jpa.mapper;
 import java.net.URI;
 import java.util.UUID;
 
+import com.imd.backend.domain.entities.core.User;
+import com.imd.backend.domain.entities.tunetown.Tuneet;
+import com.imd.backend.domain.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
-import com.imd.backend.domain.entities.Tuneet;
 import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
-import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
-import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
 import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
-import com.imd.backend.infra.persistence.jpa.repository.user.UserJPA;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class TuneetJpaMapper {
-  private final UserJPA userJPA;
+  private final UserRepository userJPA;
 
-  public TuneetEntity fromTuneetDomain(Tuneet tuneet) {
-    if(tuneet == null) return null;
-
-    final TuneetEntity entity = new TuneetEntity();
-
-    entity.setId(tuneet.getId().toString());
-    entity.setContentText(tuneet.getTextContent());
-    entity.setTunableItemId(tuneet.getItemId());
-    entity.setTunableItemPlataform(tuneet.getItemPlataform());
-    entity.setTunableItemTitle(tuneet.getItemTitle());
-    entity.setTunableItemType(tuneet.getItemType().toString());
-    entity.setTunableItemArtist(tuneet.getItemArtist());
-    entity.setTunableItemArtworkUrl(tuneet.getItemArtworkUrl().toString());
-    entity.setCreatedAt(tuneet.getCreatedAt()); 
-
-    if(tuneet.getAuthorId() != null) {
-      final UserEntity authorRef = userJPA.getReferenceById(tuneet.getAuthorId().toString());
-      entity.setAuthor(authorRef);
-    }
-
-    return entity;
-  }
-
-  public Tuneet tuneetFromJpaEntity(TuneetEntity entity) {
+  public Tuneet tuneetFromJpaEntity(Tuneet entity) {
     if(entity == null) return null;
 
     final UUID authorId = (entity.getAuthor() != null) ? UUID.fromString(entity.getAuthor().getId()) : null;
 
-    return Tuneet.rebuild(
-      UUID.fromString(entity.getId()),
-      authorId,
-      entity.getContentText(),
+    return Tuneet.create(
+     entity.getAuthor(),
+      entity.getTextContent(),
       new TunableItem(
         entity.getTunableItemId(), 
         entity.getTunableItemPlataform(), 
@@ -62,8 +37,7 @@ public class TuneetJpaMapper {
         entity.getTunableItemArtist(),
         URI.create(entity.getTunableItemArtworkUrl()),
         TunableItemType.fromString(entity.getTunableItemType())
-      ),
-      entity.getCreatedAt()
+      )
     );    
   }
 

@@ -11,6 +11,8 @@ import java.util.Objects;
     @UniqueConstraint(columnNames = { "follower_id", "followed_id" })
 })
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // Exigido pelo JPA
 public class Follow {
 

@@ -1,7 +1,13 @@
 package com.imd.backend.domain.valueObjects.TunableItem;
 
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.net.URI;
 
+@Getter
+@Setter
 public final class TunableItem {
   private final String id;
   private final String plataformId;
@@ -24,30 +30,5 @@ public final class TunableItem {
     this.artist = artist;
     this.artworkUrl = artworkUrl;
     this.itemType = itemType;
-  }
-
-  // Getters
-  public String getPlataformId() {
-    return this.plataformId;
-  }
-
-  public String getItemId() {
-    return this.id;
-  }
-
-  public String getTitle() {
-    return this.title;
-  }
-
-  public String getArtist() {
-    return this.artist;
-  }
-
-  public URI getArtworkUrl() {
-    return this.artworkUrl;
-  }
-
-  public TunableItemType getItemType() {
-    return this.itemType;
   }
 }

@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Getter
 @Setter 
 @SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Tuneet extends BasePost {
 
   // --- CAMPOS ESPECÍFICOS (VARIÁVEIS) ---
@@ -64,7 +65,7 @@ public class Tuneet extends BasePost {
         .author(author)
         .textContent(textContent)
         // Mapeamento do VO para os campos da entidade
-        .tunableItemId(item.getItemId())
+        .tunableItemId(item.getId())
         .tunableItemPlataform(item.getPlataformId())
         .tunableItemTitle(item.getTitle())
         .tunableItemArtist(item.getArtist())
@@ -81,7 +82,9 @@ public class Tuneet extends BasePost {
     return tuneet;
   }
 
-  // --- MÉTODOS DE DOMÍNIO ---
+
+
+    // --- MÉTODOS DE DOMÍNIO ---
 
   private void validateTunableItem() {
     if (this.tunableItemId == null || this.tunableItemId.isBlank())
@@ -120,7 +123,7 @@ public class Tuneet extends BasePost {
     if (newItem == null)
       throw new IllegalArgumentException("Item não pode ser nulo");
 
-    this.tunableItemId = newItem.getItemId();
+    this.tunableItemId = newItem.getId();
     this.tunableItemPlataform = newItem.getPlataformId();
     this.tunableItemTitle = newItem.getTitle();
     this.tunableItemArtist = newItem.getArtist();

@@ -22,7 +22,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "profiles")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // Exigido pelo JPA
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Profile {
     @Id
     private String id;

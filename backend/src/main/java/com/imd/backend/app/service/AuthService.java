@@ -37,14 +37,16 @@ public class AuthService {
         User user = this.userService.findUserByUsername(tuneUserDetails.getUsername());
 
         String accessToken = jwtService.generateAccessToken(tuneUserDetails);
-        UserDTO userReponse = new UserDTO(user.getId().toString(), user.getUsername(), user.getEmail(), user.getProfileId());
+        UserDTO userReponse = new UserDTO(user.getId().toString(), user.getUsername(), user.getEmail(), user.getProfile().getId());
 
         return new LoginResponse(accessToken, userReponse);
     }
 
     public User register(String username, String email, String password) throws BusinessException {
         final var encryptedPassword = passwordEncoder.encode(password);
-        final User userToCreate = User.createNew(email, username, encryptedPassword, null);
+        final User userToCreate = User.builder().email(email)
+                .password(encryptedPassword)
+                .username(username).build();
         return userService.createUser(userToCreate);
     }
 }

@@ -4,7 +4,9 @@ import com.imd.backend.api.dto.RestResponseMessage;
 import com.imd.backend.api.dto.like.LikeCreateDTO;
 import com.imd.backend.api.dto.like.LikeResponseDTO;
 import com.imd.backend.app.service.LikeService;
-import com.imd.backend.domain.entities.Like;
+import com.imd.backend.domain.entities.core.Profile;
+import com.imd.backend.domain.entities.tunetown.Like;
+import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.infra.persistence.jpa.mapper.LikeMapper;
 import org.springframework.data.domain.Page;
@@ -50,7 +52,14 @@ public class LikeController implements CrudController<Long, LikeCreateDTO> {
     @Override
     @PostMapping
     public ResponseEntity<RestResponseMessage> create(@Valid @RequestBody LikeCreateDTO dto) {
-        Like created = likeService.create(LikeMapper.toDomain(dto));
+        Tuneet tuneetLiked = new Tuneet();
+        Profile author = new Profile();
+
+        author.setId(dto.getProfileId());
+        tuneetLiked.setId(dto.getTuneetId());
+
+
+        Like created = likeService.create(new Like(tuneetLiked));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new RestResponseMessage(LikeMapper.toDTO(created), HttpStatus.CREATED.value(), "Like criado"));
     }
@@ -58,7 +67,7 @@ public class LikeController implements CrudController<Long, LikeCreateDTO> {
     @Override
     @PutMapping
     public ResponseEntity<RestResponseMessage> update(@Valid @RequestBody LikeCreateDTO dto) {
-        Like updated = likeService.update(LikeMapper.toDomain(dto));
+        Like updated = likeService.update(dto);
         return ResponseEntity.ok(new RestResponseMessage(LikeMapper.toDTO(updated), HttpStatus.OK.value(), "Like atualizado"));
     }
 

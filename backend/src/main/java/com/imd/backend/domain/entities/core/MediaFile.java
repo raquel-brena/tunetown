@@ -8,8 +8,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "files")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MediaFile {
 

@@ -2,7 +2,8 @@ package com.imd.backend.api.dto.comment;
 
 import lombok.Builder;
 import lombok.Data;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -11,5 +12,5 @@ public class CommentResponseDTO {
     private String tuneetId;
     private String authorUsername;
     private String contentText;
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }

@@ -1,7 +1,8 @@
-package com.imd.backend.infra.persistence.jpa.repository.user;
+package com.imd.backend.domain.repository;
 
 
 import com.imd.backend.domain.entities.core.User;
+import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.infra.persistence.jpa.projections.UserWithProfileProjection;
 
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, String> {
         "LEFT JOIN p.photo ph " + 
         "WHERE u.username = :username"
     )
-    public Optional<UserWithProfileProjection> findUserWithProfileByUsername(@Param("username") String username);  
+     Optional<UserWithProfileProjection> findUserWithProfileByUsername(@Param("username") String username);
 
     @Query("SELECT " +
         "  u.id as userId, " +
@@ -52,5 +53,5 @@ public interface UserRepository extends JpaRepository<User, String> {
         "LEFT JOIN p.photo ph " +
         "WHERE UPPER(u.username) LIKE UPPER(CONCAT('%', :username, '%'))"
     )
-    public Page<UserWithProfileProjection> searchUsersWithProfileByUsernameContaining(@Param("username") String username, Pageable pageable);    
+     Page<UserWithProfileProjection> searchUsersWithProfileByUsernameContaining(@Param("username") String username, Pageable pageable);
 }

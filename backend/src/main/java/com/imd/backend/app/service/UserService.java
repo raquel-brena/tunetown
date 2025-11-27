@@ -3,17 +3,23 @@ package com.imd.backend.app.service;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
+import com.imd.backend.domain.valueObjects.PageResult;
+import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.UserWithProfile;
 import com.imd.backend.infra.persistence.jpa.projections.UserWithProfileProjection;
-import com.imd.backend.infra.persistence.jpa.repository.user.UserRepository;
+import com.imd.backend.domain.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.s3.model.OptionalObjectAttributes;
 
 @Service
 public class UserService {
@@ -52,12 +58,28 @@ public class UserService {
         return user.get();
     }
 
-    public Page<User> findAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable); 
+    public PageResult<User> findAllUsers(Pagination pagination) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
+                Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
+
+        Page<User> page = userRepository.findAll(pageable);
+
+        return new PageResult<>(
+                page.getContent(),
+                page.getNumberOfElements(),
+                page.getTotalElements(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalPages()
+        );
     }
 
     public boolean userExistsById(UUID id) {
         return this.userRepository.existsById(id.toString());
+    }
+
+    public Optional<User> findUserById(UUID id) {
+        return this.userRepository.findById(id.toString());
     }
 
     public UserWithProfile findUserWithProfileByUsername(String username) {
@@ -86,12 +108,44 @@ public class UserService {
         return user;
     }
 
-    public Page<UserWithProfile> searchUsersWithProfileByUsernamePart(String usernamePart, Pageable pageable) {
-        final Page<UserWithProfileProjection> projection = this.userRepository.searchUsersWithProfileByUsernameContaining(usernamePart, pageable);
-        final Page<UserWithProfile> users = projection
-            .map(p -> new UserWithProfile(UUID.fromString(p.getUserId()), p.getUserEmail(), p.getUsername(),
-             p.getProfileId(), p.getBio(), p.getFavoriteSong(), p.getCreatedAt(), p.getFileName())); 
+    public PageResult<UserWithProfile> searchUsersWithProfileByUsernamePart(
+            String usernamePart,
+            Pagination pagination
+    ) {
+        Pageable pageable = PageRequest.of(
+                pagination.page(),
+                pagination.size(),
+                Sort.by(
+                        Sort.Direction.fromString(pagination.orderDirection()),
+                        pagination.orderBy()
+                )
+        );
 
-        return users;
+        final Page<UserWithProfileProjection> projection =
+                this.userRepository.searchUsersWithProfileByUsernameContaining(usernamePart, pageable);
+
+        final List<UserWithProfile> items = projection
+                .stream()
+                .map(p -> new UserWithProfile(
+                        UUID.fromString(p.getUserId()),
+                        p.getUserEmail(),
+                        p.getUsername(),
+                        p.getProfileId(),
+                        p.getBio(),
+                        p.getFavoriteSong(),
+                        p.getCreatedAt(),
+                        p.getFileName()
+                ))
+                .toList();
+
+        return new PageResult<>(
+                items,
+                projection.getNumberOfElements(),
+                projection.getTotalElements(),
+                projection.getNumber(),
+                projection.getSize(),
+                projection.getTotalPages()
+        );
     }
+
 }

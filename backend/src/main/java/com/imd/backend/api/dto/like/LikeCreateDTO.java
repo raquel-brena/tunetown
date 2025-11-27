@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class LikeCreateDTO {
 
+    private Long id;
+
     @NotNull(message = "O id do Tuneet é obrigatório")
     private String tuneetId;
 

@@ -1,11 +1,11 @@
 package com.imd.backend.app.service;
 
 import com.imd.backend.app.gateway.aiGateway.TunetownAiGateway;
+import com.imd.backend.domain.entities.core.Profile;
+import com.imd.backend.domain.entities.tunetown.Comment;
+import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.infra.configuration.TutoProfileRegistry;
-import com.imd.backend.infra.persistence.jpa.entity.CommentEntity;
-import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
-import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
-import com.imd.backend.infra.persistence.jpa.repository.CommentRepository;
+import com.imd.backend.domain.repository.CommentRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -52,19 +53,19 @@ public class TutoResponder {
                 return;
             }
 
-            ProfileEntity tutoProfile = tutoProfileRegistry.getProfile();
+            Profile tutoProfile = tutoProfileRegistry.getProfile();
             if (tutoProfile == null) {
                 LOGGER.warn("Perfil do Tuto não pôde ser recuperado. Resposta automática não será criada.");
                 return;
             }
 
-            TuneetEntity tuneetRef = entityManager.getReference(TuneetEntity.class, tuneetId);
+            Tuneet tuneetRef = entityManager.getReference(Tuneet.class, tuneetId);
 
-            CommentEntity tutoComment = CommentEntity.builder()
+            Comment tutoComment = Comment.builder()
                     .tuneet(tuneetRef)
                     .author(tutoProfile)
                     .contentText(response.trim())
-                    .createdAt(new Date())
+                    .createdAt(LocalDateTime.now())
                     .build();
 
             commentRepository.save(tutoComment);

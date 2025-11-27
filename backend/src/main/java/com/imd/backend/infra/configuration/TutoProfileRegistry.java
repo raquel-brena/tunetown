@@ -1,11 +1,13 @@
 package com.imd.backend.infra.configuration;
 
-import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
-import com.imd.backend.infra.persistence.jpa.entity.UserEntity;
-import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
-import com.imd.backend.infra.persistence.jpa.repository.user.UserJPA;
+import com.imd.backend.domain.entities.core.Profile;
+import com.imd.backend.domain.entities.core.User;
+import com.imd.backend.domain.repository.ProfileRepository;
+import com.imd.backend.domain.repository.UserRepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -16,16 +18,16 @@ public class TutoProfileRegistry {
     private static final String TUTO_EMAIL = "tuto@tunetown.app";
 
     private final ProfileRepository profileRepository;
-    private final UserJPA userRepository;
+    private final UserRepository userRepository;
 
-    private ProfileEntity cachedProfile;
+    private Profile cachedProfile;
 
-    public TutoProfileRegistry(ProfileRepository profileRepository, UserJPA userRepository) {
+    public TutoProfileRegistry(ProfileRepository profileRepository, UserRepository userRepository) {
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
     }
 
-    public synchronized ProfileEntity getProfile() {
+    public synchronized Profile getProfile() {
         if (cachedProfile == null || cachedProfile.getId() == null) {
             cachedProfile = findOrCreateProfile();
         }
@@ -36,14 +38,14 @@ public class TutoProfileRegistry {
         return getProfile().getId();
     }
 
-    private ProfileEntity findOrCreateProfile() {
+    private Profile findOrCreateProfile() {
         return profileRepository.findByUserUsername(TUTO_USERNAME)
                 .map(this::ensureUserLink)
                 .orElseGet(this::createProfileWithUser);
     }
 
-    private ProfileEntity ensureUserLink(ProfileEntity profile) {
-        UserEntity user = profile.getUser();
+    private Profile ensureUserLink(Profile profile) {
+        User user = profile.getUser();
         if (user == null || user.getUsername() == null) {
             user = userRepository.findByUsername(TUTO_USERNAME)
                     .orElseGet(this::createUser);
@@ -59,14 +61,14 @@ public class TutoProfileRegistry {
         return profile;
     }
 
-    private ProfileEntity createProfileWithUser() {
-        UserEntity user = userRepository.findByUsername(TUTO_USERNAME)
+    private Profile createProfileWithUser() {
+        User user = userRepository.findByUsername(TUTO_USERNAME)
                 .orElseGet(this::createUser);
 
-        ProfileEntity profile = ProfileEntity.builder()
+        Profile profile = Profile.builder()
                 .user(user)
                 .bio("Assistente virtual da Tunetown")
-                .createdAt(new Date())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         profile = profileRepository.save(profile);
@@ -76,8 +78,8 @@ public class TutoProfileRegistry {
         return profile;
     }
 
-    private UserEntity createUser() {
-        UserEntity user = new UserEntity(UUID.randomUUID().toString(), TUTO_EMAIL, TUTO_USERNAME, null);
+    private User createUser() {
+        User user = new User(UUID.randomUUID().toString(), TUTO_EMAIL, TUTO_USERNAME, null);
         return userRepository.save(user);
     }
 }

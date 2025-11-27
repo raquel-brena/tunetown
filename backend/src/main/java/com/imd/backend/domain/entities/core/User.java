@@ -1,13 +1,12 @@
 package com.imd.backend.domain.entities.core;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import com.imd.backend.domain.entities.tunetown.Tuneet;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,10 +32,32 @@ public class User {
 
   private String password;
 
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private Profile profile;
+
+  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Tuneet> tuneets = new ArrayList<>();
+
   // O relacionamento inverso (OneToMany) geralmente fica na classe concreta
   // ou pode ser omitido se não for estritamente necessário para o framework core.
-  
-  @Override
+
+    public User(String id, String email, String username, String password) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.profile = null;
+    }
+
+    public User(String id, String email, String username, String password, Profile profile) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.profile = profile;
+    }
+
+    @Override
   public boolean equals(Object o) {
       if (this == o) return true;
       if (!(o instanceof User user)) return false;

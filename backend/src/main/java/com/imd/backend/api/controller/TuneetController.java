@@ -1,11 +1,14 @@
 package com.imd.backend.api.controller;
 
+import com.imd.backend.app.service.TuneetService;
+import com.imd.backend.domain.repository.TuneetRepository;
+import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
+import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imd.backend.api.dto.CreateTuneetDTO;
 import com.imd.backend.api.dto.UpdateTuneetDTO;
-import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.PageResult;
@@ -43,12 +46,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class TuneetController {
   private final TuneetService tuneetService;
+  private final TuneetRepository tuneetRepository;
+  private final TuneetJpaMapper tuneetJpaMapper;
 
-  @GetMapping(path = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Tuneet> getById(
     @PathVariable(required = true) UUID tuneetId
   ) {
-    final Optional<Tuneet> tuneetOp = this.tuneetService.findTuneetById(tuneetId);
+    final Optional<Tuneet> tuneetOp = this.tuneetService.findTuneetById(String.valueOf(tuneetId));
 
     return ResponseEntity.of(tuneetOp);
   }
@@ -75,7 +80,7 @@ public class TuneetController {
       @RequestParam(defaultValue = "id") String orderBy,
       @RequestParam(defaultValue = "ASC") String orderDirection) {
     final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
-    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetsByAuthorId(UUID.fromString(authorId), pagination);
+    final PageResult<Tuneet> tuneets = this.tuneetService.findTuneetsByAuthorId(authorId, pagination);
 
     return ResponseEntity.ok(tuneets);
   }  
@@ -139,17 +144,20 @@ public class TuneetController {
     return ResponseEntity.ok(items);
   }
 
-  @GetMapping("/resume")
-  public ResponseEntity<PageResult<TuneetResume>> getAllTuneetResume(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "20") int size,
-      @RequestParam(defaultValue = "createdAt") String orderBy,
-      @RequestParam(defaultValue = "ASC") String orderDirection) {
-    final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
-    final var resumes = this.tuneetService.findAllTuneetResume(pagination);
+    @GetMapping("/resume")
+    public ResponseEntity<PageResult<TuneetResumeProjection>> getAllTuneetResume(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt") String orderBy,
+            @RequestParam(defaultValue = "ASC") String orderDirection) {
 
-    return ResponseEntity.ok(resumes);
-  }  
+        final Pagination pagination = new Pagination(page, size, orderBy, orderDirection);
+
+        final PageResult<TuneetResumeProjection> resumes =
+                tuneetService.findAllTuneetResume(pagination);
+
+        return ResponseEntity.ok(resumes);
+    }
 
   @GetMapping("author/{authorId}/resume")
   public ResponseEntity<PageResult<TuneetResume>> getTuneetResumeByAuthorId(
@@ -168,9 +176,14 @@ public class TuneetController {
   public ResponseEntity<TuneetResume> getTuneetResumeById(
       @PathVariable(required = true) String id
   ) {
-    final var resumes = this.tuneetService.findTuneetResumeById(UUID.fromString(id));
+   this.tuneetService.findTuneetResumeById(UUID.fromString(id));
 
-    return ResponseEntity.ok(resumes);
+   var founded = this.tuneetRepository.findTuneetResumeById(id);
+   if (founded.isEmpty()) throw new NotFoundException("Tuneet Resume não encontrado.");
+
+   final TuneetResume op = tuneetJpaMapper.resumeFromProjection(founded.get());
+
+    return ResponseEntity.ok(op);
   }  
 
   @GetMapping("/global")
@@ -192,10 +205,10 @@ public class TuneetController {
       return ResponseEntity.status(401).build();
     }
 
-    UUID currentUserId = userDetails.user().getId();
+    String currentUserId = userDetails.user().getId();
     Pagination pagination = new Pagination(page, size, "createdAt", "DESC");
 
-    PageResult<TimeLineItem> result = this.tuneetService.getHomeTimeLine(currentUserId, pagination);
+    PageResult<TimeLineItem> result = this.tuneetService.getHomeTimeLine(UUID.fromString(currentUserId), pagination);
     return ResponseEntity.ok(result);
   }  
 
@@ -205,7 +218,7 @@ public class TuneetController {
     @Valid @RequestBody CreateTuneetDTO createTuneetDTO,
     @AuthenticationPrincipal TuneUserDetails userDetails
   ) {
-    final UUID userId = userDetails.user().getId();
+    final UUID userId = UUID.fromString(userDetails.user().getId());
     final Tuneet createdTuneet = this.tuneetService.createTuneet(
       createTuneetDTO.itemId(),
       userId,
@@ -220,12 +233,12 @@ public class TuneetController {
   public ResponseEntity<Tuneet> deleteTuneet(
       @PathVariable UUID tuneetId,
       @AuthenticationPrincipal TuneUserDetails loggedUser) {
-    final Optional<Tuneet> tuneetOp = tuneetService.findTuneetById(tuneetId);
+    final Optional<Tuneet> tuneetOp = tuneetService.findTuneetById(String.valueOf(tuneetId));
 
     if(tuneetOp.isEmpty())
       throw new NotFoundException("Não foi encontrado nenhum tuneet com esse ID");
 
-    if (!tuneetOp.get().getAuthorId().equals(loggedUser.user().getId())) 
+    if (!tuneetOp.get().getAuthor().getId().equals(loggedUser.user().getId()))
       throw new AccessDeniedException("Você não pode deletar um tuneet que não é seu");
 
     tuneetService.deleteById(tuneetId);
@@ -237,12 +250,12 @@ public class TuneetController {
       @PathVariable UUID tuneetId,
       @Valid @RequestBody UpdateTuneetDTO updateTuneetDTO,
       @AuthenticationPrincipal TuneUserDetails loggedUser) {
-    final Optional<Tuneet> tuneetOp = tuneetService.findTuneetById(tuneetId);
+    final Optional<Tuneet> tuneetOp = tuneetService.findTuneetById(String.valueOf(tuneetId));
 
     if (tuneetOp.isEmpty())
       throw new NotFoundException("Não foi encontrado nenhum tuneet com esse ID");
 
-    if (!tuneetOp.get().getAuthorId().equals(loggedUser.user().getId()))
+    if (!tuneetOp.get().getAuthor().getId().equals(loggedUser.user().getId()))
       throw new AccessDeniedException("Você não pode deletar um tuneet que não é seu");
 
     final Tuneet updated = tuneetService.updateTuneet(

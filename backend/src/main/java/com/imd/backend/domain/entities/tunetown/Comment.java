@@ -10,9 +10,9 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "tuneet_comments")
 @Getter
-@Setter // Opcional, se precisar para frameworks
+@Setter
 @SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Comment extends BaseComment {
 
   // PONTO VARIÁVEL (Implementação):

@@ -2,7 +2,7 @@ package com.imd.backend.api.controller;
 
 import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.app.service.UserService;
-import com.imd.backend.domain.entities.User;
+import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.UserWithProfile;

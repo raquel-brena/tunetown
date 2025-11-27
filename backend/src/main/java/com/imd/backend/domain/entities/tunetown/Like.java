@@ -13,8 +13,10 @@ import lombok.experimental.SuperBuilder;
     @UniqueConstraint(columnNames = { "tuneet_id", "profile_id" })
 })
 @Getter
+@Setter
 @SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Like extends BaseLike {
 
   // PONTO VARIÁVEL: Este Like aponta para um Tuneet

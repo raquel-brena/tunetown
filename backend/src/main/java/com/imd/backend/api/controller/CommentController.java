@@ -5,7 +5,7 @@ import com.imd.backend.api.dto.comment.CommentCreateDTO;
 import com.imd.backend.api.dto.comment.CommentResponseDTO;
 import com.imd.backend.api.dto.comment.CommentUpdateDTO;
 import com.imd.backend.app.service.CommentService;
-import com.imd.backend.domain.entities.Comment;
+import com.imd.backend.domain.entities.tunetown.Comment;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.infra.persistence.jpa.mapper.CommentMapper;
 import org.springframework.data.domain.Page;

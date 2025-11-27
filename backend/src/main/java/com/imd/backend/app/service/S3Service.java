@@ -1,13 +1,12 @@
 package com.imd.backend.app.service;
 
-import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
+import com.imd.backend.domain.entities.core.MediaFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -27,7 +26,7 @@ public class S3Service {
         this.bucketName = bucketName;
     }
 
-    public FileEntity uploadFile(MultipartFile file) throws IOException {
+    public MediaFile uploadFile(MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
 
         PutObjectRequest request = PutObjectRequest.builder()
@@ -40,7 +39,7 @@ public class S3Service {
 
         String url = s3.utilities().getUrl(b -> b.bucket(bucketName).key(fileName)).toString();
 
-        FileEntity fileEntity = new FileEntity();
+        MediaFile fileEntity = new MediaFile();
         fileEntity.setFileName(fileName);
         fileEntity.setUrl(url);
         fileEntity.setContentType(file.getContentType());
