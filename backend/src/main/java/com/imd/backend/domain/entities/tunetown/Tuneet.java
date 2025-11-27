@@ -4,6 +4,9 @@ import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -20,6 +23,7 @@ import java.util.UUID;
 @Setter 
 @SuperBuilder
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Tuneet extends BasePost {
 
   // --- CAMPOS ESPECÍFICOS (VARIÁVEIS) ---
@@ -47,11 +51,25 @@ public class Tuneet extends BasePost {
 
   @OneToMany(mappedBy = "tuneet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default 
+  @JsonIgnore
   private List<Comment> comments = new ArrayList<>();
 
   @OneToMany(mappedBy = "tuneet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default 
+  @JsonIgnore
   private List<Like> likes = new ArrayList<>();
+
+  @Transient
+  @JsonProperty("totalComments")
+  public int getTotalCommentsCount() {
+    return comments != null ? comments.size() : 0;
+  }
+
+  @Transient
+  @JsonProperty("totalLikes")
+  public int getTotalLikesCount() {
+    return likes != null ? likes.size() : 0;
+  }
 
   // --- FACTORY METHOD ---
 

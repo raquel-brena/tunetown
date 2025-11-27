@@ -15,7 +15,7 @@ public class LikeMapper {
         return LikeResponseDTO.builder()
                 .id(like.getId())
                 .tuneetId(like.getTuneet().getId())
-                .profileId(like.getTuneet().getAuthor().getProfile().getId())
+                .profileId(like.getProfile().getId())
                 .build();
     }
 

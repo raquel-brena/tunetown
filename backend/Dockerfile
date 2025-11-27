@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM amazoncorretto:21
  
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./

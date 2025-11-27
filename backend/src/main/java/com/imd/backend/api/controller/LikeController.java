@@ -58,8 +58,7 @@ public class LikeController implements CrudController<Long, LikeCreateDTO> {
         author.setId(dto.getProfileId());
         tuneetLiked.setId(dto.getTuneetId());
 
-
-        Like created = likeService.create(new Like(tuneetLiked));
+        Like created = likeService.create(Like.create(tuneetLiked, author));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new RestResponseMessage(LikeMapper.toDTO(created), HttpStatus.CREATED.value(), "Like criado"));
     }

@@ -1,5 +1,8 @@
 package com.imd.backend.domain.entities.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +29,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Profile {
     @Id
     private String id;
@@ -42,6 +46,7 @@ public class Profile {
     // RELACIONAMENTO CORE: Perfil pertence a um Usuário
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JsonIgnore // evita recursão infinita na serialização
     private User user;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -51,9 +56,11 @@ public class Profile {
     // RELACIONAMENTO SOCIAL
     // MappedBy refere-se aos campos na entidade 'Follow' (que refatoraremos em seguida)
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Follow> following = new ArrayList<>();
 
     @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Follow> followers = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)

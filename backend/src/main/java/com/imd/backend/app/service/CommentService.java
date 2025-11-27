@@ -47,10 +47,7 @@ public class CommentService {
         Profile author = profileRepository.findById(dto.getAuthorId())
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado."));
 
-        Comment entity = new Comment();
-        tuneet.setAuthor(author.getUser());
-        entity.setTuneet(tuneet);
-
+        Comment entity = Comment.create(author, tuneet, dto.getContentText());
         Comment savedComment = repository.save(entity);
 
         if (containsTutoMention(dto.getContentText())) {

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor 
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
   @Id
   private String id;
@@ -33,9 +36,11 @@ public class User {
   private String password;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonIgnore // evita recursão infinita ao serializar user -> profile -> user
   private Profile profile;
 
   @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonIgnore // evita user -> tuneets -> author -> user
   private List<Tuneet> tuneets = new ArrayList<>();
 
   // O relacionamento inverso (OneToMany) geralmente fica na classe concreta

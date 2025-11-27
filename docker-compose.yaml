@@ -12,7 +12,6 @@ services:
       - postgres
     volumes:
       - ./backend/src:/src
-      - ~/.m2:/root/.m2
     command: ./mvnw spring-boot:run
 
   postgres:
