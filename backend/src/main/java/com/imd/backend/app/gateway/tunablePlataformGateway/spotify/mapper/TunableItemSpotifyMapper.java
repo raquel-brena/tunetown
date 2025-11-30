@@ -2,6 +2,7 @@ package com.imd.backend.app.gateway.tunablePlataformGateway.spotify.mapper;
 
 import java.net.URI;
 
+import com.imd.backend.domain.entities.core.PostItem;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.AlbumResponseDTO;
@@ -15,15 +16,20 @@ import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 public class TunableItemSpotifyMapper {
   public static final String PLATAFORM_ID = "spotify";
 
-  public TunableItem fromSpotifyAlbum(AlbumResponseDTO albumDto) {
+  public PostItem fromSpotifyAlbum(AlbumResponseDTO albumDto) {
     try {
-      return new TunableItem(
+      TunableItem tuneet = new TunableItem(
           albumDto.id(),
           PLATAFORM_ID,
           albumDto.name(),
           albumDto.artists().getFirst().name(),
           new URI(albumDto.images().getFirst().url()),
-          TunableItemType.ALBUM);      
+          TunableItemType.ALBUM);
+
+        return PostItem.builder().type(tuneet.getItemType().getTypeName())
+                .title(tuneet.getTitle())
+                .author(tuneet.getArtist())
+                .plataform(tuneet.getPlataformId()).build();
     } catch (Exception e) {
       throw new TunableItemConvertionException(
         "Erro ao converter album do spotify em item tunetável: " + e.getLocalizedMessage(), 

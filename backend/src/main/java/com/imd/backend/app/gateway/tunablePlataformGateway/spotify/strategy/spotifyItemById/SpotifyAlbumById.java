@@ -3,6 +3,7 @@ package com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spo
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.SpotifyApiClient;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.AlbumResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.mapper.TunableItemSpotifyMapper;
+import com.imd.backend.domain.entities.core.PostItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ public class SpotifyAlbumById implements SpotifyItemByIdStrategy{
   private final TunableItemSpotifyMapper tunableItemMapper;
 
   @Override
-  public TunableItem execute(String id) {
+  public PostItem execute(String id) {
     final AlbumResponseDTO album = this.spotifyApiClient.getAlbumById(id);
 
     return tunableItemMapper.fromSpotifyAlbum(album);

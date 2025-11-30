@@ -3,6 +3,7 @@ package com.imd.backend.infra.persistence.jpa.mapper;
 import java.net.URI;
 import java.util.UUID;
 
+import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.repository.UserRepository;
@@ -22,24 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class TuneetJpaMapper {
   private final UserRepository userJPA;
 
-  public Tuneet tuneetFromJpaEntity(Tuneet entity) {
-    if(entity == null) return null;
-
-    final UUID authorId = (entity.getAuthor() != null) ? UUID.fromString(entity.getAuthor().getId()) : null;
-
-    return Tuneet.create(
-     entity.getAuthor(),
-      entity.getTextContent(),
-      new TunableItem(
-        entity.getTunableItemId(), 
-        entity.getTunableItemPlataform(), 
-        entity.getTunableItemTitle(), 
-        entity.getTunableItemArtist(),
-        URI.create(entity.getTunableItemArtworkUrl()),
-        TunableItemType.fromString(entity.getTunableItemType())
-      )
-    );    
-  }
 
   public TuneetResume resumeFromProjection(TuneetResumeProjection projection) {
     if(projection == null) return null;

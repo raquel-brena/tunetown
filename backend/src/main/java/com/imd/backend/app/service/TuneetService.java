@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.imd.backend.app.service.core.BasePostService;
+import com.imd.backend.domain.entities.core.PostItem;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.exception.RepositoryException;
@@ -34,120 +36,22 @@ import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import jakarta.transaction.Transactional;
 
 @Service
-public class TuneetService {
-  private final TunablePlataformGateway plataformGateway;
-  private final TuneetRepository tuneetRepository;
-  private final UserService userService;
-  private final TuneetJpaMapper tuneetJpaMapper;
+public class TuneetService extends BasePostService<Tuneet, TunableItem> {
 
-  public TuneetService(
-    @Qualifier("SpotifyGateway") TunablePlataformGateway plataformGateway,
-    TuneetRepository tuneetRepository,
-    UserService userService,
-    TuneetJpaMapper tuneetJpaMapper,
-    ProfileService profileService) {
-    this.plataformGateway = plataformGateway;
-    this.tuneetRepository = tuneetRepository;
-    this.tuneetJpaMapper = tuneetJpaMapper;
-    this.userService = userService;
-  }
+    private final TuneetRepository tuneetRepository;
 
-  public Optional<Tuneet> findTuneetById(String id) {
-    return this.tuneetRepository.findById(id);
-  }
-
-    public PageResult<Tuneet> findAllTuneets(Pagination pagination) {
-        final Sort.Direction direction = Sort.Direction.fromString(pagination.orderDirection());
-        final Sort sort = Sort.by(direction, pagination.orderBy());
-        final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), sort);
-
-        final var findedTuneets = this.tuneetRepository.findAll(pageable);
-
-        return new PageResult<>(
-                findedTuneets.getContent()
-                        .stream()
-                        .toList(),
-
-                findedTuneets.getNumberOfElements(),
-                findedTuneets.getTotalElements(),
-                findedTuneets.getNumber(),
-                findedTuneets.getSize(),
-                findedTuneets.getTotalPages()
-        );
+    public TuneetService(
+            @Qualifier("SpotifyGateway") TunablePlataformGateway platformGateway,
+            TuneetRepository tuneetRepository,
+            UserService userService,
+            TuneetJpaMapper mapper
+    ) {
+        super(platformGateway, tuneetRepository, userService, mapper);
+        this.tuneetRepository = tuneetRepository;
     }
 
 
-  public PageResult<Tuneet> findTuneetsByAuthorId(String authorId, Pagination pagination) {
-      final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
-              Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
 
-      Page<Tuneet> findedTuneets = tuneetRepository.findByAuthorId(authorId.toString(), pageable);
-
-      return new PageResult<>(
-              findedTuneets.getContent().stream()
-                      .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
-                      .toList(),
-              findedTuneets.getNumberOfElements(),
-              findedTuneets.getTotalElements(),
-              findedTuneets.getNumber(),
-              findedTuneets.getSize(),
-              findedTuneets.getTotalPages()
-      );
-//
-//      Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
-//              Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
-//
-//      var findedTuneets = this.tuneetRepository.findByTunableItemId(tunableItemId, pageable);
-//
-//      return new PageResult<>(
-//              findedTuneets.getContent().stream()
-//                      .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
-//                      .toList(),
-//              findedTuneets.getNumberOfElements(),
-//              findedTuneets.getTotalElements(),
-//              findedTuneets.getNumber(),
-//              findedTuneets.getSize(),
-//              findedTuneets.getTotalPages()
-//      );
-  }
-
-  public PageResult<Tuneet> findTuneetByTunableItem(
-    String tunableItemId,
-    Pagination pagination
-  ) {
-      Pageable pageable = PageRequest.of(
-              pagination.page(),
-              pagination.size(),
-              Sort.by(
-                      Sort.Direction.fromString(pagination.orderDirection()),
-                      pagination.orderBy()
-              )
-      );
-
-      Page<Tuneet> page = this.tuneetRepository.findByTunableItemId(tunableItemId, pageable);
-          return new PageResult<>(
-              page.getContent(),
-              page.getNumberOfElements(),
-              page.getTotalElements(),
-              page.getNumber(),
-              page.getSize(),
-              page.getTotalPages()
-      );
-  }
-
-  public PageResult<Tuneet> findTuneetByTunableItemTitleContaining(String word, Pagination pagination) {
-      Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
-              Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
-      Page<Tuneet> page = this.tuneetRepository.findByTunableItemTitleContainingIgnoreCase(word, pageable);
-      return new PageResult<>(
-              page.getContent(),
-              page.getNumberOfElements(),
-              page.getTotalElements(),
-              page.getNumber(),
-              page.getSize(),
-              page.getTotalPages()
-      );
-  }
 
   public PageResult<Tuneet> findTuneetByTunableItemArtistContaining(String word, Pagination pagination) {
       Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
@@ -164,7 +68,7 @@ public class TuneetService {
   }  
 
   public List<TunableItem> searchTunableItems(String query, TunableItemType itemType) {
-    return plataformGateway.searchItem(query, itemType);
+    return platformGateway.searchItem(query, itemType);
   }
 
     public List<TrendingTuneResult> getTrendingTunes(TunableItemType type, int limit) {
@@ -219,7 +123,7 @@ public class TuneetService {
 
       final var result = new PageResult<TuneetResume>(
               projection.getContent().stream()
-                      .map(tuneetJpaMapper::resumeFromProjection)
+                      .map(mapper::resumeFromProjection)
                       .toList(),
               projection.getNumberOfElements(),
               projection.getTotalElements(),
@@ -246,7 +150,7 @@ public class TuneetService {
     
     final TuneetResumeProjection tuneetResume = op.get();
 
-    TuneetResume resume = tuneetJpaMapper.resumeFromProjection(tuneetResume);
+    TuneetResume resume = mapper.resumeFromProjection(tuneetResume);
 
     if (tuneetResume.getFileNamePhoto() != null) {
       final String presignedUrl = FileService.applyPresignedUrl(tuneetResume.getFileNamePhoto());
@@ -273,7 +177,7 @@ public class TuneetService {
 
       return new PageResult<>(
               pageResult.getContent().stream()
-                      .map(tuneetJpaMapper::fromTimelineProjection)
+                      .map(mapper::fromTimelineProjection)
                       .toList(),
               pageResult.getNumberOfElements(),
               pageResult.getTotalElements(),
@@ -298,7 +202,7 @@ public class TuneetService {
 
       return new PageResult<>(
               pageResult.getContent().stream()
-                      .map(tuneetJpaMapper::fromTimelineProjection)
+                      .map(mapper::fromTimelineProjection)
                       .toList(),
               pageResult.getNumberOfElements(),
               pageResult.getTotalElements(),
@@ -319,7 +223,7 @@ public class TuneetService {
         if(user.isEmpty())
           throw new BusinessException("Não existe nenhum usuário com esse ID");
 
-        final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
+        final PostItem tunableItem = this.platformGateway.getItemById(tunableItemId, tunableItemType);
         final Tuneet tuneetToSave = Tuneet.create(user.get(), textContent, tunableItem);
         this.tuneetRepository.save(tuneetToSave);
         return tuneetToSave;
@@ -354,15 +258,15 @@ public class TuneetService {
     if(hasItemId ^ hasItemType) 
       throw new BusinessException("Para atualizar o item, é necessário passar o ID e o tipo dele");
 
-    if(hasItemId && hasItemType) {
-      final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
-      tuneet.setTunableItemId(tunableItemId);
-      tuneet.setTunableItemArtist(tunableItem.getArtist());
-      tuneet.setTunableItemTitle(tunableItem.getTitle());
-      tuneet.setTunableItemArtworkUrl(String.valueOf(tunableItem.getArtworkUrl()));
-      tuneet.setTunableItemType(String.valueOf(tunableItem.getItemType()));
-      tuneet.setTunableItemPlataform(tunableItem.getPlataformId());
-    }
+//    if(hasItemId && hasItemType) {
+//      final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
+//      tuneet.setTunableItemId(tunableItemId);
+//      tuneet.setTunableItemArtist(tunableItem.getArtist());
+//      tuneet.setTunableItemTitle(tunableItem.getTitle());
+//      tuneet.setTunableItemArtworkUrl(String.valueOf(tunableItem.getArtworkUrl()));
+//      tuneet.setTunableItemType(String.valueOf(tunableItem.getItemType()));
+//      tuneet.setTunableItemPlataform(tunableItem.getPlataformId());
+//    }
 
     if(hasTextContent)
       tuneet.setTextContent(textContent);
@@ -371,4 +275,28 @@ public class TuneetService {
     return tuneet;
   }
 
+    @Override
+    protected Tuneet saveEntity(Tuneet entity) {
+        return null;
+    }
+
+    @Override
+    protected TunableItem fetchItemById(String itemId, Object itemType) {
+        return null;
+    }
+
+    @Override
+    protected void applyNewItem(Tuneet entity, TunableItem item) {
+
+    }
+
+    @Override
+    protected void applyTextUpdate(Tuneet entity, String text) {
+
+    }
+
+    @Override
+    protected Tuneet createNewEntity(UUID userId, String text, TunableItem item) {
+        return null;
+    }
 }

@@ -23,14 +23,14 @@ public class TuneScoreService {
     public TuneScoreResponse calculateTuneScore(String firstUsername, String secondUsername) {
         var pagination = new Pagination(0, 50, "id", "DESC");
 
-        var firstUserTuneets = tuneetService.findTuneetsByAuthorId(firstUsername, pagination);
-        var secondUserTuneets = tuneetService.findTuneetsByAuthorId(secondUsername, pagination);
+        var firstUserTuneets = tuneetService.listByAuthorId(firstUsername, pagination);
+        var secondUserTuneets = tuneetService.listByAuthorId(secondUsername, pagination);
 
         var firstUserTunableItems = firstUserTuneets.itens().stream()
-                .map(Tuneet::getTunableContent).toList();
+                .map(Tuneet::getPostItem).toList();
 
         var secondUserTunableItems = secondUserTuneets.itens().stream()
-               .map(Tuneet::getTunableContent).toList();
+               .map(Tuneet::getPostItem).toList();
 
         var response = openAiGateway.structuredCall("""
             # Tunetown - TuneScore

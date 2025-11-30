@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.imd.backend.domain.entities.tunetown.Tuneet;
+import com.imd.backend.domain.repository.core.BasePostRepository;
 import com.imd.backend.domain.valueObjects.*;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +16,7 @@ import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TrendingTuneProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 
-public interface TuneetRepository extends JpaRepository<Tuneet, String> {
+public interface TuneetRepository extends BasePostRepository<Tuneet> {
     @Query("""
         SELECT
           t.id as tuneetId,

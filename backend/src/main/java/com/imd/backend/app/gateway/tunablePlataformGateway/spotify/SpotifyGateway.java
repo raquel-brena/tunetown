@@ -2,6 +2,7 @@ package com.imd.backend.app.gateway.tunablePlataformGateway.spotify;
 
 import java.util.List;
 
+import com.imd.backend.domain.entities.core.PostItem;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,7 @@ public class SpotifyGateway implements TunablePlataformGateway {
   }
 
   @Override
-  public TunableItem getItemById(String id, TunableItemType itemType){
+  public PostItem getItemById(String id, TunableItemType itemType){
     final SpotifyItemByIdStrategy findByIdStrategy = this.itemByIdStrategyFactory.create(itemType);
 
     return findByIdStrategy.execute(id);

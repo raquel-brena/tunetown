@@ -53,13 +53,13 @@ public class CommentService {
         if (containsTutoMention(dto.getContentText())) {
             String tunableSummary;
             try {
-                tunableSummary = tuneet.getTunableContent();
+                tunableSummary = String.valueOf(tuneet.getPostItem());
             } catch (Exception ex) {
                 tunableSummary = null;
             }
             tutoResponder.generateResponseAsync(
                     savedComment.getTuneet().getId(),
-                    tuneet.getTunableContent(),
+                    String.valueOf(tuneet.getPostItem()),
                     tunableSummary,
                     dto.getContentText()
             );
