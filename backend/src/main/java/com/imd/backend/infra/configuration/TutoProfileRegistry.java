@@ -1,14 +1,13 @@
 package com.imd.backend.infra.configuration;
 
+import org.springframework.stereotype.Component;
+
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.repository.ProfileRepository;
 import com.imd.backend.domain.repository.UserRepository;
-import org.springframework.cglib.core.Local;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Component

@@ -17,7 +17,6 @@ import java.util.UUID;
 
 @Service
 public class S3Service {
-
     private final S3Client s3;
     private final String bucketName;
 

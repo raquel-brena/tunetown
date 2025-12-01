@@ -3,7 +3,6 @@ package com.imd.backend.api.controller;
 import com.imd.backend.api.dto.tunescore.TuneScoreResponse;
 import com.imd.backend.app.service.TuneScoreService;
 import com.imd.backend.domain.exception.BusinessException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TuneScoreController {
     private final TuneScoreService tuneScoreService;
 
-    @Autowired
     public TuneScoreController(TuneScoreService tuneScoreService) {
         this.tuneScoreService = tuneScoreService;
     }

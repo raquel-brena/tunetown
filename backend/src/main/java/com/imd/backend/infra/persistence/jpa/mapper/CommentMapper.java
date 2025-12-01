@@ -4,7 +4,6 @@ import com.imd.backend.api.dto.comment.CommentCreateDTO;
 import com.imd.backend.api.dto.comment.CommentResponseDTO;
 import com.imd.backend.api.dto.comment.CommentUpdateDTO;
 import com.imd.backend.domain.entities.core.Profile;
-import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.tunetown.Comment;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 

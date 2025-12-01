@@ -8,7 +8,6 @@ import com.imd.backend.domain.repository.core.BasePostRepository;
 import com.imd.backend.domain.valueObjects.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -183,25 +182,6 @@ public interface TuneetRepository extends BasePostRepository<Tuneet> {
 
 
     public Page<Tuneet> findAll(Pageable pagination);
-//    @Override
-//    public PageResult<Tuneet> findByAuthorId(UUID authorId, Pageable pagination) {
-//
-//        final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),
-//                Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
-//
-//        Page<Tuneet> findedTuneets = this.findByAuthorId(authorId.toString(), pageable);
-//
-//        return new PageResult<>(
-//                findedTuneets.getContent().stream()
-//                        .map(entity -> tuneetJpaMapper.tuneetFromJpaEntity(entity))
-//                        .toList(),
-//                findedTuneets.getNumberOfElements(),
-//                findedTuneets.getTotalElements(),
-//                findedTuneets.getNumber(),
-//                findedTuneets.getSize(),
-//                findedTuneets.getTotalPages()
-//        );
-//    }
 
     public Page<Tuneet> findByTunableItemId(String tunableItemId, Pageable pagination);
 

@@ -19,17 +19,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.awssdk.services.s3.model.OptionalObjectAttributes;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     public UserService(
-        UserRepository userRepository
+        UserRepository userRepository,
+        FileService fileService
     ) {
         this.userRepository = userRepository;
+        this.fileService = fileService;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -101,7 +103,7 @@ public class UserService {
         );
 
         if(user.getPhotoFileName() != null) {
-            final String presignedUrl = FileService.applyPresignedUrl(user.getPhotoFileName());
+            final String presignedUrl = this.fileService.applyPresignedUrl(user.getPhotoFileName());
             user.setPhotoUrl(presignedUrl);
         }
 

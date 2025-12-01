@@ -1,126 +1,84 @@
 package com.imd.backend.app.service.core;
 
-import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
 import com.imd.backend.app.service.UserService;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
+import com.imd.backend.domain.entities.core.BasePost;
+import com.imd.backend.domain.entities.core.User;
+import com.imd.backend.domain.exception.BusinessException;
+import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.repository.core.BasePostRepository;
-import com.imd.backend.domain.valueObjects.PageResult;
-import com.imd.backend.domain.valueObjects.Pagination;
-import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.imd.backend.domain.valueObjects.core.PostItem;
 import org.springframework.data.domain.*;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
-public abstract class BasePostService<T,   // Entidade (Tuneet)
-        I    // Item vinculável (TunableItem)
-        > {
+public abstract class BasePostService<T extends BasePost, I extends PostItem> {
 
-    protected final TunablePlataformGateway platformGateway;
     protected final BasePostRepository<T> repository;
     protected final UserService userService;
-    protected final TuneetJpaMapper mapper;
 
-    protected BasePostService(TunablePlataformGateway platformGateway, BasePostRepository<T> repository, UserService userService, TuneetJpaMapper mapper) {
-        this.platformGateway = platformGateway;
+    protected BasePostService(BasePostRepository<T> repository, UserService userService) {
         this.repository = repository;
         this.userService = userService;
-        this.mapper = mapper;
     }
 
-    protected abstract T saveEntity(T entity);
+    // --- MÉTODOS FIXOS (CRUD Padrão) ---
 
-    protected abstract I fetchItemById(String itemId, Object itemType);
-
-    protected abstract void applyNewItem(T entity, I item);
-
-    protected abstract void applyTextUpdate(T entity, String text);
-
-    protected abstract T createNewEntity(UUID userId, String text, I item);
-
-
-    public Optional<T> findById(String id) {
-        return this.repository.findById(id);
+    public Page<T> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
-    public PageResult<T> list(Pagination pagination) {
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
-        final Page<T> postsList = this.repository.findAll(pageable);
-
-        return new PageResult<>(postsList.getContent().stream().toList(),
-
-                postsList.getNumberOfElements(), postsList.getTotalElements(), postsList.getNumber(), postsList.getSize(), postsList.getTotalPages());
+    public Page<T> findByAuthorId(UUID authorId, Pageable pageable) {
+        return repository.findByAuthorId(authorId.toString(), pageable);
     }
 
-    public PageResult<T> listByAuthorId(String authorId, Pagination pagination) {
-        final Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
-
-        Page<T> postList = repository.findByAuthorId(authorId, pageable);
-
-        return new PageResult<>(postList.getContent().stream().toList(), postList.getNumberOfElements(), postList.getTotalElements(), postList.getNumber(), postList.getSize(), postList.getTotalPages());
-    }
-
-    public PageResult<T> listByItem(String itemId, Pagination pagination) {
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
-
-        Page<T> page = this.repository.findByTunableItemId(itemId, pageable);
-        return new PageResult<>(page.getContent(), page.getNumberOfElements(), page.getTotalElements(), page.getNumber(), page.getSize(), page.getTotalPages());
-    }
-
-    public PageResult<T> findTuneetByTunableItemTitleContaining(String word, Pagination pagination) {
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), Sort.by(Sort.Direction.fromString(pagination.orderDirection()), pagination.orderBy()));
-        Page<T> page = this.repository.findByTunableItemTitleContainingIgnoreCase(word, pageable);
-        return new PageResult<>(page.getContent(), page.getNumberOfElements(), page.getTotalElements(), page.getNumber(), page.getSize(), page.getTotalPages());
-    }
-
-
-    @Transactional
-    public T delete(UUID id) {
-        Optional<T> post = findById(id.toString());
-        if (post.isEmpty()) {
-            throw new RuntimeException("Nenhum post encontrado com o ID informado.");
-        }
-
-        this.repository.deleteById(post.toString());
-        return post.get();
+    public T findById(UUID id) {
+        return repository.findById(id.toString())
+                .orElseThrow(() -> new NotFoundException("Post não encontrado com ID: " + id));
     }
 
     @Transactional
-    public T update(UUID entityId, String textContent, String itemId, Object itemType) {
+    public void deleteById(UUID id, UUID userId) {
+        T post = findById(id);
 
-        T entity = findById(entityId.toString()).orElseThrow(() -> new RuntimeException("Nenhum registro encontrado com esse ID"));
-
-        boolean hasText = textContent != null && !textContent.isBlank();
-        boolean hasItemId = itemId != null && !itemId.isBlank();
-        boolean hasType = itemType != null;
-
-        if (hasItemId ^ hasType) {
-            throw new RuntimeException("Para atualizar o item, é necessário enviar ID + tipo.");
+        // Validação de Segurança (Ponto Fixo)
+        if (!post.isOwnedBy(userId.toString())) {
+            throw new AccessDeniedException("Você não tem permissão para deletar este post.");
         }
 
-        if (hasItemId && hasType) {
-            I item = fetchItemById(itemId, itemType);
-            applyNewItem(entity, item);
-        }
+        repository.delete(post);
+    }    
 
-        if (hasText) {
-            applyTextUpdate(entity, textContent);
-        }
-
-        this.repository.save(entity);
-        return entity;
-    }
-
+    /**
+     * TEMPLATE METHOD: O algoritmo de criação.
+     * O Framework define O FLUXO, a Aplicação define OS DETALHES.
+     */
     @Transactional
-    public T create(UUID userId, String itemId, Object itemType, String textContent) {
+    public T create(String userId, String textContent, String itemId, String itemType) {
+        // 1. Valida Usuário (Fixo)
+        final User author = userService.findUserById(UUID.fromString(userId))
+             .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
 
-        I item = fetchItemById(itemId, itemType);
+        // 2. Busca o Item na API Externa (Variável - Abstract)
+        final I item = resolveItem(itemId, itemType);
 
-        T entity = createNewEntity(userId, textContent, item);
+        // 3. Instancia a Entidade Concreta (Variável - Abstract)
+        final T entity = createEntityInstance(author, textContent, item);
 
-        return saveEntity(entity);
-    }
+        // 4. Salva (Fixo)
+        return repository.save(entity);
+    }    
+
+    // --- MÉTODOS ABSTRATOS (Hot Spots) ---
+
+    /**
+     * A subclasse deve saber como buscar o item (ex: chamar SpotifyGateway).
+     */
+    protected abstract I resolveItem(String itemId, String itemType); 
+    
+    /**
+     * A subclasse deve saber como instanciar sua entidade (ex: new Tuneet(...)).
+     */
+    protected abstract T createEntityInstance(User author, String textContent, I item);    
 }

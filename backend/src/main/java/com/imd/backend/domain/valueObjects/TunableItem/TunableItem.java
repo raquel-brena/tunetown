@@ -1,34 +1,37 @@
 package com.imd.backend.domain.valueObjects.TunableItem;
 
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.net.URI;
 
+import com.imd.backend.domain.valueObjects.core.PostItem;
+
 @Getter
 @Setter
-public final class TunableItem {
-  private final String id;
-  private final String plataformId;
-  private final String title;
-  private final String artist;
-  private final URI artworkUrl;
-  private final TunableItemType itemType; 
+@SuperBuilder // ESSENCIAL: Substitui @Builder para funcionar com herança
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true) // Importante: compara também os campos do Pai (ID, Title, etc)
+public final class TunableItem extends PostItem {
+  private String artist;
+  private TunableItemType itemType;
 
   public TunableItem(
-    String id,
-    String plataformId,
-    String title,
-    String artist,
-    URI artworkUrl,
-    TunableItemType itemType
+      String id,
+      String plataformName, // Mapeia para o 'platformName' do pai
+      String title,
+      String artist,
+      URI artworkUrl,
+      TunableItemType itemType
   ) {
-    this.id = id;
-    this.plataformId = plataformId;
-    this.title = title;
-    this.artist = artist;
-    this.artworkUrl = artworkUrl;
-    this.itemType = itemType;
-  }
+      // Chama o construtor do pai (PostItem)
+      super(id, title, plataformName, artworkUrl);
+      
+      // Inicializa os campos específicos
+      this.artist = artist;
+      this.itemType = itemType;
+  }    
 }

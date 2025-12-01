@@ -1,7 +1,5 @@
 package com.imd.backend.infra.persistence.jpa.mapper;
 
-import java.util.UUID;
-
 import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.domain.entities.core.User;
 

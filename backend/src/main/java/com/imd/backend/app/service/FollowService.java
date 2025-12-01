@@ -3,13 +3,10 @@ package com.imd.backend.app.service;
 import com.imd.backend.domain.entities.core.Follow;
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.repository.FollowRepository;
-import com.imd.backend.infra.persistence.jpa.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service

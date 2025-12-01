@@ -3,11 +3,12 @@ package com.imd.backend.app.service;
 import com.imd.backend.api.dto.tunescore.TuneScoreResponse;
 import com.imd.backend.api.dto.tunescore.TuneScoreStructuredResponse;
 import com.imd.backend.app.gateway.llmGateway.OpenAiGateway;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.Pagination;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,16 +22,16 @@ public class TuneScoreService {
     }
 
     public TuneScoreResponse calculateTuneScore(String firstUsername, String secondUsername) {
-        var pagination = new Pagination(0, 50, "id", "DESC");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(0, 50, sort);
 
-        var firstUserTuneets = tuneetService.listByAuthorId(firstUsername, pagination);
-        var secondUserTuneets = tuneetService.listByAuthorId(secondUsername, pagination);
+        var firstUserTuneets = tuneetService.findByAuthorId(UUID.fromString(firstUsername), pageable);
+        var secondUserTuneets = tuneetService.findByAuthorId(UUID.fromString(secondUsername), pageable);
 
-        var firstUserTunableItems = firstUserTuneets.itens().stream()
-                .map(Tuneet::getPostItem).toList();
+        
+        var firstUserTunableItems = firstUserTuneets.map(tuneet -> tuneet.getTunableItem()).getContent();
 
-        var secondUserTunableItems = secondUserTuneets.itens().stream()
-               .map(Tuneet::getPostItem).toList();
+        var secondUserTunableItems = secondUserTuneets.map(tuneet -> tuneet.getTunableItem()).getContent();
 
         var response = openAiGateway.structuredCall("""
             # Tunetown - TuneScore

@@ -6,8 +6,6 @@ import com.imd.backend.domain.entities.tunetown.Comment;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.repository.TuneetRepository;
-import com.imd.backend.infra.persistence.jpa.mapper.CommentMapper;
-import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
 import com.imd.backend.domain.repository.CommentRepository;
 import com.imd.backend.domain.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -53,13 +48,13 @@ public class CommentService {
         if (containsTutoMention(dto.getContentText())) {
             String tunableSummary;
             try {
-                tunableSummary = String.valueOf(tuneet.getPostItem());
+                tunableSummary = String.valueOf(tuneet.getTunableContent());
             } catch (Exception ex) {
                 tunableSummary = null;
             }
             tutoResponder.generateResponseAsync(
                     savedComment.getTuneet().getId(),
-                    String.valueOf(tuneet.getPostItem()),
+                    tuneet.getTunableContent(),
                     tunableSummary,
                     dto.getContentText()
             );

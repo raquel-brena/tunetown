@@ -1,13 +1,11 @@
 package com.imd.backend.domain.entities.core;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.experimental.SuperBuilder;
 
@@ -38,75 +36,60 @@ public abstract class BasePost {
     @Column(columnDefinition = "TEXT", nullable = false)
     protected String textContent;
 
-    // Relacionamento Fixo: Todo post tem um item
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_item_id", nullable = false)
-    protected PostItem postItem;
-
-    @CreationTimestamp
+    // Removemos @CreationTimestamp para ter controle total no Factory Method
+    // Mas mantemos updatable = false para segurança
     @Column(name = "created_at", updatable = false)
     protected LocalDateTime createdAt;
 
+    // --- MÉTODOS DE DOMÍNIO ---
+
     protected void validateState() {
         if (this.id == null || this.id.isBlank()) {
-            // Garante identidade se não tiver sido gerada
             this.id = UUID.randomUUID().toString();
         }
-
         if (this.author == null) {
             throw new IllegalArgumentException("Todo post deve ter um autor.");
         }
-
         if (this.textContent == null || this.textContent.trim().isEmpty()) {
             throw new IllegalArgumentException("O conteúdo do texto não pode estar vazio.");
         }
     }
 
-    /**
-     * Ação de negócio: Atualizar o texto.
-     * Mantém o encapsulamento e valida a regra de negócio.
-     */
     public void updateContent(String newContent) {
         if (newContent == null || newContent.trim().isEmpty()) {
             throw new IllegalArgumentException("Não é possível atualizar para um texto vazio.");
         }
         this.textContent = newContent;
-        // Aqui poderíamos atualizar um campo 'updatedAt' se existisse
     }
 
-    /**
-     * Verifica se o usuário solicitante é o dono do post.
-     * Útil para guardas de segurança.
-     */
     public boolean isOwnedBy(String userId) {
         if (this.author == null || this.author.getId() == null)
             return false;
         return this.author.getId().equals(userId);
     }
 
-    // equals e hashCode baseados APENAS no ID (identidade)
+    // --- HOOKS ---
+    @PrePersist
+    private void prePersist() {
+        if (this.id == null)
+            this.id = UUID.randomUUID().toString();
+        if (this.createdAt == null)
+            this.createdAt = LocalDateTime.now();
+    }
+
+    // --- EQUALS & HASHCODE ---
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof BasePost))
             return false;
-        BasePost that = (BasePost) o;
-        return Objects.equals(id, that.id);
+        BasePost basePost = (BasePost) o;
+        return Objects.equals(id, basePost.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    /**
-     * SAFETY NET:
-     * Executa automaticamente antes de qualquer INSERT no banco.
-     * Garante que, mesmo se usarem o Builder errado, o ID será gerado.
-     */
-    @PrePersist
-    private void ensureIdAndValidation() {
-        this.validateState();
     }
 }

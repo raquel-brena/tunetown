@@ -1,6 +1,5 @@
 package com.imd.backend.infra.persistence.jpa.mapper;
 
-import com.imd.backend.api.dto.like.LikeCreateDTO;
 import com.imd.backend.api.dto.like.LikeResponseDTO;
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.entities.tunetown.Like;

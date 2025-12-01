@@ -3,28 +3,18 @@ package com.imd.backend.infra.persistence.jpa.mapper;
 import java.net.URI;
 import java.util.UUID;
 
-import com.imd.backend.domain.entities.core.BasePost;
-import com.imd.backend.domain.entities.core.User;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TuneetResume;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 
-import lombok.RequiredArgsConstructor;
-
 @Component
-@RequiredArgsConstructor
 public class TuneetJpaMapper {
-  private final UserRepository userJPA;
 
-
-  public TuneetResume resumeFromProjection(TuneetResumeProjection projection) {
+  public static TuneetResume resumeFromProjection(TuneetResumeProjection projection) {
     if(projection == null) return null;
 
     // --- Defesa para UUIDs ---
@@ -67,7 +57,7 @@ public class TuneetJpaMapper {
     );
   }
 
-  public TimeLineItem fromTimelineProjection(TimelineItemProjection p) {
+  public static TimeLineItem fromTimelineProjection(TimelineItemProjection p) {
     if (p == null) return null;
 
     return new TimeLineItem(

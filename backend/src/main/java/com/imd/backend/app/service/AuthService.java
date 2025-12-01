@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.imd.backend.infra.security.JwtService;
-import com.imd.backend.app.service.ProfileService;
 
 @Service
 public class AuthService {

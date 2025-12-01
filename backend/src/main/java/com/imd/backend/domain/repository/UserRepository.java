@@ -2,7 +2,6 @@ package com.imd.backend.domain.repository;
 
 
 import com.imd.backend.domain.entities.core.User;
-import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.infra.persistence.jpa.projections.UserWithProfileProjection;
 
 import org.springframework.data.domain.Page;

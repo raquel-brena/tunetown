@@ -1,7 +1,6 @@
 package com.imd.backend.infra.security;
 
 import com.imd.backend.domain.entities.core.User;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

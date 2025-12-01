@@ -13,7 +13,7 @@ import java.time.Duration;
 public class FileService {
 
     private final FileRepository fileRepository;
-    private static S3Service s3Service;
+    private final S3Service s3Service;
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     private static final String[] ALLOWED_TYPES = {"image/jpeg", "image/png", "image/jpg"};
@@ -46,9 +46,9 @@ public class FileService {
         }
     }
 
-    public static String applyPresignedUrl(String filename) {
+    public String applyPresignedUrl(String filename) {
         if (filename != null) {
-            return s3Service.generatePresignedUrl(
+            return this.s3Service.generatePresignedUrl(
                     filename,
                     Duration.ofHours(36)
             );
