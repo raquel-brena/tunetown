@@ -1,20 +1,22 @@
-package com.imd.backend.domain.repository;
+package com.imd.backend.infra.persistence.jpa.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.repository.core.BasePostRepository;
 import com.imd.backend.domain.valueObjects.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TrendingTuneProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
+import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
+@Repository("TuneetJpaRepository")
 public interface TuneetRepository extends BasePostRepository<Tuneet> {
     @Query("""
         SELECT

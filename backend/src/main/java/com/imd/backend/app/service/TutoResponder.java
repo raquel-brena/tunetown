@@ -5,7 +5,8 @@ import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.entities.tunetown.Comment;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.infra.configuration.TutoProfileRegistry;
-import com.imd.backend.domain.repository.CommentRepository;
+import com.imd.backend.infra.persistence.jpa.repository.CommentRepository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;

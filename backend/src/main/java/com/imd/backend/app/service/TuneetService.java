@@ -8,10 +8,11 @@ import java.util.UUID;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.repository.TuneetRepository;
 import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
 import com.imd.backend.infra.persistence.jpa.projections.TrendingTuneProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
+import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

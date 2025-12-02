@@ -2,7 +2,8 @@ package com.imd.backend.app.service;
 
 import com.imd.backend.domain.entities.core.MediaFile;
 import com.imd.backend.domain.entities.core.Profile;
-import com.imd.backend.domain.repository.FileRepository;
+import com.imd.backend.infra.persistence.jpa.repository.FileRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

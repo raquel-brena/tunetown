@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.entities.core.User;
-import com.imd.backend.domain.repository.ProfileRepository;
-import com.imd.backend.domain.repository.UserRepository;
+import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
+import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

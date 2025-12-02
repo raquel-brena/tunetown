@@ -5,8 +5,9 @@ import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.domain.repository.core.BasePostRepository;
 import com.imd.backend.domain.valueObjects.core.PostItem;
+import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
+
 import org.springframework.data.domain.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;

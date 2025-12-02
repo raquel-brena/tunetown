@@ -5,9 +5,10 @@ import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.entities.tunetown.Comment;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.domain.repository.TuneetRepository;
-import com.imd.backend.domain.repository.CommentRepository;
-import com.imd.backend.domain.repository.ProfileRepository;
+import com.imd.backend.infra.persistence.jpa.repository.CommentRepository;
+import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
+import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package com.imd.backend.domain.repository.core;
+package com.imd.backend.infra.persistence.jpa.repository.core;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

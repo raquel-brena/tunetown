@@ -1,4 +1,4 @@
-package com.imd.backend.domain.repository;
+package com.imd.backend.infra.persistence.jpa.repository;
 
 import com.imd.backend.domain.entities.tunetown.Comment;
 import org.springframework.data.domain.Page;

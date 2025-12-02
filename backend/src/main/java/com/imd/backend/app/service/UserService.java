@@ -7,7 +7,7 @@ import com.imd.backend.domain.valueObjects.PageResult;
 import com.imd.backend.domain.valueObjects.Pagination;
 import com.imd.backend.domain.valueObjects.UserWithProfile;
 import com.imd.backend.infra.persistence.jpa.projections.UserWithProfileProjection;
-import com.imd.backend.domain.repository.UserRepository;
+import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

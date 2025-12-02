@@ -1,4 +1,9 @@
 FROM amazoncorretto:21
+
+WORKDIR /app
+
+# Instala o tar e o gzip (necessários para o mvnw descompactar o maven)
+RUN yum install -y tar gzip
  
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./

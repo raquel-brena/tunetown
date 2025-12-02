@@ -140,7 +140,7 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
   @GetMapping("/search-tunable-item")
   public ResponseEntity<List<TunableItem>> searchTunableItem(
       @RequestParam String query,
-      @RequestParam(defaultValue = "MUSIC") TunableItemType itemType) {
+      @RequestParam(defaultValue = "MUSIC", name = "type") TunableItemType itemType) {
     final List<TunableItem> items = tuneetService.searchTunableItems(query, itemType);
     return ResponseEntity.ok(items);
   }
