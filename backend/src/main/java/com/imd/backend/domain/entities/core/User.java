@@ -1,13 +1,10 @@
 package com.imd.backend.domain.entities.core;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,27 +36,12 @@ public class User {
   @JsonIgnore // evita recursão infinita ao serializar user -> profile -> user
   private Profile profile;
 
-  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonIgnore // evita user -> tuneets -> author -> user
-  private List<Tuneet> tuneets = new ArrayList<>();
-
-  // O relacionamento inverso (OneToMany) geralmente fica na classe concreta
-  // ou pode ser omitido se não for estritamente necessário para o framework core.
-
     public User(String id, String email, String username, String password) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
         this.profile = null;
-    }
-
-    public User(String id, String email, String username, String password, Profile profile) {
-        this.id = id;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.profile = profile;
     }
 
     @Override

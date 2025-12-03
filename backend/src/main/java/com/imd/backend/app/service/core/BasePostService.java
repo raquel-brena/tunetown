@@ -5,6 +5,7 @@ import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
+import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueObjects.core.PostItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
@@ -12,14 +13,18 @@ import org.springframework.data.domain.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
-public abstract class BasePostService<T extends BasePost, I extends PostItem> {
+public abstract class BasePostService<
+    T extends BasePost, // POST que será utilizado
+    I extends PostItem // POST ITEM (sobre o que será postado)
+> {
 
-    protected final BasePostRepository<T> repository;
+    protected final BasePostRepository<T, I> repository;
     protected final UserService userService;
 
-    protected BasePostService(BasePostRepository<T> repository, UserService userService) {
+    protected BasePostService(BasePostRepository<T, I> repository, UserService userService) {
         this.repository = repository;
         this.userService = userService;
     }
@@ -69,9 +74,14 @@ public abstract class BasePostService<T extends BasePost, I extends PostItem> {
 
         // 4. Salva (Fixo)
         return repository.save(entity);
-    }    
+    }
+    
+    public List<BaseTrendingItem<I>> getTrending(String filterType, int limit) {
+        // Cria paginação para o limite
+        Pageable pageable = PageRequest.of(0, limit);
 
-    // --- MÉTODOS ABSTRATOS (Hot Spots) ---
+        return repository.findTrendingItems(filterType, pageable);
+    }  
 
     /**
      * A subclasse deve saber como buscar o item (ex: chamar SpotifyGateway).

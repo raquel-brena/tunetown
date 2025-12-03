@@ -34,4 +34,25 @@ public final class TunableItem extends PostItem {
       this.artist = artist;
       this.itemType = itemType;
   }    
+
+  // --- NOVO CONSTRUTOR "JPA COMPLIANT" ---
+  // Este construtor aceita Strings para URL e Enum e faz a conversão.
+  // É usado exclusivamente pela query JPQL.
+  public TunableItem(
+      String id,
+      String platformName,
+      String title,
+      String artist,
+      String artworkUrlStr, // Recebe String do banco
+      String itemTypeStr // Recebe String do banco
+  ) {
+    super(
+        id,
+        title,
+        platformName,
+        artworkUrlStr != null ? URI.create(artworkUrlStr) : null // Converte aqui
+    );
+    this.artist = artist;
+    this.itemType = TunableItemType.fromString(itemTypeStr); // Converte aqui
+  }  
 }

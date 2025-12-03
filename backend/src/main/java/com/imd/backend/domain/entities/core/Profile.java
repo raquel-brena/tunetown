@@ -55,10 +55,12 @@ public class Profile {
     // RELACIONAMENTO SOCIAL
     // MappedBy refere-se aos campos na entidade 'Follow' (que refatoraremos em seguida)
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
     @JsonIgnore
     private List<Follow> following = new ArrayList<>();
 
     @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
     @JsonIgnore
     private List<Follow> followers = new ArrayList<>();
 
@@ -67,11 +69,13 @@ public class Profile {
 
     // Campos auxiliares para leitura (não persistidos)
     @Transient
+    @Builder.Default
     @Setter // Permitimos setter aqui pois geralmente é preenchido por DTO/Query
     private Long totalFollowers = 0L;
 
     @Transient
     @Setter
+    @Builder.Default
     private Long totalFollowing = 0L;
 
     /**

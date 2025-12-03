@@ -6,7 +6,6 @@ import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.TimeLineItem;
-import com.imd.backend.domain.valueObjects.TrendingTuneResult;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.domain.valueObjects.TuneetResume;
@@ -128,14 +127,6 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
   // ==================================================================================
   // INTEGRAÇÃO / TRENDING / SEARCH EXTERNO
   // ==================================================================================
-
-  @GetMapping("/trending")
-  public ResponseEntity<List<TrendingTuneResult>> getTrending(
-      @RequestParam(defaultValue = "MUSIC") TunableItemType type, 
-      @RequestParam(defaultValue = "10") int limit) {
-    List<TrendingTuneResult> trending = tuneetService.getTrendingTunes(type, limit);
-    return ResponseEntity.ok(trending);
-  }
 
   @GetMapping("/search-tunable-item")
   public ResponseEntity<List<TunableItem>> searchTunableItem(

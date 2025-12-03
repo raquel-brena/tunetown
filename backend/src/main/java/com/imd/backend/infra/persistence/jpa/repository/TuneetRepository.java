@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.*;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +20,7 @@ import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
 @Repository("TuneetJpaRepository")
-public interface TuneetRepository extends BasePostRepository<Tuneet> {
+public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem> {
     @Query("""
         SELECT
           t.id as tuneetId,
@@ -108,22 +111,33 @@ public interface TuneetRepository extends BasePostRepository<Tuneet> {
 
     Page<Tuneet> findByTunableItemArtistContainingIgnoreCase(String name, Pageable pageable);
 
+    @Override
     @Query("""
-    SELECT t.tunableItemId as itemId,
-      t.tunableItemTitle as title,
-      t.tunableItemArtist as artist,
-      t.tunableItemPlataform as platformId,
-      t.tunableItemType as itemType,
-      t.tunableItemArtworkUrl as artworkUrl,
-      COUNT(t) as tuneetCount
-    FROM Tuneet t
-    GROUP BY t.tunableItemId, t.tunableItemTitle, t.tunableItemArtist,
-      t.tunableItemPlataform, t.tunableItemType, t.tunableItemArtworkUrl
-    ORDER BY COUNT(t) DESC
-  """)
-    List<TrendingTuneProjection> findTrendingTunesTunableItemType(
-            @Param("itemType") String itemType,
-            Pageable pageable
+        SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTrendingItem(
+            NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+                t.tunableItemId,
+                t.tunableItemPlataform,
+                t.tunableItemTitle,
+                t.tunableItemArtist,
+                t.tunableItemArtworkUrl,
+                t.tunableItemType       
+            ),
+            COUNT(t)
+        )
+        FROM Tuneet t
+        WHERE UPPER(t.tunableItemType) = UPPER(:filterType)
+        GROUP BY 
+            t.tunableItemId, 
+            t.tunableItemPlataform, 
+            t.tunableItemTitle, 
+            t.tunableItemArtist, 
+            t.tunableItemArtworkUrl, 
+            t.tunableItemType
+        ORDER BY COUNT(t) DESC
+    """)
+    List<BaseTrendingItem<TunableItem>> findTrendingItems(
+        @Param("filterType") String filterType, 
+        Pageable pageable
     );
 
     Page<Tuneet> findByAuthorId(String authorId, Pageable pageable);
