@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.*;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.core.BaseResume;
 import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 
 import org.springframework.data.domain.Page;
@@ -15,97 +16,103 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
-import com.imd.backend.infra.persistence.jpa.projections.TrendingTuneProjection;
-import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
 @Repository("TuneetJpaRepository")
 public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem> {
-    @Query("""
-        SELECT
-          t.id as tuneetId,
-          t.textContent as contentText,
-          t.tunableItemArtist as tunableItemArtist,
-          t.tunableItemTitle as tunableItemTitle,
-          t.tunableItemArtworkUrl as tunableItemArtworkUrl,
-          t.tunableItemId as tunableItemId,
-          t.tunableItemPlataform as tunableItemPlataform,
-          t.tunableItemType as tunableItemType,
-          t.createdAt as createdAt,
-          u.username as username,
-          u.profile.id as profileId,
-          u.email as email,
-          u.id as authorId,
-          p.bio as bio,
-          f.fileName as fileNamePhoto,
-          SIZE(t.comments) as totalComments,
-          SIZE(t.likes) as totalLikes,
-          SIZE(p.followers) as totalFollowers,
-          SIZE(p.following) as totalFollowing
-        FROM Tuneet t
-        LEFT JOIN t.author u
-        LEFT JOIN u.profile p
-        LEFT JOIN p.photo f
-        WHERE u.id = :authorId
-    """)
-    Page<TuneetResumeProjection> findTuneetResumeByAuthorId(@Param("authorId") String authorId, Pageable pageable);
-
-    @Query("""
-          SELECT
-            t.id as tuneetId,
-            t.textContent as contentText,
-            t.tunableItemArtist as tunableItemArtist,
-            t.tunableItemTitle as tunableItemTitle,
-            t.tunableItemArtworkUrl as tunableItemArtworkUrl,
-            t.tunableItemId as tunableItemId,
-            t.tunableItemPlataform as tunableItemPlataform,
-            t.tunableItemType as tunableItemType,
-            t.createdAt as createdAt,
-            u.username as username,
-            u.profile.id as profileId,
-            u.email as email,
-            u.id as authorId,
-            p.bio as bio,          
-            f.fileName as fileNamePhoto,
-            SIZE(t.comments) as totalComments,
-            SIZE(t.likes) as totalLikes,
-            SIZE(p.followers) as totalFollowers,
-            SIZE(p.following) as totalFollowing
+  @Override
+  @Query("""
+          SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+              t.id,
+              t.textContent,
+              t.createdAt,
+              u.id,
+              u.username,
+              u.email,
+              p.bio,
+              f.fileName,
+              SIZE(t.comments),
+              SIZE(t.likes),
+              SIZE(p.followers),
+              SIZE(p.following),
+              NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+                  t.tunableItemId,
+                  t.tunableItemPlataform,
+                  t.tunableItemTitle,
+                  t.tunableItemArtist,
+                  t.tunableItemArtworkUrl,
+                  t.tunableItemType
+              )
+          )
           FROM Tuneet t
-          LEFT JOIN t.author u
+          JOIN t.author u
+          LEFT JOIN u.profile p
+          LEFT JOIN p.photo f
+          WHERE u.id = :authorId
+      """)
+    Page<BaseResume<TunableItem>> findResumesByAuthorId(@Param("authorId") String authorId, Pageable pageable);
+
+      @Query("""
+          SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+              t.id,
+              t.textContent,
+              t.createdAt,
+              u.id,
+              u.username,
+              u.email,
+              p.bio,
+              f.fileName,
+              SIZE(t.comments),
+              SIZE(t.likes),
+              SIZE(p.followers),
+              SIZE(p.following),
+              NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+                  t.tunableItemId,
+                  t.tunableItemPlataform,
+                  t.tunableItemTitle,
+                  t.tunableItemArtist,
+                  t.tunableItemArtworkUrl,
+                  t.tunableItemType
+              )
+          )
+          FROM Tuneet t
+          JOIN t.author u
           LEFT JOIN u.profile p
           LEFT JOIN p.photo f
           WHERE t.id = :id
-        """)
-    Optional<TuneetResumeProjection> findTuneetResumeById(@Param("id") String id);
+      """)
+    Optional<BaseResume<TunableItem>> findResumeById(@Param("id") String id);
 
+    @Override
     @Query("""
-        SELECT
-          t.id as tuneetId,
-          t.textContent as contentText,
-          t.tunableItemArtist as tunableItemArtist,
-          t.tunableItemTitle as tunableItemTitle,
-          t.tunableItemArtworkUrl as tunableItemArtworkUrl,
-          t.tunableItemId as tunableItemId,
-          t.tunableItemPlataform as tunableItemPlataform,
-          t.tunableItemType as tunableItemType,
-          t.createdAt as createdAt,
-          u.username as username,
-          u.profile.id as profileId,
-          u.email as email,
-          u.id as authorId,
-          p.bio as bio,          
-          f.fileName as fileNamePhoto,
-          SIZE(t.comments) as totalComments,
-          SIZE(t.likes) as totalLikes,
-          SIZE(p.followers) as totalFollowers,
-          SIZE(p.following) as totalFollowing
+      SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+          t.id,
+          t.textContent,
+          t.createdAt,
+          u.id,
+          u.username,
+          u.email,
+          p.bio,
+          f.fileName,
+          SIZE(t.comments),
+          SIZE(t.likes),
+          SIZE(p.followers),
+          SIZE(p.following),
+          NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+              t.tunableItemId,
+              t.tunableItemPlataform,
+              t.tunableItemTitle,
+              t.tunableItemArtist,
+              t.tunableItemArtworkUrl,
+              t.tunableItemType
+          )
+      )
         FROM Tuneet t
-        LEFT JOIN t.author u
+        JOIN t.author u
         LEFT JOIN u.profile p
         LEFT JOIN p.photo f
-  """)
-    Page<TuneetResumeProjection> findAllTuneetResume(Pageable pageable);
+    """)
+    Page<BaseResume<TunableItem>> findAllResumes(Pageable pageable);
 
     Page<Tuneet> findByTunableItemTitleContainingIgnoreCase(String title, Pageable pageable);
 
@@ -204,31 +211,6 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
     public Page<Tuneet> findByTunableItemTitleContaining(String word, Pageable pagination);
 
     public Page<Tuneet> findByTunableItemArtistContaining(String word, Pageable pagination);
-
-    @Query("""
-    SELECT 
-      t.tunableItemId AS itemId,
-      t.tunableItemTitle AS title,
-      t.tunableItemArtist AS artist,
-      t.tunableItemPlataform AS platformId,
-      t.tunableItemType AS itemType,
-      t.tunableItemArtworkUrl AS artworkUrl,
-      COUNT(t.id) AS tuneetCount
-    FROM Tuneet t
-    WHERE t.tunableItemType = :type
-    GROUP BY 
-      t.tunableItemId, 
-      t.tunableItemTitle, 
-      t.tunableItemArtist,
-      t.tunableItemPlataform,
-      t.tunableItemType, 
-      t.tunableItemArtworkUrl
-    ORDER BY COUNT(t.id) DESC
-""")
-    Page<TrendingTuneProjection> findTrendingTunesByTunableItemType(
-            @Param("type") String type,
-            Pageable pageable
-    );
 
     @Query("""
     SELECT TimeLineItem(

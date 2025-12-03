@@ -5,6 +5,7 @@ import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
+import com.imd.backend.domain.valueObjects.core.BaseResume;
 import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueObjects.core.PostItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
@@ -76,12 +77,46 @@ public abstract class BasePostService<
         return repository.save(entity);
     }
     
+    // TRENDING
+
     public List<BaseTrendingItem<I>> getTrending(String filterType, int limit) {
         // Cria paginação para o limite
         Pageable pageable = PageRequest.of(0, limit);
 
         return repository.findTrendingItems(filterType, pageable);
     }  
+
+    // RESUMES
+    public Page<BaseResume<I>> findAllResume(Pageable pageable) {
+        // 1. Busca os dados brutos (já montados como objetos)
+        Page<BaseResume<I>> page = repository.findAllResumes(pageable);
+        
+        // 2. Chama o HOOK para processamento adicional (ex: assinar URL)
+        page.forEach(this::postProcessResume);
+        
+        return page;
+    }    
+
+    public Page<BaseResume<I>> findResumeByAuthorId(UUID authorId, Pageable pageable) {
+        Page<BaseResume<I>> page = repository.findResumesByAuthorId(authorId.toString(), pageable);
+
+        page.forEach(this::postProcessResume);
+
+        return page;
+    }
+
+    public BaseResume<I> findResumeById(UUID id) {
+        BaseResume<I> resume = repository.findResumeById(id.toString())
+                .orElseThrow(() -> new NotFoundException("Resume não encontrado para o ID: " + id));
+
+        postProcessResume(resume);
+
+        return resume;
+    }    
+
+    protected void postProcessResume(BaseResume<I> resume) {
+        // Default: faz nada
+    }
 
     /**
      * A subclasse deve saber como buscar o item (ex: chamar SpotifyGateway).

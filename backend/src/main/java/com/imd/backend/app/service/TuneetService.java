@@ -1,6 +1,5 @@
 package com.imd.backend.app.service;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,8 +8,6 @@ import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
-import com.imd.backend.infra.persistence.jpa.projections.TrendingTuneProjection;
-import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,10 +21,9 @@ import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGatew
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.TimeLineItem;
-import com.imd.backend.domain.valueObjects.TrendingTuneResult;
-import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueObjects.core.BaseResume;
 
 import jakarta.transaction.Transactional;
 
@@ -65,60 +61,6 @@ public class TuneetService extends BasePostService<Tuneet, TunableItem> {
                 return this.plataformGateway.searchItem(query, itemType);
         }
 
-        public List<TrendingTuneResult> getTrendingTunes(TunableItemType type, int limit) {
-        Pageable pageable = PageRequest.of(0, limit);
-
-        Page<TrendingTuneProjection> result =
-                tuneetRepository.findTrendingTunesByTunableItemType(type.toString(), pageable);
-
-        return result.getContent().stream()
-                .map(p -> new TrendingTuneResult(
-                        p.getItemId(),
-                        p.getTitle(),
-                        p.getArtist(),
-                        p.getPlatformId(),
-                        TunableItemType.fromString(p.getItemType()),
-                        p.getArtworkUrl() != null ? URI.create(p.getArtworkUrl()) : null,
-                        p.getTuneetCount()
-                ))
-                .toList();
-        }
-
-
-        public Page<TuneetResume> findAllTuneetResume(Pageable pagination) {
-                final var projection = tuneetRepository.findAllTuneetResume(pagination);
-                return projection.map(
-                        p -> TuneetJpaMapper.resumeFromProjection(p)
-                );
-        }
-
-        public Page<TuneetResume> findTuneetResumeByAuthorId(UUID authorId, Pageable pagination) {
-
-                final Page<TuneetResumeProjection> projection =
-                        this.tuneetRepository.findTuneetResumeByAuthorId(authorId.toString(), pagination);
-                
-                return projection.map(
-                        p -> TuneetJpaMapper.resumeFromProjection(p)
-                ); 
-        }
-
-        public TuneetResume findTuneetResumeById(UUID id) {
-                final Optional<TuneetResumeProjection> op = this.tuneetRepository.findTuneetResumeById(String.valueOf(id));
-
-                if(op.isEmpty()) throw new NotFoundException("Nenhum tuneet foi encontrado com esse ID");
-                
-                final TuneetResumeProjection tuneetResume = op.get();
-
-                TuneetResume resume = TuneetJpaMapper.resumeFromProjection(tuneetResume);
-
-                if (tuneetResume.getFileNamePhoto() != null) {
-                final String presignedUrl = this.fileService.applyPresignedUrl(tuneetResume.getFileNamePhoto());
-                        resume.setUrlPhoto(presignedUrl);
-                }
-
-
-                return resume;
-        }
 
         public Page<TimeLineItem> getGlobalTimeLine(Pageable pagination) {
                 Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -173,6 +115,14 @@ public class TuneetService extends BasePostService<Tuneet, TunableItem> {
                 this.tuneetRepository.save(tuneet);
                 return tuneet;
         }
+
+        @Override
+        protected void postProcessResume(BaseResume<TunableItem> resume) {
+                if (resume.getAuthorPhotoFileName() != null && !resume.getAuthorPhotoFileName().isBlank()) {
+                        String presignedUrl = fileService.applyPresignedUrl(resume.getAuthorPhotoFileName());
+                        resume.setAuthorPhotoUrl(presignedUrl);
+                }
+        }        
 
         @Override
         protected TunableItem resolveItem(String itemId, String itemType) {

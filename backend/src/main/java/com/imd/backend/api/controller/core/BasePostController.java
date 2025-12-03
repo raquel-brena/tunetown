@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.BasePost;
+import com.imd.backend.domain.valueObjects.core.BaseResume;
 import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueObjects.core.PostItem;
 
@@ -44,13 +45,38 @@ public abstract class BasePostController<T extends BasePost, I extends PostItem>
   ) {
       return ResponseEntity.ok(service.findByAuthorId(authorId, pageable));
   }
+
+  // TRENDING
   
   @GetMapping("/trending")
   public ResponseEntity<List<BaseTrendingItem<I>>> getTrending(
     @RequestParam(required = false) String type,
     @RequestParam(defaultValue = "10") int limit
-) {
-    // Chama o método genérico do serviço
-    return ResponseEntity.ok(service.getTrending(type, limit));
-}  
+    ) {
+        // Chama o método genérico do serviço
+        return ResponseEntity.ok(service.getTrending(type, limit));
+    }  
+    
+    // RESUMES
+    @GetMapping("/resume")
+    public ResponseEntity<Page<BaseResume<I>>> getAllResumes(
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<BaseResume<I>> page = service.findAllResume(pageable);
+        return ResponseEntity.ok(page); 
+    }
+
+    @GetMapping("/author/{authorId}/resume")
+    public ResponseEntity<Page<BaseResume<I>>> getResumesByAuthor(
+            @PathVariable UUID authorId,
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<BaseResume<I>> page = service.findResumeByAuthorId(authorId, pageable);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}/resume")
+    public ResponseEntity<BaseResume<I>> getResumeById(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.findResumeById(id));
+    }    
 }

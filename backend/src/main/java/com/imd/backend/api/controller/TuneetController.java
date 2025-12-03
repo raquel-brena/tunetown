@@ -8,7 +8,6 @@ import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
-import com.imd.backend.domain.valueObjects.TuneetResume;
 import com.imd.backend.infra.security.TuneUserDetails;
 import jakarta.validation.Valid;
 
@@ -134,29 +133,6 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
       @RequestParam(defaultValue = "MUSIC", name = "type") TunableItemType itemType) {
     final List<TunableItem> items = tuneetService.searchTunableItems(query, itemType);
     return ResponseEntity.ok(items);
-  }
-
-  // ==================================================================================
-  // RESUMES (DTOs Otimizados)
-  // ==================================================================================
-
-  @GetMapping("/resume")
-  public ResponseEntity<Page<TuneetResume>> getAllTuneetResume(
-      @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return ResponseEntity.ok(tuneetService.findAllTuneetResume(pageable));
-  }
-
-  @GetMapping("author/{authorId}/resume")
-  public ResponseEntity<Page<TuneetResume>> getTuneetResumeByAuthorId(
-      @PathVariable UUID authorId,
-      @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return ResponseEntity.ok(tuneetService.findTuneetResumeByAuthorId(authorId, pageable));
-  }
-
-  @GetMapping("/{id}/resume")
-  public ResponseEntity<TuneetResume> getTuneetResumeById(@PathVariable UUID id) {
-    // O service já lança NotFoundException se não achar
-    return ResponseEntity.ok(tuneetService.findTuneetResumeById(id));
   }
 
   // ==================================================================================
