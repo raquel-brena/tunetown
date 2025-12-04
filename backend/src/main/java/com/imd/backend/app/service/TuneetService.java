@@ -7,20 +7,16 @@ import java.util.UUID;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.infra.persistence.jpa.mapper.TuneetJpaMapper;
 import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
@@ -60,26 +56,6 @@ public class TuneetService extends BasePostService<Tuneet, TunableItem> {
         public List<TunableItem> searchTunableItems(String query, TunableItemType itemType) {
                 return this.plataformGateway.searchItem(query, itemType);
         }
-
-
-        public Page<TimeLineItem> getGlobalTimeLine(Pageable pagination) {
-                Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-                Pageable pageable = PageRequest.of(pagination.getPageNumber(), pagination.getPageSize(), sort);
-                final var projection = this.tuneetRepository.findGlobalTimeline(pageable);
-                return projection.map(
-                        p -> TuneetJpaMapper.fromTimelineProjection(p)
-                );
-        }
-
-        public Page<TimeLineItem> getHomeTimeLine(UUID userId, Pageable pagination) {
-                Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-                Pageable pageable = PageRequest.of(pagination.getPageNumber(), pagination.getPageSize(), sort);
-                final var projection = this.tuneetRepository.findHomeTimeline(userId.toString(), pageable);
-                return projection.map(
-                                p -> TuneetJpaMapper.fromTimelineProjection(p)
-                );
-        }
-
 
         @Transactional(rollbackOn = Exception.class)
         public Tuneet deleteById(UUID tuneetId) {

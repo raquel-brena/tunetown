@@ -7,6 +7,7 @@ import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.*;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
+import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
 import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 
 import org.springframework.data.domain.Page;
@@ -15,7 +16,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
 @Repository("TuneetJpaRepository")
@@ -150,57 +150,45 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
     Page<Tuneet> findByAuthorId(String authorId, Pageable pageable);
 
     @Query("""
-    SELECT
-      t.id as tuneetId,
-      t.textContent as textContent,
-      t.createdAt as createdAt,
-      t.tunableItemTitle as tunableItemTitle,
-      t.tunableItemArtist as tunableItemArtist,
-      t.tunableItemArtworkUrl as tunableItemArtworkUrl,
-      t.tunableItemType as tunableItemType,
-      u.id as authorId,
-      u.username as authorUsername,
-      f.url as authorAvatarUrl,
-      f.fileName as authorAvatarFileName,
-      SIZE(t.comments) as totalComments,
-      SIZE(t.likes) as totalLikes
-    FROM Tuneet t
-    JOIN t.author u
-    LEFT JOIN u.profile p ON u.id = p.user.id
-    LEFT JOIN p.photo f
-  """)
-    Page<TimelineItemProjection> findGlobalTimeline(Pageable pageable);
+      SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+        t.id, t.textContent, t.createdAt,
+        SIZE(t.comments), SIZE(t.likes),
+        u.id, u.username, f.url, 
+        NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+          t.tunableItemId, t.tunableItemPlataform, t.tunableItemTitle,
+          t.tunableItemArtist, t.tunableItemArtworkUrl, t.tunableItemType
+        )
+      )
+      FROM Tuneet t
+      JOIN t.author u
+      LEFT JOIN u.profile p
+      LEFT JOIN p.photo f
+    """)
+    Page<BaseTimelineItem<TunableItem>> findGlobalTimelineItems(Pageable pageable);
 
     @Query("""
-    SELECT
-      t.id as tuneetId,
-      t.textContent as textContent,
-      t.createdAt as createdAt,
-      t.tunableItemTitle as tunableItemTitle,
-      t.tunableItemArtist as tunableItemArtist,
-      t.tunableItemArtworkUrl as tunableItemArtworkUrl,
-      t.tunableItemType as tunableItemType,
-      u.id as authorId,
-      u.username as authorUsername,
-      f.url as authorAvatarUrl,
-      f.fileName as authorAvatarFileName,
-      SIZE(t.comments) as totalComments,
-      SIZE(t.likes) as totalLikes
-    FROM Tuneet t
-    JOIN t.author u
-    LEFT JOIN u.profile p
-    LEFT JOIN p.photo f
-    WHERE p IN (
-      SELECT fol.followed
-      FROM Profile p_current
-      JOIN p_current.following fol
-      WHERE p_current.user.id = :currentUserId
-    )
-    OR u.id = :currentUserId
-  """)
-    Page<TimelineItemProjection> findHomeTimeline(
-            @Param("currentUserId") String currentUserId,
-            Pageable pageable
+      SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+        t.id, t.textContent, t.createdAt,
+        SIZE(t.comments), SIZE(t.likes),
+        u.id, u.username, f.url,
+        NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+          t.tunableItemId, t.tunableItemPlataform, t.tunableItemTitle,
+          t.tunableItemArtist, t.tunableItemArtworkUrl, t.tunableItemType
+        )
+      )
+      FROM Tuneet t
+      JOIN t.author u
+      LEFT JOIN u.profile p
+      LEFT JOIN p.photo f
+      WHERE p IN (
+        SELECT fol.followed FROM Profile p_curr JOIN p_curr.following fol
+        WHERE p_curr.user.id = :currentUserId
+      )
+      OR u.id = :currentUserId
+    """)    
+    Page<BaseTimelineItem<TunableItem>> findHomeTimelineItems(
+      @Param("currentUserId") String currentUserId,
+      Pageable pageable
     );
 
 

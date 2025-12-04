@@ -16,7 +16,7 @@ public class JwtService {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY);
 
-    public String generateAccessToken(TuneUserDetails userDetails) {
+    public String generateAccessToken(CoreUserDetails userDetails) {
         return JWT.create()
                 .withIssuedAt(generateCreationDate())
                 .withExpiresAt(generateExpirationDate())

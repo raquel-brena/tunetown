@@ -5,10 +5,9 @@ import com.imd.backend.api.dto.CreateTuneetDTO;
 import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
-import com.imd.backend.infra.security.TuneUserDetails;
+import com.imd.backend.infra.security.CoreUserDetails;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -37,32 +36,13 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
   }
 
   // ==================================================================================
-  // MÉTODOS HERDADOS DO BASE
-  // ==================================================================================
-  // GET /api/tuneet (findAll)
-  // GET /api/tuneet/{id} (findById)
-  // GET /api/tuneet/author/{authorId} (findByAuthorId)
-
-  // ==================================================================================
-  // SOBRESCRITA DE MÉTODOS (Para regras de segurança específicas)
-  // ==================================================================================
-
-  @DeleteMapping(value = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Void> delete(
-      @PathVariable UUID tuneetId,
-      @AuthenticationPrincipal TuneUserDetails userDetails) {
-    service.deleteById(tuneetId, UUID.fromString(userDetails.user().getId()));
-    return ResponseEntity.noContent().build();
-  }
-
-  // ==================================================================================
   // OPERAÇÕES DE ESCRITA (Create / Update)
   // ==================================================================================
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Tuneet> createTuneet(
       @Valid @RequestBody CreateTuneetDTO createTuneetDTO,
-      @AuthenticationPrincipal TuneUserDetails userDetails) {
+      @AuthenticationPrincipal CoreUserDetails userDetails) {
     // O ID do usuário vem do Token JWT (UserDetails)
     final String userId = userDetails.user().getId();
 
@@ -80,7 +60,7 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
   public ResponseEntity<Tuneet> updateTuneet(
       @PathVariable UUID tuneetId,
       @Valid @RequestBody UpdateTuneetDTO updateTuneetDTO,
-      @AuthenticationPrincipal TuneUserDetails userDetails) {
+      @AuthenticationPrincipal CoreUserDetails userDetails) {
     
     final Tuneet existing = tuneetService.findById(tuneetId);
 
@@ -133,28 +113,5 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
       @RequestParam(defaultValue = "MUSIC", name = "type") TunableItemType itemType) {
     final List<TunableItem> items = tuneetService.searchTunableItems(query, itemType);
     return ResponseEntity.ok(items);
-  }
-
-  // ==================================================================================
-  // TIMELINES
-  // ==================================================================================
-
-  @GetMapping("/global")
-  public ResponseEntity<Page<TimeLineItem>> getGlobalTimeline(
-      @PageableDefault(size = 20) Pageable pageable // Sort é forçado no service
-  ) {
-    return ResponseEntity.ok(this.tuneetService.getGlobalTimeLine(pageable));
-  }
-
-  @GetMapping("/home")
-  public ResponseEntity<Page<TimeLineItem>> getHomeTimeline(
-      @PageableDefault(size = 20) Pageable pageable,
-      @AuthenticationPrincipal TuneUserDetails userDetails) {
-    if (userDetails == null || userDetails.user() == null) {
-      return ResponseEntity.status(401).build();
-    }
-
-    UUID currentUserId = UUID.fromString(userDetails.user().getId());
-    return ResponseEntity.ok(this.tuneetService.getHomeTimeLine(currentUserId, pageable));
   }
 }

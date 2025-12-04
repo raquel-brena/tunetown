@@ -6,6 +6,7 @@ import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
+import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
 import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueObjects.core.PostItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
@@ -112,6 +113,26 @@ public abstract class BasePostService<
         postProcessResume(resume);
 
         return resume;
+    }    
+
+    // TIMELINE
+    public Page<BaseTimelineItem<I>> getGlobalTimeLine(Pageable pageable) {
+        // Regra Fixa: Timelines são sempre ordenadas por criação decrescente
+        Pageable sortedPageable = enforceTimelineSort(pageable);
+        return this.repository.findGlobalTimelineItems(sortedPageable);
+    }
+
+    public Page<BaseTimelineItem<I>> getHomeTimeLine(UUID userId, Pageable pageable) {
+        Pageable sortedPageable = enforceTimelineSort(pageable);
+        return this.repository.findHomeTimelineItems(userId.toString(), sortedPageable);
+    }
+
+    // --- Helper Privado ---
+    private Pageable enforceTimelineSort(Pageable pageable) {
+        return PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt"));
     }    
 
     protected void postProcessResume(BaseResume<I> resume) {

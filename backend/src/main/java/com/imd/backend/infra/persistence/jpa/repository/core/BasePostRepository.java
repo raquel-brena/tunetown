@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
+import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
 import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueObjects.core.PostItem;
 
@@ -25,4 +26,11 @@ public interface BasePostRepository<T extends BasePost, I extends PostItem > ext
   Page<BaseResume<I>> findResumesByAuthorId(String authorId, Pageable pageable);
 
   Optional<BaseResume<I>> findResumeById(@Param("id") String id);
+
+  Page<BaseTimelineItem<I>> findGlobalTimelineItems(Pageable pageable);
+
+  Page<BaseTimelineItem<I>> findHomeTimelineItems(
+    @Param("currentUserId") String currentUserId, 
+    Pageable pageable
+  );  
 }

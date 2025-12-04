@@ -18,8 +18,8 @@ public class TuneUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public TuneUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CoreUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         final User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return new TuneUserDetails(user);
+        return new CoreUserDetails(user);
     }
 }

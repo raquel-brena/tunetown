@@ -5,7 +5,7 @@ import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.api.dto.profile.ProfileCreateDTO;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
-import com.imd.backend.infra.security.TuneUserDetails;
+import com.imd.backend.infra.security.CoreUserDetails;
 import com.imd.backend.infra.security.TuneUserDetailsService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +41,7 @@ public class AuthService {
 
     public LoginResponse login(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        TuneUserDetails tuneUserDetails = tuneUserDetailsService.loadUserByUsername(username);
+        CoreUserDetails tuneUserDetails = tuneUserDetailsService.loadUserByUsername(username);
 
         User user = this.userService.findUserByUsername(tuneUserDetails.getUsername());
 
