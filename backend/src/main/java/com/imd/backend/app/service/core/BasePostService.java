@@ -58,6 +58,19 @@ public abstract class BasePostService<
         repository.delete(post);
     }    
 
+    // -------------------------- POST ITENS -------------------------------------
+    public Page<T> findByItemId(String itemId, Pageable pageable) {
+        return repository.findByItemId(itemId, pageable);
+    }
+
+    public Page<T> findByItemTitle(String title, Pageable pageable) {
+        return repository.findByItemTitle(title, pageable);
+    }
+
+    public Page<T> findByItemCreator(String creatorName, Pageable pageable) {
+        return repository.findByItemCreator(creatorName, pageable);
+    }    
+
     /**
      * TEMPLATE METHOD: O algoritmo de criação.
      * O Framework define O FLUXO, a Aplicação define OS DETALHES.

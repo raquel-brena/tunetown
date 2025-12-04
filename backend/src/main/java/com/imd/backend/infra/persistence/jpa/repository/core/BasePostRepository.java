@@ -17,6 +17,12 @@ import com.imd.backend.domain.valueObjects.core.PostItem;
 
 @NoRepositoryBean
 public interface BasePostRepository<T extends BasePost, I extends PostItem > extends JpaRepository<T, String> {
+  Page<T> findByItemId(@Param("itemId") String itemId, Pageable pageable);
+
+  Page<T> findByItemTitle(@Param("title") String title, Pageable pageable);
+
+  Page<T> findByItemCreator(@Param("creatorName") String creatorName, Pageable pageable);
+  
   Page<T> findByAuthorId(String authorId, Pageable pageable);
   
   List<BaseTrendingItem<I>> findTrendingItems(@Param("filterType") String filterType, Pageable pageable);

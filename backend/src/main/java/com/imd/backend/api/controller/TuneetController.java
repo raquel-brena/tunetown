@@ -10,10 +10,6 @@ import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.security.CoreUserDetails;
 import jakarta.validation.Valid;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -76,31 +72,6 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
         updateTuneetDTO.itemType());
 
     return ResponseEntity.ok(updated);
-  }
-
-  // ==================================================================================
-  // BUSCAS ESPECÍFICAS DE MÚSICA (Filtros)
-  // ==================================================================================
-
-  @GetMapping(path = "tunable-item/{tunableItemId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Page<Tuneet>> getTuneetsByTunableItem(
-      @PathVariable String tunableItemId,
-      @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return ResponseEntity.ok(this.tuneetService.findTuneetByTunableItem(tunableItemId, pageable));
-  }
-
-  @GetMapping(path = "tunable-item/search-by-title/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Page<Tuneet>> getTuneetsByTunableItemTitleContaining(
-      @PathVariable String word,
-      @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return ResponseEntity.ok(this.tuneetService.findTuneetByTunableItemTitleContaining(word, pageable));
-  }
-
-  @GetMapping(path = "tunable-item/search-by-artist/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Page<Tuneet>> getTuneetsByTunableItemArtistContaining(
-      @PathVariable String word,
-      @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return ResponseEntity.ok(this.tuneetService.findTuneetByTunableItemArtistContaining(word, pageable));
   }
 
   // ==================================================================================

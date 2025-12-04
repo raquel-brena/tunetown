@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,29 @@ public abstract class BasePostController<
       this.service = service;
   }  
 
-  // --- PONTOS FIXOS (Endpoints Padrão) ---
+  // ------------------------------- POST ITENS ---------------------------------------
+    @GetMapping(path = "tunable-item/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<T>> getPostsByItem(
+        @PathVariable String itemId,
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.service.findByItemId(itemId, pageable));
+    }
+
+    @GetMapping(path = "tunable-item/search-by-title/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<T>> getPostsByItemTitleContaining(
+        @PathVariable String word,
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.service.findByItemTitle(word, pageable));
+    }
+
+    @GetMapping(path = "tunable-item/search-by-artist/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<T>> getPostsByItemCreator(
+        @PathVariable String word,
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.service.findByItemCreator(word, pageable));
+    }  
+
+  // ------------------------------- ENDPOINTS PADRÃO -------------------------------
   @GetMapping
   public ResponseEntity<Page<T>> getAll(
           @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
@@ -67,7 +90,7 @@ public abstract class BasePostController<
         return ResponseEntity.noContent().build();
     }  
 
-  // TRENDING TOPICS
+  // ------------------------------- TRENDING TOPICS ------------------------------
   
   @GetMapping("/trending")
   public ResponseEntity<List<BaseTrendingItem<I>>> getTrending(
@@ -78,7 +101,7 @@ public abstract class BasePostController<
         return ResponseEntity.ok(service.getTrending(type, limit));
     }  
     
-    // RESUMES
+    // -------------------------------  RESUMES -------------------------------
     @GetMapping("/resume")
     public ResponseEntity<Page<BaseResume<I>>> getAllResumes(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
@@ -101,7 +124,7 @@ public abstract class BasePostController<
         return ResponseEntity.ok(service.findResumeById(id));
     }    
 
-    // TIMELINE
+    // ------------------------------- TIMELINE -------------------------------
     @GetMapping("/global")
     public ResponseEntity<Page<BaseTimelineItem<I>>> getGlobalTimeline(
             @PageableDefault(size = 20) Pageable pageable

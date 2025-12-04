@@ -191,14 +191,19 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
       Pageable pageable
     );
 
-
     public Page<Tuneet> findAll(Pageable pagination);
 
-    public Page<Tuneet> findByTunableItemId(String tunableItemId, Pageable pagination);
+    @Override
+    @Query("SELECT t FROM Tuneet t WHERE t.tunableItemId = :itemId")
+    Page<Tuneet> findByItemId(@Param("itemId") String itemId, Pageable pageable);
 
-    public Page<Tuneet> findByTunableItemTitleContaining(String word, Pageable pagination);
+    @Override
+    @Query("SELECT t FROM Tuneet t WHERE UPPER(t.tunableItemTitle) LIKE UPPER(CONCAT('%', :title, '%'))")
+    Page<Tuneet> findByItemTitle(@Param("title") String title, Pageable pageable);
 
-    public Page<Tuneet> findByTunableItemArtistContaining(String word, Pageable pagination);
+    @Override
+    @Query("SELECT t FROM Tuneet t WHERE UPPER(t.tunableItemArtist) LIKE UPPER(CONCAT('%', :creatorName, '%'))")
+    Page<Tuneet> findByItemCreator(@Param("creatorName") String creatorName, Pageable pageable);
 
     @Query("""
     SELECT TimeLineItem(
