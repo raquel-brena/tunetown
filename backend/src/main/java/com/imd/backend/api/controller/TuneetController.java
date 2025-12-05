@@ -6,7 +6,6 @@ import com.imd.backend.api.dto.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.infra.security.CoreUserDetails;
 import jakarta.validation.Valid;
 
@@ -17,7 +16,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -72,17 +70,5 @@ public class TuneetController extends BasePostController<Tuneet, TunableItem> {
         updateTuneetDTO.itemType());
 
     return ResponseEntity.ok(updated);
-  }
-
-  // ==================================================================================
-  // INTEGRAÇÃO / TRENDING / SEARCH EXTERNO
-  // ==================================================================================
-
-  @GetMapping("/search-tunable-item")
-  public ResponseEntity<List<TunableItem>> searchTunableItem(
-      @RequestParam String query,
-      @RequestParam(defaultValue = "MUSIC", name = "type") TunableItemType itemType) {
-    final List<TunableItem> items = tuneetService.searchTunableItems(query, itemType);
-    return ResponseEntity.ok(items);
   }
 }

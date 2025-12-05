@@ -34,33 +34,10 @@ public abstract class BasePostController<
       this.service = service;
   }  
 
-  // ------------------------------- POST ITENS ---------------------------------------
-    @GetMapping(path = "tunable-item/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<T>> getPostsByItem(
-        @PathVariable String itemId,
-        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.service.findByItemId(itemId, pageable));
-    }
-
-    @GetMapping(path = "tunable-item/search-by-title/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<T>> getPostsByItemTitleContaining(
-        @PathVariable String word,
-        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.service.findByItemTitle(word, pageable));
-    }
-
-    @GetMapping(path = "tunable-item/search-by-artist/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<T>> getPostsByItemCreator(
-        @PathVariable String word,
-        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.service.findByItemCreator(word, pageable));
-    }  
-
-  // ------------------------------- ENDPOINTS PADRÃO -------------------------------
+  // ------------------------------- ENDPOINTS PADRÃO ------------------------------
   @GetMapping
   public ResponseEntity<Page<T>> getAll(
-          @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
-  ) {
+          @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
       return ResponseEntity.ok(service.findAll(pageable));
   }
 
@@ -72,23 +49,53 @@ public abstract class BasePostController<
   @GetMapping("/author/{authorId}")
   public ResponseEntity<Page<T>> getByAuthor(
           @PathVariable UUID authorId,
-          @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
-  ) {
+          @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
       return ResponseEntity.ok(service.findByAuthorId(authorId, pageable));
   }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(
-            @PathVariable UUID id,
-            @AuthenticationPrincipal CoreUserDetails userDetails // Tipo Concreto!
-    ) {
-        if (userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  @DeleteMapping(value = "/{id}")
+  public ResponseEntity<Void> delete(
+          @PathVariable UUID id,
+          @AuthenticationPrincipal CoreUserDetails userDetails // Tipo Concreto!
+  ) {
+      if (userDetails == null)
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        UUID userId = UUID.fromString(userDetails.getUserId());
+      UUID userId = UUID.fromString(userDetails.getUserId());
 
-        service.deleteById(id, userId);
-        return ResponseEntity.noContent().build();
-    }  
+      service.deleteById(id, userId);
+      return ResponseEntity.noContent().build();
+  }
+  
+  // ------------------------------- POST ITENS ---------------------------------------
+  @GetMapping("/search-item")
+  public ResponseEntity<List<I>> searchTunableItem(
+          @RequestParam String query,
+          @RequestParam(defaultValue = "MUSIC", name = "type") String itemType) {
+      final List<I> items = this.service.searchItems(query, itemType);
+      return ResponseEntity.ok(items);
+  }
+
+  @GetMapping(path = "item/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Page<T>> getPostsByItem(
+          @PathVariable String itemId,
+          @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+      return ResponseEntity.ok(this.service.findByItemId(itemId, pageable));
+  }
+
+  @GetMapping(path = "item/search-by-title/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Page<T>> getPostsByItemTitleContaining(
+          @PathVariable String word,
+          @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+      return ResponseEntity.ok(this.service.findByItemTitle(word, pageable));
+  }
+
+  @GetMapping(path = "item/search-by-creator/{word}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Page<T>> getPostsByItemCreator(
+          @PathVariable String word,
+          @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+      return ResponseEntity.ok(this.service.findByItemCreator(word, pageable));
+  }  
 
   // ------------------------------- TRENDING TOPICS ------------------------------
   

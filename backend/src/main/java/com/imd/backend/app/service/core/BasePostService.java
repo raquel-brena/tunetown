@@ -1,5 +1,6 @@
 package com.imd.backend.app.service.core;
 
+import com.imd.backend.app.gateway.core.IPostItemGateway;
 import com.imd.backend.app.service.UserService;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.User;
@@ -22,13 +23,18 @@ public abstract class BasePostService<
     T extends BasePost, // POST que será utilizado
     I extends PostItem // POST ITEM (sobre o que será postado)
 > {
-
     protected final BasePostRepository<T, I> repository;
     protected final UserService userService;
+    protected final IPostItemGateway<I> itemGateway;
 
-    protected BasePostService(BasePostRepository<T, I> repository, UserService userService) {
+    protected BasePostService(
+        BasePostRepository<T, I> repository, 
+        UserService userService,
+        IPostItemGateway<I> itemGateway
+    ) {
         this.repository = repository;
         this.userService = userService;
+        this.itemGateway = itemGateway;
     }
 
     // --- MÉTODOS FIXOS (CRUD Padrão) ---
@@ -59,6 +65,10 @@ public abstract class BasePostService<
     }    
 
     // -------------------------- POST ITENS -------------------------------------
+    public List<I> searchItems(String query, String itemType) {
+        return itemGateway.searchItem(query, itemType);
+    }    
+    
     public Page<T> findByItemId(String itemId, Pageable pageable) {
         return repository.findByItemId(itemId, pageable);
     }
@@ -82,7 +92,7 @@ public abstract class BasePostService<
              .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
 
         // 2. Busca o Item na API Externa (Variável - Abstract)
-        final I item = resolveItem(itemId, itemType);
+        final I item = this.itemGateway.getItemById(itemId, itemType);
 
         // 3. Instancia a Entidade Concreta (Variável - Abstract)
         final T entity = createEntityInstance(author, textContent, item);
@@ -92,7 +102,6 @@ public abstract class BasePostService<
     }
     
     // TRENDING
-
     public List<BaseTrendingItem<I>> getTrending(String filterType, int limit) {
         // Cria paginação para o limite
         Pageable pageable = PageRequest.of(0, limit);
@@ -151,11 +160,6 @@ public abstract class BasePostService<
     protected void postProcessResume(BaseResume<I> resume) {
         // Default: faz nada
     }
-
-    /**
-     * A subclasse deve saber como buscar o item (ex: chamar SpotifyGateway).
-     */
-    protected abstract I resolveItem(String itemId, String itemType); 
     
     /**
      * A subclasse deve saber como instanciar sua entidade (ex: new Tuneet(...)).

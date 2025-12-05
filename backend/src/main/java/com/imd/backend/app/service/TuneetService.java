@@ -31,13 +31,13 @@ public class TuneetService extends BasePostService<Tuneet, TunableItem> {
                 @Qualifier("SpotifyGateway") TunablePlataformGateway plataformGateway,
                 FileService fileService
         ) {
-                super(tuneetRepository, userService);
+                super(tuneetRepository, userService, plataformGateway);
                 this.tuneetRepository = tuneetRepository;
                 this.plataformGateway = plataformGateway;
                 this.fileService = fileService;
         } 
 
-        public List<TunableItem> searchTunableItems(String query, TunableItemType itemType) {
+        public List<TunableItem> searchTunableItems(String query, String itemType) {
                 return this.plataformGateway.searchItem(query, itemType);
         }
 
@@ -74,14 +74,7 @@ public class TuneetService extends BasePostService<Tuneet, TunableItem> {
         }        
 
         @Override
-        protected TunableItem resolveItem(String itemId, String itemType) {
-                TunableItemType type = TunableItemType.fromString(itemType);
-                return plataformGateway.getItemById(itemId, type);        
-        }
-
-        @Override
         protected Tuneet createEntityInstance(User author, String textContent, TunableItem item) {
-                // Usa o Factory Method da Entidade Rica
                 return Tuneet.create(author, textContent, item);
         }
 }
