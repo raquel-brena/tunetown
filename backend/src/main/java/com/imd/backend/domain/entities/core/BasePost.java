@@ -1,14 +1,9 @@
 package com.imd.backend.domain.entities.core;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.imd.backend.domain.entities.tunetown.Like;
-import com.imd.backend.infra.persistence.jpa.repository.core.BaseLikeRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA exige, mas protegemos
+@NoArgsConstructor
 @AllArgsConstructor
 public abstract class BasePost {
 
