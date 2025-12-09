@@ -29,8 +29,10 @@ public abstract class BaseLike {
   @Column(name = "created_at", updatable = false)
   protected LocalDateTime createdAt;
 
-  // --- VALIDAÇÕES BASE ---
+  @Transient
+  public abstract BasePost getPost();
 
+  // --- VALIDAÇÕES BASE ---
   protected void validateState() {
     if (this.profile == null) {
       throw new IllegalArgumentException("É necessário um perfil para curtir.");
