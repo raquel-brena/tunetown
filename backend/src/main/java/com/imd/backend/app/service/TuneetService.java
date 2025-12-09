@@ -1,6 +1,6 @@
 package com.imd.backend.app.service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.imd.backend.app.service.core.BasePostService;
@@ -11,18 +11,19 @@ import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.imd.backend.app.dto.CreateTuneetDTO;
+import com.imd.backend.app.dto.UpdateTuneetDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
-import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
 
-import jakarta.transaction.Transactional;
-
 @Service
-public class TuneetService extends BasePostService<Tuneet, TunableItem> {
-        private final TuneetRepository tuneetRepository;
-        private final TunablePlataformGateway plataformGateway;
+public class TuneetService extends BasePostService<
+        Tuneet, 
+        TunableItem,
+        CreateTuneetDTO,
+        UpdateTuneetDTO
+> {
         private final FileService fileService;
 
         public TuneetService(
@@ -32,38 +33,8 @@ public class TuneetService extends BasePostService<Tuneet, TunableItem> {
                 FileService fileService
         ) {
                 super(tuneetRepository, userService, plataformGateway);
-                this.tuneetRepository = tuneetRepository;
-                this.plataformGateway = plataformGateway;
                 this.fileService = fileService;
         } 
-
-        public List<TunableItem> searchTunableItems(String query, String itemType) {
-                return this.plataformGateway.searchItem(query, itemType);
-        }
-
-        @Transactional(rollbackOn = Exception.class)
-        public Tuneet updateTuneet(
-        UUID tuneetId,
-        String textContent,
-        String tunableItemId,
-        TunableItemType tunableItemType
-        ) {
-                final Tuneet tuneet = this.findById(tuneetId); // Usa método do pai
-                
-                final boolean hasTextContent = textContent != null && !textContent.isBlank();
-                final boolean hasItemId = tunableItemId != null && !tunableItemId.isEmpty();
-                final boolean hasItemType = tunableItemType != null;
-
-                // Se tiver o tipo e o ID do item, mas não ambos juntos
-                if(hasItemId ^ hasItemType) 
-                throw new BusinessException("Para atualizar o item, é necessário passar o ID e o tipo dele");
-
-                if(hasTextContent)
-                tuneet.setTextContent(textContent);
-                
-                this.tuneetRepository.save(tuneet);
-                return tuneet;
-        }
 
         @Override
         protected void postProcessResume(BaseResume<TunableItem> resume) {
@@ -71,10 +42,45 @@ public class TuneetService extends BasePostService<Tuneet, TunableItem> {
                         String presignedUrl = fileService.applyPresignedUrl(resume.getAuthorPhotoFileName());
                         resume.setAuthorPhotoUrl(presignedUrl);
                 }
+        }
+        
+        @Override
+        protected Tuneet createEntityInstance(User author, CreateTuneetDTO dto, TunableItem item) {
+                // Usa o builder aproveitando o DTO tipado
+                return Tuneet.builder()
+                        .id(UUID.randomUUID().toString())
+                        .author(author)
+                        .textContent(dto.getTextContent())
+                        .createdAt(LocalDateTime.now())
+                        
+                        // Mapeia Item -> Colunas
+                        .tunableItemId(item.getId())
+                        .tunableItemPlataform(item.getPlatformName())
+                        .tunableItemTitle(item.getTitle())
+                        .tunableItemArtist(item.getArtist())
+                        .tunableItemType(item.getItemType().toString())
+                        .tunableItemArtworkUrl(item.getArtworkUrl() != null ? item.getArtworkUrl().toString() : null)
+                        
+                        // Se o CreateTuneetDTO tivesse campos extras (ex: mood), setaria aqui:
+                        // .mood(dto.getMood()) 
+                        .build();
         }        
 
         @Override
-        protected Tuneet createEntityInstance(User author, String textContent, TunableItem item) {
-                return Tuneet.create(author, textContent, item);
-        }
+        protected void updateEntityInstance(Tuneet entity, UpdateTuneetDTO dto, TunableItem newItem) {
+                // Atualiza texto
+                if (dto.getTextContent() != null && !dto.getTextContent().isBlank()) {
+                        entity.setTextContent(dto.getTextContent());
+                }
+
+                // Atualiza item se foi passado
+                if (newItem != null) {
+                        entity.updateTunableItem(newItem);
+                }
+        }        
+
+        @Override
+        protected void validateSpecificEntity(Tuneet entity) {
+                entity.validateTunableItem();
+        }        
 }

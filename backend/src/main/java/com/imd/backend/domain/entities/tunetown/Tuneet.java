@@ -58,39 +58,9 @@ public class Tuneet extends BasePost {
     @JsonIgnore
     private List<Like> likes = new ArrayList<>();
 
-    // --- FACTORY METHOD ---
-    public static Tuneet create(User author, String textContent, TunableItem item) {
-        if (item == null)
-            throw new IllegalArgumentException("Item não pode ser nulo");
-
-        Tuneet tuneet = Tuneet.builder()
-                // --- Dados do Pai (BasePost) ---
-                .id(UUID.randomUUID().toString())
-                .author(author)
-                .textContent(textContent)
-
-                // --- Dados do Item (Mapeamento VO -> Colunas) ---
-                .tunableItemId(item.getId()) // Vem do PostItem (pai do VO)
-                .tunableItemPlataform(item.getPlatformName())
-                .tunableItemTitle(item.getTitle())
-                .tunableItemArtworkUrl(item.getArtworkUrl() != null ? item.getArtworkUrl().toString() : null)
-
-                // --- Dados Específicos de Música ---
-                .tunableItemArtist(item.getArtist())
-                .tunableItemType(item.getItemType().toString())
-                .build();
-
-        // 3. Validações
-        tuneet.validateState(); // Validações genéricas (texto, autor)
-        tuneet.validateTunableItem(); // Validações específicas
-
-        return tuneet;
-    }    
-
-
     // Métodos Úteis 
 
-    private void validateTunableItem() {
+    public void validateTunableItem() {
         if (this.tunableItemId == null || this.tunableItemId.isBlank())
             throw new IllegalArgumentException("ID do item é obrigatório");
         if (this.tunableItemType == null)
@@ -110,6 +80,15 @@ public class Tuneet extends BasePost {
                 .itemType(TunableItemType.fromString(this.tunableItemType))
                 .artworkUrl(this.tunableItemArtworkUrl != null ? URI.create(this.tunableItemArtworkUrl) : null)
                 .build();
+    }
+
+    public void updateTunableItem(TunableItem tunableItem) {
+        this.setTunableItemId(tunableItem.getId());
+        this.setTunableItemArtist(tunableItem.getArtist());
+        this.setTunableItemArtworkUrl(tunableItem.getArtworkUrl().toString());
+        this.setTunableItemPlataform(tunableItem.getPlatformName());
+        this.setTunableItemTitle(tunableItem.getTitle());
+        this.setTunableItemType(tunableItem.getItemType().toString());        
     }
 
     @Transient

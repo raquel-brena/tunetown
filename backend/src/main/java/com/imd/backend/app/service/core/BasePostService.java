@@ -1,5 +1,7 @@
 package com.imd.backend.app.service.core;
 
+import com.imd.backend.app.dto.core.CreateBasePostDTO;
+import com.imd.backend.app.dto.core.UpdateBasePostDTO;
 import com.imd.backend.app.gateway.core.IPostItemGateway;
 import com.imd.backend.app.service.UserService;
 import com.imd.backend.domain.entities.core.BasePost;
@@ -21,7 +23,9 @@ import java.util.UUID;
 
 public abstract class BasePostService<
     T extends BasePost, // POST que será utilizado
-    I extends PostItem // POST ITEM (sobre o que será postado)
+    I extends PostItem, // POST ITEM (sobre o que será postado)
+    C extends CreateBasePostDTO,
+    U extends UpdateBasePostDTO
 > {
     protected final BasePostRepository<T, I> repository;
     protected final UserService userService;
@@ -38,6 +42,51 @@ public abstract class BasePostService<
     }
 
     // --- MÉTODOS FIXOS (CRUD Padrão) ---
+    @Transactional
+    public T create(String userId, C dto) {
+        final User author = userService.findUserById(UUID.fromString(userId))
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        final I item = this.itemGateway.getItemById(dto.getItemId(), dto.getItemType());
+
+        final T entity = createEntityInstance(author, dto, item);
+
+        // 4. Validação de Domínio (Template Method)
+        entity.validateState(); // Validações do Pai (BasePost)
+        validateSpecificEntity(entity); // Validações do Filho (Tuneet)
+
+        // 5. Salva
+        return repository.save(entity);
+    }    
+
+    @Transactional
+    public T update(UUID id, String userId, U dto) {
+        final T post = findById(id);
+
+        if (!post.isOwnedBy(userId)) {
+            throw new AccessDeniedException("Você não tem permissão para editar este post.");
+        }
+
+        I newItem = null;
+        boolean hasItemId = dto.getItemId() != null && !dto.getItemId().isBlank();
+        boolean hasItemType = dto.getItemType() != null; // Assume String no DTO Base
+
+        if (hasItemId ^ hasItemType) {
+            throw new BusinessException("Para atualizar o item, é necessário passar ID e Tipo.");
+        }
+        if (hasItemId) {
+            newItem = this.itemGateway.getItemById(dto.getItemId(), dto.getItemType());
+        }
+
+        // 3. Atualiza a Entidade (Passando DTO completo!)
+        updateEntityInstance(post, dto, newItem);
+
+        // 4. Validação de Domínio (Pós-atualização)
+        post.validateState(); // Valida estado geral
+        validateSpecificEntity(post); // Valida estado específico
+
+        return repository.save(post);
+    }    
 
     public Page<T> findAll(Pageable pageable) {
         return repository.findAll(pageable);
@@ -80,26 +129,6 @@ public abstract class BasePostService<
     public Page<T> findByItemCreator(String creatorName, Pageable pageable) {
         return repository.findByItemCreator(creatorName, pageable);
     }    
-
-    /**
-     * TEMPLATE METHOD: O algoritmo de criação.
-     * O Framework define O FLUXO, a Aplicação define OS DETALHES.
-     */
-    @Transactional
-    public T create(String userId, String textContent, String itemId, String itemType) {
-        // 1. Valida Usuário (Fixo)
-        final User author = userService.findUserById(UUID.fromString(userId))
-             .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
-
-        // 2. Busca o Item na API Externa (Variável - Abstract)
-        final I item = this.itemGateway.getItemById(itemId, itemType);
-
-        // 3. Instancia a Entidade Concreta (Variável - Abstract)
-        final T entity = createEntityInstance(author, textContent, item);
-
-        // 4. Salva (Fixo)
-        return repository.save(entity);
-    }
     
     // TRENDING
     public List<BaseTrendingItem<I>> getTrending(String filterType, int limit) {
@@ -164,5 +193,12 @@ public abstract class BasePostService<
     /**
      * A subclasse deve saber como instanciar sua entidade (ex: new Tuneet(...)).
      */
-    protected abstract T createEntityInstance(User author, String textContent, I item);    
+    protected abstract T createEntityInstance(User author, C createDto, I item); 
+    
+    /**
+     * Atualiza a entidade existente com dados do DTO e o novo item (se houver).
+     */
+    protected abstract void updateEntityInstance(T entity, U dto, I newItem);
+
+    protected abstract void validateSpecificEntity(T entity); 
 }

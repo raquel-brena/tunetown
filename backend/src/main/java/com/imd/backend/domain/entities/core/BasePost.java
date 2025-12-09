@@ -48,7 +48,7 @@ public abstract class BasePost {
 
     // --- MÉTODOS DE DOMÍNIO ---
 
-    protected void validateState() {
+    public void validateState() {
         if (this.id == null || this.id.isBlank()) {
             this.id = UUID.randomUUID().toString();
         }

@@ -11,11 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.imd.backend.app.dto.core.CreateBasePostDTO;
+import com.imd.backend.app.dto.core.UpdateBasePostDTO;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
@@ -24,17 +29,41 @@ import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueObjects.core.PostItem;
 import com.imd.backend.infra.security.CoreUserDetails;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 public abstract class BasePostController<
     T extends BasePost,
-    I extends PostItem
+    I extends PostItem,
+    C extends CreateBasePostDTO,
+    U extends UpdateBasePostDTO
 > {
-  protected final BasePostService<T, I> service;
+  protected final BasePostService<T, I, C, U> service;
 
-  protected BasePostController(BasePostService<T, I> service) {
+  protected BasePostController(BasePostService<T, I, C, U> service) {
       this.service = service;
   }  
 
   // ------------------------------- ENDPOINTS PADRÃO ------------------------------
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<T> create(
+    @Validated @RequestBody C dto,
+    @AuthenticationPrincipal CoreUserDetails userDetails
+  ) {
+    System.out.println("DTO Recebido: " + dto.toString());
+    final T created = service.create(userDetails.getUserId(), dto);
+    return new ResponseEntity<>(created, HttpStatus.CREATED);
+  }
+
+  @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<T> update(
+    @PathVariable UUID id,
+    @Validated @RequestBody U dto,
+    @AuthenticationPrincipal CoreUserDetails userDetails 
+  ) {
+    final T updated = service.update(id, userDetails.getUserId(), dto);
+    return ResponseEntity.ok(updated);
+  }
+  
   @GetMapping
   public ResponseEntity<Page<T>> getAll(
           @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
