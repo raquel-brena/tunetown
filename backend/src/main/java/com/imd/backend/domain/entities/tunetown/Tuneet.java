@@ -48,12 +48,12 @@ public class Tuneet extends BasePost {
 
 
     // RELACIONAMENTOS FILHOS
-    @OneToMany(mappedBy = "tuneet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tuneet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     @JsonIgnore
     private List<Like> likes = new ArrayList<>();
@@ -124,11 +124,12 @@ public class Tuneet extends BasePost {
         return likes != null ? likes.size() : 0;
     }
 
-  public String getTunableContent() {
-    return String.format("%s by %s (%s)",
-      this.tunableItemTitle,
-      this.tunableItemArtist,
-      this.tunableItemType
-    );  
-  }  
+    @Override
+    public String getContent() {
+        return String.format("%s by %s (%s)",
+                this.tunableItemTitle,
+                this.tunableItemArtist,
+                this.tunableItemType
+        );
+    }
 }

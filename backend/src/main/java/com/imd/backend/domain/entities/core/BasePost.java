@@ -1,9 +1,14 @@
 package com.imd.backend.domain.entities.core;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.imd.backend.domain.entities.tunetown.Like;
+import com.imd.backend.infra.persistence.jpa.repository.core.BaseLikeRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -87,6 +92,8 @@ public abstract class BasePost {
         BasePost basePost = (BasePost) o;
         return Objects.equals(id, basePost.id);
     }
+
+    public abstract String getContent();
 
     @Override
     public int hashCode() {

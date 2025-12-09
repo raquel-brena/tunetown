@@ -62,7 +62,7 @@ public class TutoResponder {
             Tuneet tuneetRef = entityManager.getReference(Tuneet.class, tuneetId);
 
             Comment tutoComment = Comment.builder()
-                    .tuneet(tuneetRef)
+                    .post(tuneetRef)
                     .author(tutoProfile)
                     .contentText(response.trim())
                     .createdAt(LocalDateTime.now())
