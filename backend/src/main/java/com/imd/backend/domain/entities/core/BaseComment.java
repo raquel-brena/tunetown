@@ -33,9 +33,12 @@ public abstract class BaseComment {
   @Column(name = "created_at", updatable = false)
   protected LocalDateTime createdAt;
 
-  // --- MÉTODOS DE DOMÍNIO ---
+  @Transient
+  public abstract BasePost getPost();
 
-  protected void validateState() {
+    // --- MÉTODOS DE DOMÍNIO ---
+
+  public void validateState() {
     if (this.contentText == null || this.contentText.trim().isEmpty()) {
       throw new IllegalArgumentException("O comentário não pode ser vazio.");
     }
