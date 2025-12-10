@@ -1,5 +1,7 @@
 package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 // Detalhe Completo (inclui Créditos para achar o diretor)
 public record TmdbMovieDetailDTO(
     String id,

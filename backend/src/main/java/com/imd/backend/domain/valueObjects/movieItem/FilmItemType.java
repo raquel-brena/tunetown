@@ -4,7 +4,10 @@ public enum FilmItemType {
   MOVIE("MOVIE"),
   SERIES("SERIES"); // Deixando pronto para o futuro
 
-  public static FilmItemType fromString(String type) {
+    FilmItemType(String movie) {
+    }
+
+    public static FilmItemType fromString(String type) {
     return valueOf(type.toUpperCase());
   }
 }

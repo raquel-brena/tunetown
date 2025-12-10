@@ -58,15 +58,15 @@ public class BookReview extends BasePost {
   private Integer bookPageCount;
 
   // --- RELACIONAMENTOS ---
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
-  private List<Comment> comments = new ArrayList<>();
+  private List<BookComment> comments = new ArrayList<>();
 
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
-  private List<Like> likes = new ArrayList<>();
+  private List<BookLike> likes = new ArrayList<>();
 
   // --- VALIDAÇÃO ---
   public void validateBookReview() {

@@ -1,9 +1,9 @@
 package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.factory;
 
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbSearchItem.TmdbSearchStrategy;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.TmdbSearchItem.TmdbSearchMovieStrategy;
-import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.TmdbSearchItem.TmdbSearchStrategy;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.valueObjects.movieItem.FilmItemType;
 

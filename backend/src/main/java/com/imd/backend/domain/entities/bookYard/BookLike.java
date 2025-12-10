@@ -1,8 +1,13 @@
 package com.imd.backend.domain.entities.bookYard;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.imd.backend.domain.entities.core.BaseLike;
+import com.imd.backend.domain.entities.core.BasePost;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "book_likes", uniqueConstraints = {
@@ -18,18 +23,18 @@ public class BookLike extends BaseLike {
   // PONTO VARIÁVEL: Este Like aponta para uma Review de Livro
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "book_review_id", nullable = false)
-  private BookReview post;
+  private BookReview bookReview;
 
   @Override
   public BasePost getPost() {
-    return this.post;
+    return this.bookReview;
   }
 
   /**
    * Validação específica.
    */
   public void validateAssociation() {
-    if (this.post == null) {
+    if (this.bookReview == null) {
       throw new IllegalArgumentException("O like deve pertencer a uma Review de Livro.");
     }
   }
