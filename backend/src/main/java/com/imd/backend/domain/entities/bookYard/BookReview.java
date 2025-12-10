@@ -57,6 +57,13 @@ public class BookReview extends BasePost {
   @Column(name = "book_page_count")
   private Integer bookPageCount;
 
+  // --- DADOS ESPECÍFICOS ---
+
+  // Rating foi removido
+
+  @Column(name = "reading_status", nullable = false)
+  private String readingStatus; // "READING", "COMPLETED", "WANT_TO_READ"  
+
   // --- RELACIONAMENTOS ---
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
@@ -68,12 +75,11 @@ public class BookReview extends BasePost {
   @JsonIgnore
   private List<Like> likes = new ArrayList<>();
 
-  // --- VALIDAÇÃO ---
   public void validateBookReview() {
     if (this.bookId == null || this.bookId.isBlank())
       throw new IllegalArgumentException("ID do livro é obrigatório");
-    if (this.bookAuthor == null || this.bookAuthor.isBlank())
-      throw new IllegalArgumentException("Autor do livro é obrigatório");
+    if (this.readingStatus == null || this.readingStatus.isBlank())
+      throw new IllegalArgumentException("Status de leitura é obrigatório");    
   }
 
   // --- HELPERS ---
