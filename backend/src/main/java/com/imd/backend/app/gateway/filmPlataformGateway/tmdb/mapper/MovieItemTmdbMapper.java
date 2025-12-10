@@ -25,7 +25,8 @@ public class MovieItemTmdbMapper {
         dto.title(),
         fullArtworkUrl,
         "Desconhecido", // Busca simples não retorna diretor no TMDB, infelizmente
-        year);
+        year,
+            0);
   }
 
   public MovieItem fromTmdbDetail(TmdbMovieDetailDTO dto) {
@@ -47,6 +48,7 @@ public class MovieItemTmdbMapper {
         dto.title(),
         fullArtworkUrl,
         director,
-        year);
+        year,
+            0);
   }
 }

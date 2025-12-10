@@ -20,19 +20,19 @@ import lombok.experimental.SuperBuilder;
 public final class MovieItem extends PostItem {
 
   private String director;
-  private String releaseYear; // String para evitar problemas de formatação
-  // Poderia ter: private String genre;
+  private String releaseYear;
+  private Integer rating;
 
-  // Construtor JPA-Compliant (String-based)
   public MovieItem(
       String id,
       String platformName,
       String title,
       String artworkUrlStr,
       String director,
-      String releaseYear) {
+      String releaseYear,
+      Integer rating) {
     super(id, title, platformName, artworkUrlStr != null ? URI.create(artworkUrlStr) : null);
     this.director = director;
     this.releaseYear = releaseYear;
-  }
+    this.rating = rating;}
 }
