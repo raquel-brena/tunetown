@@ -22,6 +22,9 @@ spotify:
   api:
     url: https://api.spotify.com/v1
 
+tmdb:
+  api-key: ${TMDB_API_KEY:SEU_TOKEN_AQUI}    
+
 cloud:
   aws:
     credentials:

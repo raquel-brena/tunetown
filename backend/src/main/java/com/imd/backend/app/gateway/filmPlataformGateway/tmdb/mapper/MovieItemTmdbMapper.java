@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbCrewDTO;
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbMovieDetailDTO;
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbMovieResultDTO;
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbSeriesDetailDTO;
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbSeriesResultDTO;
 import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
 
 @Component
@@ -49,4 +51,40 @@ public class MovieItemTmdbMapper {
         director,
         year);
   }
+
+  public MovieItem fromTmdbSeriesResult(TmdbSeriesResultDTO dto) {
+    String fullArtworkUrl = dto.posterPath() != null ? IMAGE_BASE_URL + dto.posterPath() : null;
+    String year = (dto.firstAirDate() != null && dto.firstAirDate().length() >= 4) 
+                  ? dto.firstAirDate().substring(0, 4) : "N/A";
+
+    return new MovieItem(
+        String.valueOf(dto.id()),
+        PLATFORM_NAME, // Ou apenas TMDB, se preferir
+        dto.name(),
+        fullArtworkUrl,
+        "Showrunner", // Busca simples não traz criador
+        year
+    );
+  }  
+
+  public MovieItem fromTmdbSeriesDetail(TmdbSeriesDetailDTO dto) {
+    String fullArtworkUrl = dto.posterPath() != null ? IMAGE_BASE_URL + dto.posterPath() : null;
+    String year = (dto.firstAirDate() != null && dto.firstAirDate().length() >= 4) 
+                  ? dto.firstAirDate().substring(0, 4) : "N/A";
+
+    // Pega o primeiro criador da lista, se houver
+    String creator = "Desconhecido";
+    if (dto.createdBy() != null && !dto.createdBy().isEmpty()) {
+        creator = dto.createdBy().get(0).name();
+    }
+
+    return new MovieItem(
+        String.valueOf(dto.id()),
+        "TMDB_SERIES",
+        dto.name(),
+        fullArtworkUrl,
+        creator, // Mapeado para o campo 'director' do MovieItem
+        year
+    );
+  }  
 }

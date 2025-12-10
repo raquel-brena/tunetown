@@ -2,8 +2,9 @@ package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.factory;
 
 import org.springframework.stereotype.Component;
 
-import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.TmdbSearchItem.TmdbSearchMovieStrategy;
-import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.TmdbSearchItem.TmdbSearchStrategy;
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbSearchItem.TmdbSearchMovieStrategy;
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbSearchItem.TmdbSearchSeriesStrategy;
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbSearchItem.TmdbSearchStrategy;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.valueObjects.movieItem.FilmItemType;
 
@@ -13,12 +14,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TmdbSearchStrategyFactory {
   private final TmdbSearchMovieStrategy movieStrategy;
-
+  private final TmdbSearchSeriesStrategy seriesStrategy;
+  
   public TmdbSearchStrategy create(FilmItemType type) {
-    if (type == FilmItemType.MOVIE) {
-      return movieStrategy;
-    }
-    // Se tivesse SERIES, retornaria seriesStrategy
+    if (type == FilmItemType.MOVIE) return movieStrategy;
+    if (type == FilmItemType.SERIES) return seriesStrategy;
+
     throw new BusinessException("Tipo de item não suportado pelo TMDB Gateway");
   }
 }
