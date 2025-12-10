@@ -7,6 +7,7 @@ import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbMovieDetail
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbMovieResultDTO;
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbSeriesDetailDTO;
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.dto.TmdbSeriesResultDTO;
+import com.imd.backend.domain.valueObjects.movieItem.FilmItemType;
 import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
 
 @Component
@@ -27,7 +28,9 @@ public class MovieItemTmdbMapper {
         dto.title(),
         fullArtworkUrl,
         "Desconhecido", // Busca simples não retorna diretor no TMDB, infelizmente
-        year);
+        year,
+        FilmItemType.MOVIE
+    );
   }
 
   public MovieItem fromTmdbDetail(TmdbMovieDetailDTO dto) {
@@ -49,7 +52,9 @@ public class MovieItemTmdbMapper {
         dto.title(),
         fullArtworkUrl,
         director,
-        year);
+        year,
+        FilmItemType.MOVIE
+    );
   }
 
   public MovieItem fromTmdbSeriesResult(TmdbSeriesResultDTO dto) {
@@ -63,7 +68,8 @@ public class MovieItemTmdbMapper {
         dto.name(),
         fullArtworkUrl,
         "Showrunner", // Busca simples não traz criador
-        year
+        year,
+        FilmItemType.SERIES
     );
   }  
 
@@ -84,7 +90,8 @@ public class MovieItemTmdbMapper {
         dto.name(),
         fullArtworkUrl,
         creator, // Mapeado para o campo 'director' do MovieItem
-        year
+        year,
+        FilmItemType.SERIES
     );
   }  
 }
