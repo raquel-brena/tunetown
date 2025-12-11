@@ -1,7 +1,6 @@
-package com.imd.backend.infra.persistence.jpa.repository;
+package com.imd.backend.infra.persistence.jpa.repository.filmLog;
 
 import com.imd.backend.domain.entities.filmLog.MovieReview;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.TimeLineItem;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
 import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;

@@ -3,11 +3,7 @@ package com.imd.backend.domain.entities.bookYard;
 import com.imd.backend.domain.entities.core.BaseComment;
 import com.imd.backend.domain.entities.core.BasePost;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,12 +21,18 @@ public class BookComment extends BaseComment {
   // Define que este comentário pertence especificamente a uma Review de Livro.
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "book_review_id", nullable = false)
-  private BookReview bookReview;
+  private BookReview post;
+
+  @Column(name = "page_number")
+  private Integer pageNumber;
+
+  @Column(name = "chapter_name")
+  private String chapterName;
 
   // Implementação do método abstrato do pai para retornar o post genérico
   @Override
   public BasePost getPost() {
-    return this.bookReview;
+    return this.post;
   }
 
   /**
@@ -38,7 +40,7 @@ public class BookComment extends BaseComment {
    * Deve ser chamada pelo Service antes de salvar.
    */
   public void validateAssociation() {
-    if (this.bookReview == null) {
+    if (this.post == null) {
       throw new IllegalArgumentException("O comentário deve pertencer a uma Review de Livro.");
     }
   }

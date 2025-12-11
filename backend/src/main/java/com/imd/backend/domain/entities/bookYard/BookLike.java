@@ -2,6 +2,7 @@ package com.imd.backend.domain.entities.bookYard;
 
 import com.imd.backend.domain.entities.core.BaseLike;
 import com.imd.backend.domain.entities.core.BasePost;
+import com.imd.backend.domain.valueObjects.bookItem.ImpactLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,18 +24,22 @@ public class BookLike extends BaseLike {
   // PONTO VARIÁVEL: Este Like aponta para uma Review de Livro
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "book_review_id", nullable = false)
-  private BookReview bookReview;
+  private BookReview post;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "impact_level", nullable = false)
+  private ImpactLevel impactLevel;
 
   @Override
   public BasePost getPost() {
-    return this.bookReview;
+    return this.post;
   }
 
   /**
    * Validação específica.
    */
   public void validateAssociation() {
-    if (this.bookReview == null) {
+    if (this.post == null) {
       throw new IllegalArgumentException("O like deve pertencer a uma Review de Livro.");
     }
   }

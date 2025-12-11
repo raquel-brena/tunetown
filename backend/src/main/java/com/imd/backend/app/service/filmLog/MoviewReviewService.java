@@ -1,20 +1,16 @@
-package com.imd.backend.app.service;
+package com.imd.backend.app.service.filmLog;
 
-import com.imd.backend.app.dto.CreateTuneetDTO;
-import com.imd.backend.app.dto.UpdateTuneetDTO;
 import com.imd.backend.app.dto.movie.CreateMovieReviewDTO;
 import com.imd.backend.app.dto.movie.UpdateMovieReviewDTO;
 import com.imd.backend.app.gateway.filmPlataformGateway.FilmPlatformGateway;
-import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
+import com.imd.backend.app.service.FileService;
+import com.imd.backend.app.service.UserService;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.filmLog.MovieReview;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
 import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
-import com.imd.backend.infra.persistence.jpa.repository.MovieReviewRepository;
-import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
+import com.imd.backend.infra.persistence.jpa.repository.filmLog.MovieReviewRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

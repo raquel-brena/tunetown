@@ -56,12 +56,12 @@ public class MovieReview extends BasePost {
   @Column(name = "user_rating", nullable = false)
   private Integer rating; // 1 a 5 estrelas
 
-  @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
   private List<MovieComment> comments = new ArrayList<>();
 
-  @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
   private List<MovieLike> likes = new ArrayList<>();
