@@ -33,7 +33,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
   @Override
   @Query("""
           SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTrendingItem(
-              NEW com.imd.backend.domain.valueObjects.bookyard.BookItem(
+              NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
                   b.bookId,
                   b.bookPlatform,
                   b.bookTitle,
@@ -72,7 +72,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
               SIZE(b.likes),
               SIZE(p.followers),
               SIZE(p.following),
-              NEW com.imd.backend.domain.valueObjects.bookyard.BookItem(
+              NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
                   b.bookId,
                   b.bookPlatform,
                   b.bookTitle,
@@ -104,7 +104,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
         SIZE(b.likes),
         SIZE(p.followers),
         SIZE(p.following),
-        NEW com.imd.backend.domain.valueObjects.bookyard.BookItem(
+        NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
             b.bookId,
             b.bookPlatform,
             b.bookTitle,
@@ -137,7 +137,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
         SIZE(b.likes),
         SIZE(p.followers),
         SIZE(p.following),
-        NEW com.imd.backend.domain.valueObjects.bookyard.BookItem(
+        NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
             b.bookId,
             b.bookPlatform,
             b.bookTitle,
@@ -165,7 +165,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
           b.id, b.textContent, b.createdAt,
           SIZE(b.comments), SIZE(b.likes),
           u.id, u.username, f.url,
-          NEW com.imd.backend.domain.valueObjects.bookyard.BookItem(
+          NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
               b.bookId,
               b.bookPlatform,
               b.bookTitle,
@@ -188,7 +188,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
           b.id, b.textContent, b.createdAt,
           SIZE(b.comments), SIZE(b.likes),
           u.id, u.username, f.url,
-          NEW com.imd.backend.domain.valueObjects.bookyard.BookItem(
+          NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
               b.bookId,
               b.bookPlatform,
               b.bookTitle,

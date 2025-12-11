@@ -1,4 +1,4 @@
-package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.TmdbSearchItem;
+package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbSearchItem;
 
 import java.util.List;
 

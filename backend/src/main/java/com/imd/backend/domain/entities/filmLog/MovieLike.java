@@ -30,18 +30,18 @@ public class MovieLike extends BaseLike {
   // PONTO VARIÁVEL: Este Like aponta para uma Review de Filme
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "movie_review_id", nullable = false)
-  private MovieReview post;
+  private MovieReview movieReview;
 
   @Override
   public BasePost getPost() {
-    return this.post;
+    return this.movieReview;
   }
 
   /**
    * Validação específica.
    */
   public void validateAssociation() {
-    if (this.post == null) {
+    if (this.movieReview == null) {
       throw new IllegalArgumentException("O like deve pertencer a uma Review de Filme.");
     }
   }

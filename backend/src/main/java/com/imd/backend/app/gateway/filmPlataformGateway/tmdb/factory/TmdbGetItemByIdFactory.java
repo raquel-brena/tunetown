@@ -3,6 +3,7 @@ package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.factory;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbGetItemById.TmdbGetItemById;
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbGetItemById.TmdbGetMovieById;
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbGetItemById.TmdbGetSeriesById;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.valueObjects.movieItem.FilmItemType;
@@ -12,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class TmdbGetItemByIdFactory {
-  private final TmdbGetItemById getMovieById;
+  private final TmdbGetMovieById getMovieById;
   private final TmdbGetSeriesById getSeriesById;
 
   public TmdbGetItemById create(FilmItemType type) {

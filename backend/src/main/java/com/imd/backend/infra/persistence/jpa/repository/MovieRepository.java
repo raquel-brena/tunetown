@@ -33,7 +33,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
   @Override
   @Query("""
     SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTrendingItem(
-        NEW com.imd.backend.domain.valueObjects.filmlog.MovieItem(
+        NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
             m.movieId,
             m.moviePlatform,
             m.movieTitle,
@@ -75,7 +75,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
         SIZE(m.likes),
         SIZE(p.followers),
         SIZE(p.following),
-        NEW com.imd.backend.domain.valueObjects.filmlog.MovieItem(
+        NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
             m.movieId,
             m.moviePlatform,
             m.movieTitle,
@@ -107,7 +107,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
       SIZE(m.likes),
       SIZE(p.followers),
       SIZE(p.following),
-      NEW com.imd.backend.domain.valueObjects.filmlog.MovieItem(
+      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
           m.movieId,
           m.moviePlatform,
           m.movieTitle,
@@ -140,7 +140,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
       SIZE(m.likes),
       SIZE(p.followers),
       SIZE(p.following),
-      NEW com.imd.backend.domain.valueObjects.filmlog.MovieItem(
+      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
         m.movieId,
         m.moviePlatform,
         m.movieTitle,
@@ -164,7 +164,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
       m.id, m.textContent, m.createdAt,
       SIZE(m.comments), SIZE(m.likes),
       u.id, u.username, f.url,
-      NEW com.imd.backend.domain.valueObjects.filmlog.MovieItem(
+      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
         m.movieId,
         m.moviePlatform,
         m.movieTitle,
@@ -187,7 +187,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
       m.id, m.textContent, m.createdAt,
       SIZE(m.comments), SIZE(m.likes),
       u.id, u.username, f.url,
-      NEW com.imd.backend.domain.valueObjects.filmlog.MovieItem(
+      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
           m.movieId,
           m.moviePlatform,
           m.movieTitle,
