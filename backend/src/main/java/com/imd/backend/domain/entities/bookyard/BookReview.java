@@ -36,17 +36,17 @@ public class BookReview extends BasePost {
   @Column(name = "book_id", nullable = false)
   private String bookId;
 
-  @Column(name = "book_title", nullable = false)
+  @Column(name = "book_title", nullable = false, length = 1000)
   private String bookTitle;
 
   @Column(name = "book_platform", nullable = false)
   private String bookPlatform; // "GoogleBooks"
 
-  @Column(name = "book_artwork_url")
+  @Column(name = "book_artwork_url", length = 2048)
   private String bookArtworkUrl;
 
   // Específicos de Livro
-  @Column(name = "book_author", nullable = false)
+  @Column(name = "book_author", nullable = false, length = 1000)
   private String bookAuthor;
 
   @Column(name = "book_isbn")
