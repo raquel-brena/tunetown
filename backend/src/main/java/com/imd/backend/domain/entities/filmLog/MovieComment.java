@@ -21,7 +21,7 @@ public class MovieComment extends BaseComment {
   // Define que este comentário pertence especificamente a uma Review de Filme.
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "movie_review_id", nullable = false)
-  private MovieReview movieReview;
+  private MovieReview post;
 
   @Column(name = "minute_mark")
   private Integer minuteMark;
@@ -29,7 +29,7 @@ public class MovieComment extends BaseComment {
     // Implementação do método abstrato do pai para retornar o post genérico
   @Override
   public BasePost getPost() {
-    return this.movieReview;
+    return this.post;
   }
 
   /**
@@ -37,7 +37,7 @@ public class MovieComment extends BaseComment {
    * Deve ser chamada pelo Service antes de salvar.
    */
   public void validateAssociation() {
-    if (this.movieReview == null) {
+    if (this.post == null) {
       throw new IllegalArgumentException("O comentário deve pertencer a uma Review de Filme.");
     }
     // Ex: Regra de negócio - não pode comentar em review deletada
