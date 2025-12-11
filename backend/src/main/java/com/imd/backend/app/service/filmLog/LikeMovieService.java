@@ -4,7 +4,6 @@ import com.imd.backend.app.service.core.BaseLikeService;
 import com.imd.backend.domain.entities.filmLog.MovieLike;
 import com.imd.backend.domain.entities.filmLog.MovieReview;
 import com.imd.backend.infra.persistence.jpa.repository.filmLog.MovieLikeRepository;
-import com.imd.backend.infra.persistence.jpa.repository.filmLog.MovieReviewRepository;
 import org.springframework.stereotype.Service;
 
 @Service

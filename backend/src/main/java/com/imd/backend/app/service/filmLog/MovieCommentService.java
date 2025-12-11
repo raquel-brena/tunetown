@@ -6,15 +6,9 @@ import com.imd.backend.app.service.core.BaseCommentService;
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.entities.filmLog.MovieComment;
 import com.imd.backend.domain.entities.filmLog.MovieReview;
-import com.imd.backend.domain.entities.tunetown.Comment;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
-import com.imd.backend.infra.persistence.jpa.repository.CommentRepository;
 import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
-import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
 import com.imd.backend.infra.persistence.jpa.repository.filmLog.MovieCommentRepository;
-import com.imd.backend.infra.persistence.jpa.repository.filmLog.MovieReviewRepository;
 import org.springframework.stereotype.Service;
 
 @Service
