@@ -3,7 +3,7 @@ package com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spo
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.SpotifyApiClient;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.AlbumResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.mapper.TunableItemSpotifyMapper;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 
 import lombok.RequiredArgsConstructor;
 

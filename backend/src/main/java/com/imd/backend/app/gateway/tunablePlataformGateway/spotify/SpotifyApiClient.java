@@ -9,10 +9,12 @@ import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.AlbumResp
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.SearchResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.ShowResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.TrackResponseDTO;
+import com.imd.backend.infra.configuration.SpotifyFeignConfig;
 
 @FeignClient(
   name = "SpotifyApiClient",
-  url = "https://api.spotify.com/v1"
+  url = "https://api.spotify.com/v1",
+  configuration = SpotifyFeignConfig.class
 )
 public interface SpotifyApiClient {
   /**

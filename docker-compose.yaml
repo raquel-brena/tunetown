@@ -12,11 +12,10 @@ services:
       - postgres
     volumes:
       - ./backend/src:/src
-      - ~/.m2:/root/.m2
     command: ./mvnw spring-boot:run
 
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:15'
     container_name: postgres
     environment:
       - POSTGRES_DB=tunetown_db
@@ -25,9 +24,22 @@ services:
     networks:
       - spring-postgres
     ports:
-      - '5432:5432'
+      - '5434:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  ai:
+    container_name: tunetown-ai
+    build: ai
+    ports:
+      - '5000:5000'
+    env_file:
+      - ./ai/.env
+    networks:
+      - spring-postgres
+    depends_on:
+      - postgres
+
 
 volumes:
   postgres_data:

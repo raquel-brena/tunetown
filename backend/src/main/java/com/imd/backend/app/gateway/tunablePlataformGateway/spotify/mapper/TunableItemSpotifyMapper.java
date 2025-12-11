@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.AlbumResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.ShowResponseDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.dto.TrackResponseDTO;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
 import com.imd.backend.domain.exception.TunableItemConvertionException;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 @Component
 public class TunableItemSpotifyMapper {
@@ -23,12 +23,11 @@ public class TunableItemSpotifyMapper {
           albumDto.name(),
           albumDto.artists().getFirst().name(),
           new URI(albumDto.images().getFirst().url()),
-          TunableItemType.ALBUM);      
+          TunableItemType.ALBUM);
     } catch (Exception e) {
       throw new TunableItemConvertionException(
-        "Erro ao converter album do spotify em item tunetável: " + e.getLocalizedMessage(), 
-        e
-      );
+          "Erro ao converter album do spotify em item tunetável: " + e.getLocalizedMessage(),
+          e);
     }
   }
 
@@ -43,27 +42,24 @@ public class TunableItemSpotifyMapper {
           TunableItemType.MUSIC);
     } catch (Exception e) {
       throw new TunableItemConvertionException(
-        "Erro ao converter música do spotify em item tunetável: " + e.getLocalizedMessage(),
-        e
-      );
-    }    
+          "Erro ao converter música do spotify em item tunetável: " + e.getLocalizedMessage(),
+          e);
+    }
   }
 
   public TunableItem fromSpotifyShow(ShowResponseDTO showDto) {
     try {
       return new TunableItem(
-        showDto.id(),
-        PLATAFORM_ID,
-        showDto.name(),
-        showDto.publisher(),
-        new URI(showDto.images().getFirst().url()),
-        TunableItemType.PODCAST
-      );
+          showDto.id(),
+          PLATAFORM_ID,
+          showDto.name(),
+          showDto.publisher(),
+          new URI(showDto.images().getFirst().url()),
+          TunableItemType.PODCAST);
     } catch (Exception e) {
       throw new TunableItemConvertionException(
-        "Erro ao converter podcast do spotify em item tunetável: " + e.getLocalizedMessage(),
-        e
-      );
+          "Erro ao converter podcast do spotify em item tunetável: " + e.getLocalizedMessage(),
+          e);
     }
-  }  
+  }
 }

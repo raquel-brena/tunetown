@@ -10,8 +10,8 @@ import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.factory.Spoti
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.factory.SpotifySearchItemStrategyFactory;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifyItemById.SpotifyItemByIdStrategy;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifySearchItem.SpotifySearchItemStrategy;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,15 +23,17 @@ public class SpotifyGateway implements TunablePlataformGateway {
   private final SpotifySearchItemStrategyFactory searchItemStrategyFactory;
 
   @Override
-  public List<TunableItem> searchItem(String query, TunableItemType itemType) {
-    final SpotifySearchItemStrategy searchItemStrategy = this.searchItemStrategyFactory.create(itemType);
+  public List<TunableItem> searchItem(String query, String itemType) {
+    TunableItemType type = TunableItemType.fromString(itemType);
+    final SpotifySearchItemStrategy searchItemStrategy = this.searchItemStrategyFactory.create(type);
 
     return searchItemStrategy.execute(query);
   }
 
   @Override
-  public TunableItem getItemById(String id, TunableItemType itemType){
-    final SpotifyItemByIdStrategy findByIdStrategy = this.itemByIdStrategyFactory.create(itemType);
+  public TunableItem getItemById(String id, String itemType) {
+    TunableItemType type = TunableItemType.fromString(itemType);
+    final SpotifyItemByIdStrategy findByIdStrategy = this.itemByIdStrategyFactory.create(type);
 
     return findByIdStrategy.execute(id);
   }

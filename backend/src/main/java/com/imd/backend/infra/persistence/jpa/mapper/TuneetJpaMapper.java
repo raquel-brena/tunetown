@@ -1,57 +1,78 @@
 package com.imd.backend.infra.persistence.jpa.mapper;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TuneetResume;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
-import com.imd.backend.infra.persistence.jpa.entity.TuneetEntity;
+import com.imd.backend.domain.valueObjects.TimeLineItem;
+import com.imd.backend.domain.valueObjects.TuneetResume;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
+import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 
 @Component
 public class TuneetJpaMapper {
-  public TuneetEntity fromTuneetDomain(Tuneet tuneet) {
-    return new TuneetEntity(
-      tuneet.getId().toString(),
-      tuneet.getTextContent(),
-      tuneet.getItemId(),
-      tuneet.getItemPlataform(),
-      tuneet.getItemTitle(),
-      tuneet.getItemArtist(),
-      tuneet.getItemType().toString(),
-      tuneet.getItemArtworkUrl().toString()
-    );
-  }
 
-  public TuneetEntity fromTuneetResumeDomain(TuneetResume tuneetResume) {
-    return new TuneetEntity(
-      tuneetResume.getId().toString(),
-      tuneetResume.getTextContent(),
-      tuneetResume.getItemId(),
-      tuneetResume.getItemPlataform(),
-      tuneetResume.getItemTitle(),
-      tuneetResume.getItemArtist(),
-      tuneetResume.getItemType().toString(),
-      tuneetResume.getItemArtworkUrl().toString()
-    );    
-  }
+  public static TuneetResume resumeFromProjection(TuneetResumeProjection projection) {
+    if(projection == null) return null;
 
-  public TuneetResume resumeFromTuneetJpaEntity(TuneetEntity entity) throws URISyntaxException {
+    // --- Defesa para UUIDs ---
+    UUID tuneetId = (projection.getTuneetId() != null)
+        ? UUID.fromString(projection.getTuneetId())
+        : null;
+
+    UUID authorId = (projection.getAuthorId() != null)
+        ? UUID.fromString(projection.getAuthorId())
+        : null;
+
+    // --- Defesa para Enum ---
+    TunableItemType itemType = (projection.getTunableItemType() != null)
+        ? TunableItemType.fromString(projection.getTunableItemType())
+        : null;
+
+    String urlPhoto = null;
+
     return new TuneetResume(
-      UUID.fromString(entity.getId()),
-      entity.getContentText(),
-      new TunableItem(
-        entity.getTunableItemId(),
-        entity.getTunableItemPlataform(),
-        entity.getTunableItemTitle(),
-        entity.getTunableItemArtist(),
-        new URI(entity.getTunableItemArtworkUrl()),
-        TunableItemType.fromString(entity.getTunableItemType())
-      )
+        tuneetId, 
+        projection.getContentText(),
+        projection.getTunableItemArtist(),
+        projection.getTunableItemTitle(),
+        projection.getTunableItemArtworkUrl(),
+        projection.getTunableItemId(),
+        projection.getTunableItemPlataform(),
+        itemType, 
+        projection.getCreatedAt(),
+        projection.getUsername(),
+        projection.getProfileId(),
+        projection.getEmail(),
+        authorId, 
+        projection.getTotalComments(),
+        projection.getTotalLikes(),
+        projection.getBio(),
+        projection.getTotalFollowers(),
+        projection.getTotalFollowing(),
+        urlPhoto,
+        projection.getFileNamePhoto()
     );
   }
+
+  public static TimeLineItem fromTimelineProjection(TimelineItemProjection p) {
+    if (p == null) return null;
+
+    return new TimeLineItem(
+        p.getTuneetId() != null ? UUID.fromString(p.getTuneetId()) : null,
+        p.getTextContent(),
+        p.getCreatedAt(),
+        p.getTotalComments(),
+        p.getTotalLikes(),
+        p.getTunableItemTitle(),
+        p.getTunableItemArtist(),
+        p.getTunableItemArtworkUrl() != null ? URI.create(p.getTunableItemArtworkUrl()) : null,
+        p.getTunableItemType() != null ? TunableItemType.fromString(p.getTunableItemType()) : null,
+        p.getAuthorId() != null ? UUID.fromString(p.getAuthorId()) : null,
+        p.getAuthorUsername(),
+        p.getAuthorAvatarUrl() != null ? URI.create(p.getAuthorAvatarUrl()) : null
+    );
+  }  
 }

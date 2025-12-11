@@ -1,84 +1,49 @@
 package com.imd.backend.api.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.imd.backend.api.dto.CreateTuneetDTO;
-import com.imd.backend.api.dto.UpdateTuneetDTO;
+import com.imd.backend.api.controller.core.BasePostController;
+import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
+import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
-import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TuneetResume;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
+import com.imd.backend.domain.entities.tunetown.Tuneet;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.infra.security.CoreUserDetails;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/tuneet")
-@RequiredArgsConstructor
-public class TuneetController {
-  private final TuneetService tuneetService;
-
-  @GetMapping("/search-tunable-item")
-  public ResponseEntity<List<TunableItem>> searchTunableItem(
-    @RequestParam(required = true) String query,
-    @RequestParam(defaultValue = "music") TunableItemType itemType
-  ) {
-    final List<TunableItem> items = tuneetService.searchTunableItems(query, itemType);
-
-    return ResponseEntity.ok(items);
+public class TuneetController extends BasePostController<
+  Tuneet, 
+  TunableItem,
+  CreateTuneetDTO,
+  UpdateTuneetDTO
+> {
+  public TuneetController(TuneetService tuneetService) {
+    super(tuneetService);
   }
 
-  @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Tuneet> createTuneet(
-    @Valid @RequestBody CreateTuneetDTO createTuneetDTO
+  @Override
+  @PostMapping
+  public ResponseEntity<Tuneet> create(
+    @RequestBody @Validated CreateTuneetDTO dto,
+    @AuthenticationPrincipal CoreUserDetails userDetails
   ) {
-      final Tuneet createdTuneet = this.tuneetService.createTuneet(
-        createTuneetDTO.itemId(),
-        createTuneetDTO.itemType(),
-        createTuneetDTO.textContent()
-      );
+    return super.create(dto, userDetails);
+  } // COLOQUEI ESSE MÉTODO PRA CÁ POIS ESTAVA DANDO PROBLEMA NO JACKSON COM O DTO GENÉRICO
 
-      return new ResponseEntity<Tuneet>(createdTuneet, HttpStatus.CREATED);
-  }
-
-  @DeleteMapping(value = "/{tuneetId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<TuneetResume> deleteTuneet(
-    @PathVariable(required = true) String tuneetId
+  @Override
+  @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Tuneet> update(
+    @PathVariable UUID id,
+    @Validated @RequestBody UpdateTuneetDTO dto,
+    @AuthenticationPrincipal CoreUserDetails userDetails 
   ) {
-    final TuneetResume deletedTuneet = this.tuneetService.deleteById(UUID.fromString(tuneetId));
-
-    return ResponseEntity.ok(deletedTuneet);
-  }
-
-  @PatchMapping(value = "/{tuneetId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<TuneetResume> updateTuneet(
-    @PathVariable(required = true) String tuneetId,
-    @Valid @RequestBody UpdateTuneetDTO updateTuneetDTO
-  ) {
-    final TuneetResume updatedTuneet = this.tuneetService.updateTuneet(
-      UUID.fromString(tuneetId), 
-      updateTuneetDTO.textContent(), 
-      updateTuneetDTO.itemId(),
-      updateTuneetDTO.itemType()
-    );
-
-    return ResponseEntity.ok(updatedTuneet);
-  }
+    return super.update(id, dto, userDetails);
+  }  
 }

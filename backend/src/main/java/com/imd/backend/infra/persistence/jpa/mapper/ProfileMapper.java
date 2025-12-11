@@ -3,32 +3,33 @@ package com.imd.backend.infra.persistence.jpa.mapper;
 import com.imd.backend.api.dto.profile.ProfileCreateDTO;
 import com.imd.backend.api.dto.profile.ProfileResponseDTO;
 import com.imd.backend.api.dto.profile.ProfileUpdateDTO;
-import com.imd.backend.domain.entities.Profile;
-import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
-import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
-import com.imd.backend.infra.persistence.jpa.entity.User;
+import com.imd.backend.domain.entities.core.MediaFile;
+import com.imd.backend.domain.entities.core.Profile;
+import com.imd.backend.domain.entities.core.User;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 public class ProfileMapper {
 
-    public static Profile toDomain(ProfileEntity entity) {
+    public static Profile toDomain(Profile entity) {
+        User user = entity.getUser();
+
         return Profile.builder()
                 .id(entity.getId())
-                .userId(entity.getUser().getId())
+                .user(user)
                 .bio(entity.getBio())
-                .photo(FileMapper.toDomain(entity.getPhoto()))
+                .photo(entity.getPhoto())
                 .favoriteSong(entity.getFavoriteSong())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
 
-    public static ProfileEntity toEntity(ProfileCreateDTO dto) {
-        ProfileEntity entity = new ProfileEntity();
+    public static Profile toEntity(ProfileCreateDTO dto) {
+        Profile entity = new Profile();
         entity.setBio(dto.bio());
         entity.setFavoriteSong(dto.favoriteSong());
-        entity.setCreatedAt(new Date());
+        entity.setCreatedAt(LocalDateTime.now());
 
         if (dto.userId() != null) {
             User user = new User();
@@ -62,7 +63,7 @@ public class ProfileMapper {
         return Profile.builder()
                 .id(dto.id())
                 .bio(dto.bio())
-                .photo(dto.idPhoto() != null ? FileEntity.builder().id(dto.idPhoto()).build() : null)
+                .photo(dto.idPhoto() != null ? MediaFile.builder().id(dto.idPhoto()).build() : null)
                 .favoriteSong(dto.favoriteSong())
                 .createdAt(dto.createAt())
                 .build();

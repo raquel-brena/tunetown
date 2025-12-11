@@ -1,14 +1,13 @@
 package com.imd.backend.app.service;
 
-import com.imd.backend.domain.entities.Profile;
-import com.imd.backend.domain.repository.FollowRepository;
-import com.imd.backend.infra.persistence.jpa.entity.Follow;
-import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
-import com.imd.backend.infra.persistence.jpa.mapper.ProfileMapper;
+import com.imd.backend.domain.entities.core.Follow;
+import com.imd.backend.domain.entities.core.Profile;
+import com.imd.backend.infra.persistence.jpa.repository.FollowRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,8 +19,8 @@ public class FollowService {
 
     public void follow(String idFollower, String idFollowed) {
 
-        ProfileEntity follower = this.profileService.findEntityById(idFollower);
-        ProfileEntity followed = this.profileService.findEntityById(idFollowed);
+        Profile follower = this.profileService.findEntityById(idFollower);
+        Profile followed = this.profileService.findEntityById(idFollowed);
 
         boolean alreadyFollowing = followRepository.existsByFollowerAndFollowed(follower, followed);
         if (alreadyFollowing) return;
@@ -29,46 +28,46 @@ public class FollowService {
         Follow follow = Follow.builder()
                 .follower(follower)
                 .followed(followed)
-                .createdAt(new Date())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         followRepository.save(follow);
     }
 
     public void unfollow(String idFollower, String idFollowed) {
-        ProfileEntity follower = this.profileService.findEntityById(idFollower);
-        ProfileEntity followed = this.profileService.findEntityById(idFollowed);
+        Profile follower = this.profileService.findEntityById(idFollower);
+        Profile followed = this.profileService.findEntityById(idFollowed);
 
         followRepository.deleteByFollowerAndFollowed(follower, followed);
     }
 
     public boolean isFriend(String idFollower, String idFollowed) {
-        ProfileEntity follower = this.profileService.findEntityById(idFollower);
-        ProfileEntity followed = this.profileService.findEntityById(idFollowed);
+        Profile follower = this.profileService.findEntityById(idFollower);
+        Profile followed = this.profileService.findEntityById(idFollowed);
 
         return followRepository.existsByFollowerAndFollowed(follower, followed) &&
                 followRepository.existsByFollowerAndFollowed(followed, follower);
     }
 
     public List<Profile> getFriends(String idProfile) {
-        ProfileEntity profile = profileService.findEntityById(idProfile);
+        Profile profile = profileService.findEntityById(idProfile);
         return followRepository.findByFollower(profile)
                 .stream()
-                .filter(f -> followRepository.existsByFollowerAndFollowed(f.getFollowed(), profile))
-                .map(f -> ProfileMapper.toDomain(f.getFollowed()))
+                .map(Follow::getFollowed)
+                .filter(followed -> followRepository.existsByFollowerAndFollowed(followed, profile))
                 .toList();
     }
 
-    public List<ProfileEntity> getFollowing(String idProfile) {
-        ProfileEntity profile = profileService.findEntityById(idProfile);
+    public List<Profile> getFollowing(String idProfile) {
+        Profile profile = profileService.findEntityById(idProfile);
         return followRepository.findByFollower(profile)
                 .stream()
                 .map(Follow::getFollowed)
                 .toList();
     }
 
-    public List<ProfileEntity> getFollowers(String idProfile) {
-        ProfileEntity profile = profileService.findEntityById(idProfile);
+    public List<Profile> getFollowers(String idProfile) {
+        Profile profile = profileService.findEntityById(idProfile);
         return followRepository.findByFollowed(profile)
                 .stream()
                 .map(Follow::getFollower)

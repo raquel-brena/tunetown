@@ -1,8 +1,9 @@
 package com.imd.backend.app.service;
 
-import com.imd.backend.infra.persistence.jpa.entity.FileEntity;
-import com.imd.backend.infra.persistence.jpa.entity.ProfileEntity;
+import com.imd.backend.domain.entities.core.MediaFile;
+import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.infra.persistence.jpa.repository.FileRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,28 +24,39 @@ public class FileService {
         this.s3Service = s3Service;
     }
 
-    public FileEntity create(MultipartFile file) throws IOException {
+    public MediaFile create(MultipartFile file) throws IOException {
         validateAvatar(file);
-        FileEntity photo = s3Service.uploadFile(file);
+        MediaFile photo = s3Service.uploadFile(file);
         return fileRepository.save(photo);
     }
 
-    public void delete(FileEntity fileEntity) {
+    public void delete(MediaFile fileEntity) {
         if (fileEntity != null) {
             s3Service.deleteFile(fileEntity.getUrl());
             fileRepository.delete(fileEntity);
         }
     }
 
-    public void applyPresignedUrl(ProfileEntity entity) {
+    public void applyPresignedUrl(Profile entity) {
         if (entity != null && entity.getPhoto() != null) {
             String avatarUrl = s3Service.generatePresignedUrl(
                     entity.getPhoto().getFileName(),
-                    Duration.ofHours(1)
+                    Duration.ofHours(36)
             );
             entity.getPhoto().setUrl(avatarUrl);
         }
     }
+
+    public String applyPresignedUrl(String filename) {
+        if (filename != null) {
+            return this.s3Service.generatePresignedUrl(
+                    filename,
+                    Duration.ofHours(36)
+            );
+        }
+        return "";
+    }
+
     private void validateAvatar(MultipartFile file) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("O arquivo do avatar não pode estar vazio.");

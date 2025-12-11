@@ -8,8 +8,8 @@ import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spot
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifySearchItem.SpotifySearchItemStrategy;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifySearchItem.SpotifySearchShow;
 import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spotifySearchItem.SpotifySearchTrack;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
 import com.imd.backend.domain.exception.BusinessException;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
 
 import lombok.RequiredArgsConstructor;
 

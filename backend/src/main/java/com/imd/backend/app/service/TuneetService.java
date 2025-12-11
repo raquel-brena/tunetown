@@ -1,91 +1,86 @@
 package com.imd.backend.app.service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import com.imd.backend.app.service.core.BasePostService;
+import com.imd.backend.domain.entities.core.User;
+import com.imd.backend.domain.entities.tunetown.Tuneet;
+import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
+import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
-import com.imd.backend.domain.entities.Tuneet;
-import com.imd.backend.domain.entities.TuneetResume;
-import com.imd.backend.domain.entities.TunableItem.TunableItem;
-import com.imd.backend.domain.entities.TunableItem.TunableItemType;
-import com.imd.backend.domain.exception.BusinessException;
-import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.domain.repository.TuneetRepository;
-
-import jakarta.transaction.Transactional;
+import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueObjects.core.BaseResume;
 
 @Service
-public class TuneetService {
-  private final TunablePlataformGateway plataformGateway;
-  private final TuneetRepository tuneetRepository;
+public class TuneetService extends BasePostService<
+        Tuneet, 
+        TunableItem,
+        CreateTuneetDTO,
+        UpdateTuneetDTO
+> {
+        private final FileService fileService;
 
-  public TuneetService(
-    @Qualifier("SpotifyGateway") TunablePlataformGateway plataformGateway,
-    @Qualifier("TuneetJpaRepository") TuneetRepository tuneetRepository
-  ) {
-    this.plataformGateway = plataformGateway;
-    this.tuneetRepository = tuneetRepository;
-  }
+        public TuneetService(
+                @Qualifier("TuneetJpaRepository") TuneetRepository tuneetRepository,
+                UserService userService,
+                @Qualifier("SpotifyGateway") TunablePlataformGateway plataformGateway,
+                FileService fileService
+        ) {
+                super(tuneetRepository, userService, plataformGateway);
+                this.fileService = fileService;
+        } 
 
-  public List<TunableItem> searchTunableItems(String query, TunableItemType itemType) {
-    return plataformGateway.searchItem(query, itemType);
-  } 
+        @Override
+        protected void postProcessResume(BaseResume<TunableItem> resume) {
+                if (resume.getAuthorPhotoFileName() != null && !resume.getAuthorPhotoFileName().isBlank()) {
+                        String presignedUrl = fileService.applyPresignedUrl(resume.getAuthorPhotoFileName());
+                        resume.setAuthorPhotoUrl(presignedUrl);
+                }
+        }
+        
+        @Override
+        protected Tuneet createEntityInstance(User author, CreateTuneetDTO dto, TunableItem item) {
+                // Usa o builder aproveitando o DTO tipado
+                return Tuneet.builder()
+                        .id(UUID.randomUUID().toString())
+                        .author(author)
+                        .textContent(dto.getTextContent())
+                        .createdAt(LocalDateTime.now())
+                        
+                        // Mapeia Item -> Colunas
+                        .tunableItemId(item.getId())
+                        .tunableItemPlataform(item.getPlatformName())
+                        .tunableItemTitle(item.getTitle())
+                        .tunableItemArtist(item.getArtist())
+                        .tunableItemType(item.getItemType().toString())
+                        .tunableItemArtworkUrl(item.getArtworkUrl() != null ? item.getArtworkUrl().toString() : null)
+                        
+                        // Se o CreateBookReviewDTO tivesse campos extras (ex: mood), setaria aqui:
+                        // .mood(dto.getMood()) 
+                        .build();
+        }        
 
-  @Transactional(rollbackOn = Exception.class)
-  public Tuneet createTuneet(
-    String tunableItemId,
-    TunableItemType tunableItemType,
-    String textContent    
-  ) {
-    final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
-    final Tuneet tuneetToSave = new Tuneet(textContent, tunableItem);
-    
-    this.tuneetRepository.save(tuneetToSave);
-    return tuneetToSave;
-  }
+        @Override
+        protected void updateEntityInstance(Tuneet entity, UpdateTuneetDTO dto, TunableItem newItem) {
+                // Atualiza texto
+                if (dto.getTextContent() != null && !dto.getTextContent().isBlank()) {
+                        entity.setTextContent(dto.getTextContent());
+                }
 
-  @Transactional(rollbackOn = Exception.class)
-  public TuneetResume deleteById(UUID tuneetId) {
-    final Optional<TuneetResume> findedTuneet = this.tuneetRepository.findById(tuneetId);
+                // Atualiza item se foi passado
+                if (newItem != null) {
+                        entity.updateTunableItem(newItem);
+                }
+        }        
 
-    if(findedTuneet.isEmpty())
-      throw new NotFoundException("Não foi encontrado nenhum tuneet com esse ID");
-    
-    this.tuneetRepository.deleteById(tuneetId);
-    return findedTuneet.get();
-  }
-
-  @Transactional(rollbackOn = Exception.class)
-  public TuneetResume updateTuneet(
-    UUID tuneetId,
-    String textContent,
-    String tunableItemId,
-    TunableItemType tunableItemType
-  ) {
-    final TuneetResume tuneet = this.tuneetRepository.findById(tuneetId)
-      .orElseThrow(() -> new NotFoundException("Não foi encontrado nenhum tuneet com o ID fornecido"));
-    
-    final boolean hasTextContent = textContent != null && !textContent.isBlank();
-    final boolean hasItemId = tunableItemId != null && !tunableItemId.isEmpty();
-    final boolean hasItemType = tunableItemType != null;
-
-    // Se tiver o tipo e o ID do item, mas não ambos juntos
-    if(hasItemId ^ hasItemType) 
-      throw new BusinessException("Para atualizar o item, é necessário passar o ID e o tipo dele");
-
-    if(hasItemId && hasItemType) {
-      final TunableItem tunableItem = this.plataformGateway.getItemById(tunableItemId, tunableItemType);
-      tuneet.setTunableItem(tunableItem);
-    }
-
-    if(hasTextContent)
-      tuneet.setTextContent(textContent);
-    
-    this.tuneetRepository.update(tuneet);
-    return tuneet;
-  }
+        @Override
+        protected void validateSpecificEntity(Tuneet entity) {
+                entity.validateTunableItem();
+        }        
 }
