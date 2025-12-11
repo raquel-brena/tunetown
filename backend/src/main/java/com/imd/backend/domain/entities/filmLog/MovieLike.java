@@ -3,12 +3,8 @@ package com.imd.backend.domain.entities.filmLog;
 import com.imd.backend.domain.entities.core.BaseLike;
 import com.imd.backend.domain.entities.core.BasePost;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.imd.backend.domain.valueObjects.movieItem.MovieReaction;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +27,10 @@ public class MovieLike extends BaseLike {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "movie_review_id", nullable = false)
   private MovieReview post;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "reaction", nullable = false)
+  private MovieReaction reaction;
 
   @Override
   public BasePost getPost() {

@@ -4,7 +4,6 @@ import java.net.URI;
 
 import com.imd.backend.domain.valueObjects.core.PostItem;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,24 +14,41 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public final class MovieItem extends PostItem {
-
   private String director;
-  private String releaseYear; // String para evitar problemas de formatação
-  // Poderia ter: private String genre;
+  private String releaseYear;
+  private FilmItemType itemType;
 
-  // Construtor JPA-Compliant (String-based)
   public MovieItem(
       String id,
       String platformName,
       String title,
       String artworkUrlStr,
       String director,
-      String releaseYear) {
+      String releaseYear,
+      FilmItemType itemType
+  ) {
+    // Chama o construtor do Pai (PostItem) convertendo a URL
+    super(id, title, platformName, artworkUrlStr != null ? URI.create(artworkUrlStr) : null);
+
+    this.director = director;
+    this.releaseYear = releaseYear;
+    this.itemType = itemType;
+  }
+
+  public MovieItem(
+      String id,
+      String platformName,
+      String title,
+      String artworkUrlStr,
+      String director,
+      String releaseYear,
+      String itemTypeStr // <--- NOVO ARGUMENTO NO FINAL
+  ) {
     super(id, title, platformName, artworkUrlStr != null ? URI.create(artworkUrlStr) : null);
     this.director = director;
     this.releaseYear = releaseYear;
+    this.itemType = itemTypeStr != null ? FilmItemType.fromString(itemTypeStr) : FilmItemType.MOVIE;
   }
 }

@@ -1,8 +1,14 @@
 package com.imd.backend.domain.entities.bookYard;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.imd.backend.domain.entities.core.BaseLike;
+import com.imd.backend.domain.entities.core.BasePost;
+import com.imd.backend.domain.valueObjects.bookItem.ImpactLevel;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "book_likes", uniqueConstraints = {
@@ -19,6 +25,10 @@ public class BookLike extends BaseLike {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "book_review_id", nullable = false)
   private BookReview post;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "impact_level", nullable = false)
+  private ImpactLevel impactLevel;
 
   @Override
   public BasePost getPost() {

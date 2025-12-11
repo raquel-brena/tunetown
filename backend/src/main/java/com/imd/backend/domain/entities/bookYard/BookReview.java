@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.domain.entities.core.BasePost;
-import com.imd.backend.domain.entities.tunetown.Comment;
-import com.imd.backend.domain.entities.tunetown.Like;
 import com.imd.backend.domain.valueObjects.bookItem.BookItem;
 
 import jakarta.persistence.CascadeType;
@@ -57,23 +55,27 @@ public class BookReview extends BasePost {
   @Column(name = "book_page_count")
   private Integer bookPageCount;
 
+  // --- DADOS ESPECÍFICOS ---
+
+  @Column(name = "reading_status", nullable = false)
+  private String readingStatus; // "READING", "COMPLETED", "WANT_TO_READ"  
+
   // --- RELACIONAMENTOS ---
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
-  private List<Comment> comments = new ArrayList<>();
+  private List<BookComment> comments = new ArrayList<>();
 
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
-  private List<Like> likes = new ArrayList<>();
+  private List<BookLike> likes = new ArrayList<>();
 
-  // --- VALIDAÇÃO ---
   public void validateBookReview() {
     if (this.bookId == null || this.bookId.isBlank())
       throw new IllegalArgumentException("ID do livro é obrigatório");
-    if (this.bookAuthor == null || this.bookAuthor.isBlank())
-      throw new IllegalArgumentException("Autor do livro é obrigatório");
+    if (this.readingStatus == null || this.readingStatus.isBlank())
+      throw new IllegalArgumentException("Status de leitura é obrigatório");    
   }
 
   // --- HELPERS ---

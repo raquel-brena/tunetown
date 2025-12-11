@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.domain.entities.core.BasePost;
+import com.imd.backend.domain.valueObjects.movieItem.FilmItemType;
 import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
 
 import jakarta.persistence.CascadeType;
@@ -52,6 +53,9 @@ public class MovieReview extends BasePost {
   @Column(name = "movie_release_year")
   private String movieReleaseYear;
 
+  @Column(name = "movie_type", nullable = false)
+  private String movieType;
+
   // --- DADO ESPECÍFICO DO POST (Não vem da API externa) ---
   @Column(name = "user_rating", nullable = false)
   private Integer rating; // 1 a 5 estrelas
@@ -73,6 +77,9 @@ public class MovieReview extends BasePost {
 
     if (this.rating == null || this.rating < 1 || this.rating > 5)
       throw new IllegalArgumentException("A nota deve ser entre 1 e 5 estrelas.");
+
+    if (this.movieType == null)
+      throw new IllegalArgumentException("Tipo (Filme/Série) é obrigatório");
   }
 
   // --- HELPERS ---
@@ -84,6 +91,7 @@ public class MovieReview extends BasePost {
         .director(this.movieDirector)
         .releaseYear(this.movieReleaseYear)
         .artworkUrl(this.movieArtworkUrl != null ? URI.create(this.movieArtworkUrl) : null)
+        .itemType(FilmItemType.fromString(this.movieType))
         .build();
   }
 
@@ -93,6 +101,7 @@ public class MovieReview extends BasePost {
     this.moviePlatform = item.getPlatformName();
     this.movieDirector = item.getDirector();
     this.movieReleaseYear = item.getReleaseYear();
+    this.movieType = item.getItemType().toString();
     this.movieArtworkUrl = item.getArtworkUrl() != null ? item.getArtworkUrl().toString() : null;
   }
 

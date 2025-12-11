@@ -1,4 +1,4 @@
-package com.imd.backend.app.dto;
+package com.imd.backend.app.dto.tunetown;
 
 import com.imd.backend.app.dto.core.UpdateBasePostDTO;
 

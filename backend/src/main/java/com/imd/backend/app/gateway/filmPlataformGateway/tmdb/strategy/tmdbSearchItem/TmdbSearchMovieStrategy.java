@@ -1,7 +1,8 @@
-package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.TmdbSearchItem;
+package com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbSearchItem;
 
 import java.util.List;
 
+import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.strategy.tmdbSearchItem.TmdbSearchStrategy;
 import org.springframework.stereotype.Component;
 
 import com.imd.backend.app.gateway.filmPlataformGateway.tmdb.TmdbApiClient;
