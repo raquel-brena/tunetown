@@ -27,7 +27,7 @@ VALUES
 -- ===================================================================
 -- 3. Inserir Tuneets (TuneetEntity)
 -- ===================================================================
-INSERT INTO tuneets (id, author_id, content_text, tunable_item_id, tunable_item_plataform, tunable_item_title, tunable_item_artist, tunable_item_type, tunable_item_artwork_url, created_at)
+INSERT INTO tuneets (id, author_id, text_content, tunable_item_id, tunable_item_plataform, tunable_item_title, tunable_item_artist, tunable_item_type, tunable_item_artwork_url, created_at)
 VALUES 
 -- 4 tuneets originais (com IDs corrigidos)
 ('c95f7ec5-e0b3-4da4-b492-5da0a24ba23c', '232f5486-d623-4c54-8de5-665ba9e679d9', 'Amo essa música!', '77nBlfiqjoo0bKQT0fkGr6', 'spotify', 'Eu Não Sou Boa Influência pra Você', 'Seu Pereira e Coletivo 401', 'music', 'https://i.scdn.co/image/ab67616d0000b2730504fd92867c6ded742de228', NOW() - INTERVAL '5 day'),

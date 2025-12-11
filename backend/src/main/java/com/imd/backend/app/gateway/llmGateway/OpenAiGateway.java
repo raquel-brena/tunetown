@@ -6,17 +6,17 @@ import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.ResponseFormat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OpenAiGateway {
 
     private final OpenAiChatModel chatModel;
+    private final BaseLLMProvider llmProvider;
 
-    @Autowired
-    public OpenAiGateway(OpenAiChatModel chatModel) {
+    public OpenAiGateway(OpenAiChatModel chatModel, BaseLLMProvider llmProvider) {
         this.chatModel = chatModel;
+        this.llmProvider = llmProvider;
     }
 
     public <T> T structuredCall(String prompt, Class<T> structuredResponse) {
@@ -24,7 +24,7 @@ public class OpenAiGateway {
         var schema = converter.getJsonSchema();
 
         var response = chatModel.call(new Prompt(prompt, OpenAiChatOptions.builder()
-                .model("gpt-4.1-mini")
+                .model(llmProvider.getModelName())
                 .responseFormat(new ResponseFormat(ResponseFormat.Type.JSON_SCHEMA, schema))
                 .build()));
 

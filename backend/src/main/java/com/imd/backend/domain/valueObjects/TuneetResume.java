@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class TuneetResume {
   private UUID id;
   private String contentText;
@@ -52,86 +56,6 @@ public class TuneetResume {
     this.fileNamePhoto = fileNamePhoto;
     this.urlPhoto = urlPhoto;
   }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public String getContentText() {
-    return contentText;
-  }
-
-  public String getTunableItemArtist() {
-    return tunableItemArtist;
-  }
-
-  public String getTunableItemTitle() {
-    return tunableItemTitle;
-  }
-
-  public String getTunableItemArtworkUrl() {
-    return tunableItemArtworkUrl;
-  }
-
-  public String getTunableItemId() {
-    return tunableItemId;
-  }
-
-  public String getTunableItemPlataform() {
-    return tunableItemPlataform;
-  }
-
-  public TunableItemType getTunableItemType() {
-    return tunableItemType;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public String getProfileId() {
-    return profileId;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public UUID getAuthorId() {
-    return authorId;
-  }
-
-  public long getTotalComments() {
-    return totalComments;
-  }
-
-  public long getTotalLikes() {
-    return totalLikes;
-  }
-
-  public String getBio() {
-    return bio;
-  }
-
-  public long getTotalFollowers() {
-    return totalFollowers;
-  }
-
-  public long getTotalFollowing() {
-    return totalFollowing;
-  }
-
-  public String getUrlPhoto() {
-    return urlPhoto;
-  }
-
-  public String getFileNamePhoto() {
-    return fileNamePhoto;
-  }  
 
   // Setters
   public void setUrlPhoto(String url) {

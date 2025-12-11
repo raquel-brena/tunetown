@@ -23,15 +23,17 @@ public class SpotifyGateway implements TunablePlataformGateway {
   private final SpotifySearchItemStrategyFactory searchItemStrategyFactory;
 
   @Override
-  public List<TunableItem> searchItem(String query, TunableItemType itemType) {
-    final SpotifySearchItemStrategy searchItemStrategy = this.searchItemStrategyFactory.create(itemType);
+  public List<TunableItem> searchItem(String query, String itemType) {
+    TunableItemType type = TunableItemType.fromString(itemType);
+    final SpotifySearchItemStrategy searchItemStrategy = this.searchItemStrategyFactory.create(type);
 
     return searchItemStrategy.execute(query);
   }
 
   @Override
-  public TunableItem getItemById(String id, TunableItemType itemType){
-    final SpotifyItemByIdStrategy findByIdStrategy = this.itemByIdStrategyFactory.create(itemType);
+  public TunableItem getItemById(String id, String itemType) {
+    TunableItemType type = TunableItemType.fromString(itemType);
+    final SpotifyItemByIdStrategy findByIdStrategy = this.itemByIdStrategyFactory.create(type);
 
     return findByIdStrategy.execute(id);
   }

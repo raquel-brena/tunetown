@@ -3,5 +3,5 @@ package com.imd.backend.app.gateway.tunablePlataformGateway.spotify.strategy.spo
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 
 public interface SpotifyItemByIdStrategy {
-  public TunableItem execute(String id);   
+  public TunableItem execute(String id);
 }

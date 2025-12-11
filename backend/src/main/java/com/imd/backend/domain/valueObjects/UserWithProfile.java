@@ -1,6 +1,6 @@
 package com.imd.backend.domain.valueObjects;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UserWithProfile {
@@ -10,12 +10,12 @@ public class UserWithProfile {
   private String profileId;
   private String bio;
   private String favoriteSong;
-  private Date createdAt;
+  private LocalDateTime createdAt;
   private String photoUrl;
   private String photoFileName;
 
   public UserWithProfile(UUID userId, String userEmail, String username, String profileId, String bio,
-      String favoriteSong, Date createdAt, String photoFileName) {
+      String favoriteSong, LocalDateTime createdAt, String photoFileName) {
     this.userId = userId;
     this.userEmail = userEmail;
     this.username = username;
@@ -51,7 +51,7 @@ public class UserWithProfile {
     return favoriteSong;
   }
 
-  public Date getCreatedAt() {
+  public LocalDateTime getCreatedAt() {
     return createdAt;
   }
 

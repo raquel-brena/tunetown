@@ -1,53 +1,58 @@
 package com.imd.backend.domain.valueObjects.TunableItem;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
 import java.net.URI;
 
-public final class TunableItem {
-  private final String id;
-  private final String plataformId;
-  private final String title;
-  private final String artist;
-  private final URI artworkUrl;
-  private final TunableItemType itemType; 
+import com.imd.backend.domain.valueObjects.core.PostItem;
+
+@Getter
+@Setter
+@SuperBuilder // ESSENCIAL: Substitui @Builder para funcionar com herança
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true) // Importante: compara também os campos do Pai (ID, Title, etc)
+public final class TunableItem extends PostItem {
+  private String artist;
+  private TunableItemType itemType;
 
   public TunableItem(
-    String id,
-    String plataformId,
-    String title,
-    String artist,
-    URI artworkUrl,
-    TunableItemType itemType
+      String id,
+      String plataformName, // Mapeia para o 'platformName' do pai
+      String title,
+      String artist,
+      URI artworkUrl,
+      TunableItemType itemType
   ) {
-    this.id = id;
-    this.plataformId = plataformId;
-    this.title = title;
+      // Chama o construtor do pai (PostItem)
+      super(id, title, plataformName, artworkUrl);
+      
+      // Inicializa os campos específicos
+      this.artist = artist;
+      this.itemType = itemType;
+  }    
+
+  // --- NOVO CONSTRUTOR "JPA COMPLIANT" ---
+  // Este construtor aceita Strings para URL e Enum e faz a conversão.
+  // É usado exclusivamente pela query JPQL.
+  public TunableItem(
+      String id,
+      String platformName,
+      String title,
+      String artist,
+      String artworkUrlStr, // Recebe String do banco
+      String itemTypeStr // Recebe String do banco
+  ) {
+    super(
+        id,
+        title,
+        platformName,
+        artworkUrlStr != null ? URI.create(artworkUrlStr) : null // Converte aqui
+    );
     this.artist = artist;
-    this.artworkUrl = artworkUrl;
-    this.itemType = itemType;
-  }
-
-  // Getters
-  public String getPlataformId() {
-    return this.plataformId;
-  }
-
-  public String getItemId() {
-    return this.id;
-  }
-
-  public String getTitle() {
-    return this.title;
-  }
-
-  public String getArtist() {
-    return this.artist;
-  }
-
-  public URI getArtworkUrl() {
-    return this.artworkUrl;
-  }
-
-  public TunableItemType getItemType() {
-    return this.itemType;
-  }
+    this.itemType = TunableItemType.fromString(itemTypeStr); // Converte aqui
+  }  
 }

@@ -1,0 +1,8 @@
+# Ignore BookYard instance (until it stabilizes)
+src/main/java/com/imd/backend/domain/entities/bookYard/*
+# Ignore Film platform gateway while unstable
+src/main/java/com/imd/backend/app/gateway/filmPlataformGateway/*
+# Ignore movie value objects while unstable
+src/main/java/com/imd/backend/domain/valueObjects/movieItem/*
+# Ignore FilmLog instance
+src/main/java/com/imd/backend/domain/entities/filmLog/*

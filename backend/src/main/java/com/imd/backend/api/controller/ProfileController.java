@@ -5,7 +5,7 @@ import com.imd.backend.api.dto.profile.ProfileCreateDTO;
 import com.imd.backend.api.dto.profile.ProfileResponseDTO;
 import com.imd.backend.api.dto.profile.ProfileUpdateDTO;
 import com.imd.backend.app.service.ProfileService;
-import com.imd.backend.domain.entities.Profile;
+import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.infra.persistence.jpa.mapper.ProfileMapper;
 import jakarta.validation.Valid;

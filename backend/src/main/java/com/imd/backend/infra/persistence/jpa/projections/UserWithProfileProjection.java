@@ -1,6 +1,6 @@
 package com.imd.backend.infra.persistence.jpa.projections;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public interface UserWithProfileProjection {
   String getUserId();
@@ -15,7 +15,7 @@ public interface UserWithProfileProjection {
 
   String getFavoriteSong();
 
-  Date getCreatedAt();
+  LocalDateTime getCreatedAt();
 
   String getFileName();
 }
