@@ -2,7 +2,7 @@ package com.imd.backend.infra.configuration;
 
 import org.springframework.context.annotation.Bean;
 
-import com.imd.backend.app.gateway.tunablePlataformGateway.spotify.SpotifyAuthComponent;
+import com.imd.backend.app.gateway.tunableplataformgateway.spotify.SpotifyAuthComponent;
 
 import feign.RequestInterceptor;
 

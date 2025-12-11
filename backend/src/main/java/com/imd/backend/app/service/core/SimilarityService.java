@@ -3,7 +3,7 @@ package com.imd.backend.app.service.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.app.gateway.llmGateway.OpenAiGateway;
 import com.imd.backend.domain.entities.core.BasePost;
-import com.imd.backend.domain.valueObjects.core.PostItem;
+import com.imd.backend.domain.valueobjects.core.PostItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

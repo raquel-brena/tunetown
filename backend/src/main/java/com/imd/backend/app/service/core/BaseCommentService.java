@@ -1,12 +1,11 @@
 package com.imd.backend.app.service.core;
 
 import com.imd.backend.api.dto.comment.CommentDTO;
-import com.imd.backend.app.service.core.BaseBotResponder;
 import com.imd.backend.domain.entities.core.BaseComment;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.domain.valueObjects.core.PostItem;
+import com.imd.backend.domain.valueobjects.core.PostItem;
 import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
 import com.imd.backend.infra.persistence.jpa.repository.core.BaseCommentRepository;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;

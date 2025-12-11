@@ -8,10 +8,10 @@ import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.domain.valueObjects.core.BaseResume;
-import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
-import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
-import com.imd.backend.domain.valueObjects.core.PostItem;
+import com.imd.backend.domain.valueobjects.core.BaseResume;
+import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
+import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
+import com.imd.backend.domain.valueobjects.core.PostItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
 import org.springframework.data.domain.*;

@@ -5,7 +5,8 @@ import com.imd.backend.api.dto.comment.CommentDTO;
 import com.imd.backend.app.service.CommentService;
 import com.imd.backend.domain.entities.tunetown.Comment;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController

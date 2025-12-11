@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.imd.backend.domain.valueObjects.TimeLineItem;
-import com.imd.backend.domain.valueObjects.TuneetResume;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueobjects.TimeLineItem;
+import com.imd.backend.domain.valueobjects.TuneetResume;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
 import com.imd.backend.infra.persistence.jpa.projections.TimelineItemProjection;
 import com.imd.backend.infra.persistence.jpa.projections.TuneetResumeProjection;
 

@@ -3,9 +3,9 @@ package com.imd.backend.api.controller;
 import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.app.service.UserService;
 import com.imd.backend.domain.entities.core.User;
-import com.imd.backend.domain.valueObjects.PageResult;
-import com.imd.backend.domain.valueObjects.Pagination;
-import com.imd.backend.domain.valueObjects.UserWithProfile;
+import com.imd.backend.domain.valueobjects.PageResult;
+import com.imd.backend.domain.valueobjects.Pagination;
+import com.imd.backend.domain.valueobjects.UserWithProfile;
 import com.imd.backend.infra.persistence.jpa.mapper.UserMapper;
 
 import org.springframework.http.ResponseEntity;

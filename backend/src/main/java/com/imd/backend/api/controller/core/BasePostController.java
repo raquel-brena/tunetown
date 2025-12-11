@@ -23,10 +23,10 @@ import com.imd.backend.app.dto.core.CreateBasePostDTO;
 import com.imd.backend.app.dto.core.UpdateBasePostDTO;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.BasePost;
-import com.imd.backend.domain.valueObjects.core.BaseResume;
-import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
-import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
-import com.imd.backend.domain.valueObjects.core.PostItem;
+import com.imd.backend.domain.valueobjects.core.BaseResume;
+import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
+import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
+import com.imd.backend.domain.valueobjects.core.PostItem;
 import com.imd.backend.infra.security.CoreUserDetails;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;

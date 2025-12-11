@@ -4,7 +4,7 @@ import com.imd.backend.api.dto.tunescore.TuneScoreResponse;
 import com.imd.backend.app.gateway.llmGateway.OpenAiGateway;
 import com.imd.backend.app.service.core.SimilarityService;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
 import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

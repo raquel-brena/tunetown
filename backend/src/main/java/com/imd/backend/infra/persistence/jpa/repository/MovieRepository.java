@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.imd.backend.domain.entities.filmLog.MovieReview;
-import com.imd.backend.domain.valueObjects.core.BaseResume;
-import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
-import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
-import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
+import com.imd.backend.domain.entities.filmlog.MovieReview;
+import com.imd.backend.domain.valueobjects.core.BaseResume;
+import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
+import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
+import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
 @Repository("MovieJpaRepository")
@@ -32,8 +32,8 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
 
   @Override
   @Query("""
-    SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTrendingItem(
-        NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
+    SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTrendingItem(
+        NEW com.imd.backend.domain.valueobjects.movieitem.MovieItem(
             m.movieId,
             m.moviePlatform,
             m.movieTitle,
@@ -62,7 +62,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
 
   @Override
   @Query("""
-    SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+    SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
         m.id,
         m.textContent,
         m.createdAt,
@@ -75,7 +75,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
         SIZE(m.likes),
         SIZE(p.followers),
         SIZE(p.following),
-        NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
+        NEW com.imd.backend.domain.valueobjects.movieitem.MovieItem(
             m.movieId,
             m.moviePlatform,
             m.movieTitle,
@@ -94,7 +94,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
 
   @Override
   @Query("""
-    SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+    SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
       m.id,
       m.textContent,
       m.createdAt,
@@ -107,7 +107,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
       SIZE(m.likes),
       SIZE(p.followers),
       SIZE(p.following),
-      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
+      NEW com.imd.backend.domain.valueobjects.movieitem.MovieItem(
           m.movieId,
           m.moviePlatform,
           m.movieTitle,
@@ -127,7 +127,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
 
   @Override
   @Query("""
-  SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+  SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
       m.id,
       m.textContent,
       m.createdAt,
@@ -140,7 +140,7 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
       SIZE(m.likes),
       SIZE(p.followers),
       SIZE(p.following),
-      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
+      NEW com.imd.backend.domain.valueobjects.movieitem.MovieItem(
         m.movieId,
         m.moviePlatform,
         m.movieTitle,
@@ -160,11 +160,11 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
 
   @Override
   @Query("""
-    SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+    SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTimelineItem(
       m.id, m.textContent, m.createdAt,
       SIZE(m.comments), SIZE(m.likes),
       u.id, u.username, f.url,
-      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
+      NEW com.imd.backend.domain.valueobjects.movieitem.MovieItem(
         m.movieId,
         m.moviePlatform,
         m.movieTitle,
@@ -183,11 +183,11 @@ public interface MovieRepository extends BasePostRepository<MovieReview, MovieIt
 
   @Override
   @Query("""
-    SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+    SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTimelineItem(
       m.id, m.textContent, m.createdAt,
       SIZE(m.comments), SIZE(m.likes),
       u.id, u.username, f.url,
-      NEW com.imd.backend.domain.valueObjects.movieItem.MovieItem(
+      NEW com.imd.backend.domain.valueobjects.movieitem.MovieItem(
           m.movieId,
           m.moviePlatform,
           m.movieTitle,

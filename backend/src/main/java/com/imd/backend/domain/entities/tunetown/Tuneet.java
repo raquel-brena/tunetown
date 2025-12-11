@@ -1,8 +1,8 @@
 package com.imd.backend.domain.entities.tunetown;
 
 import com.imd.backend.domain.entities.core.BasePost;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItemType;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

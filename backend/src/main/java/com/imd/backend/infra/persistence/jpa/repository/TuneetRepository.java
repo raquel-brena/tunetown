@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.*;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
-import com.imd.backend.domain.valueObjects.core.BaseResume;
-import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
-import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
+import com.imd.backend.domain.valueobjects.*;
+import com.imd.backend.domain.valueobjects.core.BaseResume;
+import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
+import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +22,7 @@ import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem> {
   @Override
   @Query("""
-          SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+          SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
               t.id,
               t.textContent,
               t.createdAt,
@@ -35,7 +35,7 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
               SIZE(t.likes),
               SIZE(p.followers),
               SIZE(p.following),
-              NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+              NEW com.imd.backend.domain.valueobjects.tunableitem.TunableItem(
                   t.tunableItemId,
                   t.tunableItemPlataform,
                   t.tunableItemTitle,
@@ -53,7 +53,7 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
     Page<BaseResume<TunableItem>> findResumesByAuthorId(@Param("authorId") String authorId, Pageable pageable);
 
       @Query("""
-          SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+          SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
               t.id,
               t.textContent,
               t.createdAt,
@@ -66,7 +66,7 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
               SIZE(t.likes),
               SIZE(p.followers),
               SIZE(p.following),
-              NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+              NEW com.imd.backend.domain.valueobjects.tunableitem.TunableItem(
                   t.tunableItemId,
                   t.tunableItemPlataform,
                   t.tunableItemTitle,
@@ -85,7 +85,7 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
 
     @Override
     @Query("""
-      SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+      SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
           t.id,
           t.textContent,
           t.createdAt,
@@ -98,7 +98,7 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
           SIZE(t.likes),
           SIZE(p.followers),
           SIZE(p.following),
-          NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+          NEW com.imd.backend.domain.valueobjects.tunableitem.TunableItem(
               t.tunableItemId,
               t.tunableItemPlataform,
               t.tunableItemTitle,
@@ -120,8 +120,8 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
 
     @Override
     @Query("""
-        SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTrendingItem(
-            NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+        SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTrendingItem(
+            NEW com.imd.backend.domain.valueobjects.tunableitem.TunableItem(
                 t.tunableItemId,
                 t.tunableItemPlataform,
                 t.tunableItemTitle,
@@ -150,11 +150,11 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
     Page<Tuneet> findByAuthorId(String authorId, Pageable pageable);
 
     @Query("""
-      SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+      SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTimelineItem(
         t.id, t.textContent, t.createdAt,
         SIZE(t.comments), SIZE(t.likes),
         u.id, u.username, f.url, 
-        NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+        NEW com.imd.backend.domain.valueobjects.tunableitem.TunableItem(
           t.tunableItemId, t.tunableItemPlataform, t.tunableItemTitle,
           t.tunableItemArtist, t.tunableItemArtworkUrl, t.tunableItemType
         )
@@ -167,11 +167,11 @@ public interface TuneetRepository extends BasePostRepository<Tuneet, TunableItem
     Page<BaseTimelineItem<TunableItem>> findGlobalTimelineItems(Pageable pageable);
 
     @Query("""
-      SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+      SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTimelineItem(
         t.id, t.textContent, t.createdAt,
         SIZE(t.comments), SIZE(t.likes),
         u.id, u.username, f.url,
-        NEW com.imd.backend.domain.valueObjects.TunableItem.TunableItem(
+        NEW com.imd.backend.domain.valueobjects.tunableitem.TunableItem(
           t.tunableItemId, t.tunableItemPlataform, t.tunableItemTitle,
           t.tunableItemArtist, t.tunableItemArtworkUrl, t.tunableItemType
         )

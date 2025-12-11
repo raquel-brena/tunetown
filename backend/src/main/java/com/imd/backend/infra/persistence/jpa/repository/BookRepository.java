@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.imd.backend.domain.entities.bookYard.BookReview;
-import com.imd.backend.domain.valueObjects.bookItem.BookItem;
-import com.imd.backend.domain.valueObjects.core.BaseResume;
-import com.imd.backend.domain.valueObjects.core.BaseTimelineItem;
-import com.imd.backend.domain.valueObjects.core.BaseTrendingItem;
+import com.imd.backend.domain.entities.bookyard.BookReview;
+import com.imd.backend.domain.valueobjects.bookitem.BookItem;
+import com.imd.backend.domain.valueobjects.core.BaseResume;
+import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
+import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
 
 @Repository("BookJpaRepository")
@@ -32,8 +32,8 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
 
   @Override
   @Query("""
-          SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTrendingItem(
-              NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
+          SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTrendingItem(
+              NEW com.imd.backend.domain.valueobjects.bookitem.BookItem(
                   b.bookId,
                   b.bookPlatform,
                   b.bookTitle,
@@ -59,7 +59,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
 
   @Override
   @Query("""
-          SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+          SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
               b.id,
               b.textContent,
               b.createdAt,
@@ -72,7 +72,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
               SIZE(b.likes),
               SIZE(p.followers),
               SIZE(p.following),
-              NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
+              NEW com.imd.backend.domain.valueobjects.bookitem.BookItem(
                   b.bookId,
                   b.bookPlatform,
                   b.bookTitle,
@@ -91,7 +91,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
 
   @Override
   @Query("""
-    SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+    SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
         b.id,
         b.textContent,
         b.createdAt,
@@ -104,7 +104,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
         SIZE(b.likes),
         SIZE(p.followers),
         SIZE(p.following),
-        NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
+        NEW com.imd.backend.domain.valueobjects.bookitem.BookItem(
             b.bookId,
             b.bookPlatform,
             b.bookTitle,
@@ -124,7 +124,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
 
   @Override
   @Query("""
-    SELECT NEW com.imd.backend.domain.valueObjects.core.BaseResume(
+    SELECT NEW com.imd.backend.domain.valueobjects.core.BaseResume(
         b.id,
         b.textContent,
         b.createdAt,
@@ -137,7 +137,7 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
         SIZE(b.likes),
         SIZE(p.followers),
         SIZE(p.following),
-        NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
+        NEW com.imd.backend.domain.valueobjects.bookitem.BookItem(
             b.bookId,
             b.bookPlatform,
             b.bookTitle,
@@ -161,11 +161,11 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
 
   @Override
   @Query("""
-        SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+        SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTimelineItem(
           b.id, b.textContent, b.createdAt,
           SIZE(b.comments), SIZE(b.likes),
           u.id, u.username, f.url,
-          NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
+          NEW com.imd.backend.domain.valueobjects.bookitem.BookItem(
               b.bookId,
               b.bookPlatform,
               b.bookTitle,
@@ -184,11 +184,11 @@ public interface BookRepository extends BasePostRepository<BookReview, BookItem>
 
   @Override
   @Query("""
-        SELECT NEW com.imd.backend.domain.valueObjects.core.BaseTimelineItem(
+        SELECT NEW com.imd.backend.domain.valueobjects.core.BaseTimelineItem(
           b.id, b.textContent, b.createdAt,
           SIZE(b.comments), SIZE(b.likes),
           u.id, u.username, f.url,
-          NEW com.imd.backend.domain.valueObjects.bookItem.BookItem(
+          NEW com.imd.backend.domain.valueobjects.bookitem.BookItem(
               b.bookId,
               b.bookPlatform,
               b.bookTitle,

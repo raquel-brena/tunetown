@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.imd.backend.app.dto.movie.CreateMovieReviewDTO;
 import com.imd.backend.app.dto.movie.UpdateMovieReviewDTO;
-import com.imd.backend.app.gateway.filmPlataformGateway.FilmPlatformGateway;
+import com.imd.backend.app.gateway.filmplataformgateway.FilmPlatformGateway;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.User;
-import com.imd.backend.domain.entities.filmLog.MovieReview;
-import com.imd.backend.domain.valueObjects.core.BaseResume;
-import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
+import com.imd.backend.domain.entities.filmlog.MovieReview;
+import com.imd.backend.domain.valueobjects.core.BaseResume;
+import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
 import com.imd.backend.infra.persistence.jpa.repository.MovieRepository;
 
 @Service

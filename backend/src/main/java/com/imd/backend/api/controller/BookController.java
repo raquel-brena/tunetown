@@ -17,8 +17,8 @@ import com.imd.backend.api.controller.core.BasePostController;
 import com.imd.backend.app.dto.bookYard.CreateBookReviewDTO;
 import com.imd.backend.app.dto.bookYard.UpdateBookReviewDTO;
 import com.imd.backend.app.service.BookService;
-import com.imd.backend.domain.entities.bookYard.BookReview;
-import com.imd.backend.domain.valueObjects.bookItem.BookItem;
+import com.imd.backend.domain.entities.bookyard.BookReview;
+import com.imd.backend.domain.valueobjects.bookitem.BookItem;
 import com.imd.backend.infra.security.CoreUserDetails;
 
 @RestController

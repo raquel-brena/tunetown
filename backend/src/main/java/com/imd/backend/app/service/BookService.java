@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.imd.backend.app.dto.bookYard.CreateBookReviewDTO;
 import com.imd.backend.app.dto.bookYard.UpdateBookReviewDTO;
+import com.imd.backend.app.gateway.bookplatformgateway.BookPlatformGateway;
 import com.imd.backend.app.service.core.BasePostService;
-import com.imd.backend.domain.entities.bookYard.BookReview;
+import com.imd.backend.domain.entities.bookyard.BookReview;
 import com.imd.backend.domain.entities.core.User;
-import com.imd.backend.domain.valueObjects.bookItem.BookItem;
-import com.imd.backend.domain.valueObjects.core.BaseResume;
+import com.imd.backend.domain.valueobjects.bookitem.BookItem;
+import com.imd.backend.domain.valueobjects.core.BaseResume;
 import com.imd.backend.infra.persistence.jpa.repository.BookRepository;
-import com.imd.backend.app.gateway.bookPlatformGateway.BookPlatformGateway;
 
 @Service
 public class BookService extends BasePostService<

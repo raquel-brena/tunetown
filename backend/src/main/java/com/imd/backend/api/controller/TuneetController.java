@@ -5,7 +5,7 @@ import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
 import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
 import com.imd.backend.infra.security.CoreUserDetails;
 
 import java.util.UUID;

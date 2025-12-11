@@ -17,8 +17,8 @@ import com.imd.backend.api.controller.core.BasePostController;
 import com.imd.backend.app.dto.movie.CreateMovieReviewDTO;
 import com.imd.backend.app.dto.movie.UpdateMovieReviewDTO;
 import com.imd.backend.app.service.MovieService;
-import com.imd.backend.domain.entities.filmLog.MovieReview;
-import com.imd.backend.domain.valueObjects.movieItem.MovieItem;
+import com.imd.backend.domain.entities.filmlog.MovieReview;
+import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
 import com.imd.backend.infra.security.CoreUserDetails;
 
 @RestController

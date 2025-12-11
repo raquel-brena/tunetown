@@ -1,0 +1,11 @@
+package com.imd.backend.domain.valueobjects;
+
+import java.util.List;
+
+public record PageResult<T> (
+    List<T> itens,
+    int pageItens,
+    long totalItens,
+    int currentPage,
+    int pageSize,
+    int totalPages) {}

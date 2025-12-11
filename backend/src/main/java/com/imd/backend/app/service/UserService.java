@@ -3,9 +3,9 @@ package com.imd.backend.app.service;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.exception.NotFoundException;
-import com.imd.backend.domain.valueObjects.PageResult;
-import com.imd.backend.domain.valueObjects.Pagination;
-import com.imd.backend.domain.valueObjects.UserWithProfile;
+import com.imd.backend.domain.valueobjects.PageResult;
+import com.imd.backend.domain.valueobjects.Pagination;
+import com.imd.backend.domain.valueobjects.UserWithProfile;
 import com.imd.backend.infra.persistence.jpa.projections.UserWithProfileProjection;
 import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
 

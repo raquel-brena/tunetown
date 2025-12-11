@@ -28,17 +28,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  ai:
-    container_name: tunetown-ai
-    build: ai
-    ports:
-      - '5000:5000'
-    env_file:
-      - ./ai/.env
-    networks:
-      - spring-postgres
-    depends_on:
-      - postgres
+  # ai:
+  #   container_name: tunetown-ai
+  #   build: ai
+  #   ports:
+  #     - '5000:5000'
+  #   env_file:
+  #     - ./ai/.env
+  #   networks:
+  #     - spring-postgres
+  #   depends_on:
+  #     - postgres
 
 
 volumes:
