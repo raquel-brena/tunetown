@@ -52,16 +52,16 @@ public class MoviewReviewService extends BasePostService<
                         .author(author)
                         .textContent(dto.getTextContent())
                         .createdAt(LocalDateTime.now())
-//
-//                        // Mapeia Item -> Colunas
-//                        .tunableItemId(item.getId())
-//                        .tunableItemPlataform(item.getPlatformName())
-//                        .tunableItemTitle(item.getTitle())
-//                        .tunableItemArtist(item.getArtist())
-//                        .tunableItemType(item.getItemType().toString())
-//                        .tunableItemArtworkUrl(item.getArtworkUrl() != null ? item.getArtworkUrl().toString() : null)
+
+                        // Mapeia Item -> Colunas
+                        .movieId(item.getId())
+                        .moviePlatform(item.getPlatformName())
+                        .movieTitle(item.getTitle())
+                        .movieDirector(item.getDirector())
+                        .movieReleaseYear(item.getReleaseYear())
+                        .movieArtworkUrl(item.getArtworkUrl() != null ? item.getArtworkUrl().toString() : null)
                         
-                        // Se o CreateTuneetDTO tivesse campos extras (ex: mood), setaria aqui:
+                        // Se o CreateBookReviewDTO tivesse campos extras (ex: mood), setaria aqui:
                         // .mood(dto.getMood()) 
                         .build();
         }        

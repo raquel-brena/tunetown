@@ -1,37 +1,36 @@
-package com.imd.backend.api.controller;
+package com.imd.backend.api.controller.bookYard;
 
 import com.imd.backend.api.controller.core.BasePostController;
-import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
-import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
-import com.imd.backend.app.service.TuneetService;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
+import com.imd.backend.app.dto.bookYard.CreateBookReviewDTO;
+import com.imd.backend.app.dto.bookYard.UpdateBookReviewDTO;
+import com.imd.backend.app.service.bookYard.BookReviewService;
+import com.imd.backend.domain.entities.bookYard.BookReview;
+import com.imd.backend.domain.valueObjects.bookItem.BookItem;
 import com.imd.backend.infra.security.CoreUserDetails;
-
-import java.util.UUID;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
-@RequestMapping("api/tuneet")
-public class TuneetController extends BasePostController<
-  Tuneet, 
-  TunableItem,
-  CreateTuneetDTO,
-  UpdateTuneetDTO
+@RequestMapping("api/filmlog/reviews")
+public class BookReviewController extends BasePostController<
+        BookReview,
+        BookItem,
+        CreateBookReviewDTO,
+        UpdateBookReviewDTO
 > {
-  public TuneetController(TuneetService tuneetService) {
-    super(tuneetService);
+  public BookReviewController(BookReviewService service) {
+    super(service);
   }
 
   @Override
   @PostMapping
-  public ResponseEntity<Tuneet> create(
-    @RequestBody @Validated CreateTuneetDTO dto,
+  public ResponseEntity<BookReview> create(
+    @RequestBody @Validated CreateBookReviewDTO dto,
     @AuthenticationPrincipal CoreUserDetails userDetails
   ) {
     return super.create(dto, userDetails);
@@ -39,9 +38,9 @@ public class TuneetController extends BasePostController<
 
   @Override
   @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Tuneet> update(
+  public ResponseEntity<BookReview> update(
     @PathVariable UUID id,
-    @Validated @RequestBody UpdateTuneetDTO dto,
+    @Validated @RequestBody UpdateBookReviewDTO dto,
     @AuthenticationPrincipal CoreUserDetails userDetails 
   ) {
     return super.update(id, dto, userDetails);
