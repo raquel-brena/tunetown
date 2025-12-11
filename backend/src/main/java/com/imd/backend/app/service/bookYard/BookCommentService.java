@@ -1,7 +1,7 @@
 package com.imd.backend.app.service.bookYard;
 
 import com.imd.backend.api.dto.comment.CommentDTO;
-import com.imd.backend.app.service.TutoResponder;
+import com.imd.backend.app.service.bookYard.BookResponderService;
 import com.imd.backend.app.service.core.BaseCommentService;
 import com.imd.backend.domain.entities.bookYard.BookComment;
 import com.imd.backend.domain.entities.bookYard.BookReview;
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class BookCommentService extends BaseCommentService<BookComment, BookReview, BookItem>{
 
     public BookCommentService(BookCommentRepository repository,
-                              TutoResponder tutoResponder,
+                              BookResponderService bookResponderService,
                               ProfileRepository profileRepository,
                               BookRepository movieRepository) {
-        super(repository,tutoResponder, profileRepository, movieRepository);
+        super(repository, bookResponderService, profileRepository, movieRepository);
     }
 
     @Override

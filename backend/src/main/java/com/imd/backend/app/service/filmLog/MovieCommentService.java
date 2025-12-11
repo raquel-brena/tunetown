@@ -1,7 +1,7 @@
 package com.imd.backend.app.service.filmLog;
 
 import com.imd.backend.api.dto.comment.CommentDTO;
-import com.imd.backend.app.service.TutoResponder;
+import com.imd.backend.app.service.filmLog.MovieResponderService;
 import com.imd.backend.app.service.core.BaseCommentService;
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.entities.filmLog.MovieComment;
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class MovieCommentService extends BaseCommentService<MovieComment, MovieReview, MovieItem>{
 
     public MovieCommentService(MovieCommentRepository repository,
-                               TutoResponder tutoResponder,
+                               MovieResponderService movieResponderService,
                                ProfileRepository profileRepository,
                                MovieRepository movieRepository) {
-        super(repository,tutoResponder, profileRepository, movieRepository);
+        super(repository, movieResponderService, profileRepository, movieRepository);
     }
 
     @Override
