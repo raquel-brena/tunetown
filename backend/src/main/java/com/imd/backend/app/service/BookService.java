@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.imd.backend.app.dto.CreateBookReviewDTO;
-import com.imd.backend.app.dto.UpdateBookReviewDTO;
+import com.imd.backend.app.dto.bookYard.CreateBookReviewDTO;
+import com.imd.backend.app.dto.bookYard.UpdateBookReviewDTO;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.bookYard.BookReview;
 import com.imd.backend.domain.entities.core.User;

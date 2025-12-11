@@ -1,4 +1,4 @@
-package com.imd.backend.app.dto;
+package com.imd.backend.app.dto.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.app.dto.core.UpdateBasePostDTO;

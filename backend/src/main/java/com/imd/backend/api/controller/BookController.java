@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imd.backend.api.controller.core.BasePostController;
-import com.imd.backend.app.dto.CreateBookReviewDTO;
-import com.imd.backend.app.dto.UpdateBookReviewDTO;
+import com.imd.backend.app.dto.bookYard.CreateBookReviewDTO;
+import com.imd.backend.app.dto.bookYard.UpdateBookReviewDTO;
 import com.imd.backend.app.service.BookService;
 import com.imd.backend.domain.entities.bookYard.BookReview;
 import com.imd.backend.domain.valueObjects.bookItem.BookItem;
@@ -24,10 +24,10 @@ import com.imd.backend.infra.security.CoreUserDetails;
 @RestController
 @RequestMapping("api/bookyard")
 public class BookController extends BasePostController<
-  BookReview,
-  BookItem,
-  CreateBookReviewDTO,
-  UpdateBookReviewDTO
+ BookReview,
+ BookItem,
+ CreateBookReviewDTO,
+ UpdateBookReviewDTO
 >{
   public BookController(BookService service) {
     super(service);

@@ -11,8 +11,8 @@ import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.imd.backend.app.dto.CreateTuneetDTO;
-import com.imd.backend.app.dto.UpdateTuneetDTO;
+import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
+import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
 import com.imd.backend.app.gateway.tunablePlataformGateway.TunablePlataformGateway;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;
 import com.imd.backend.domain.valueObjects.core.BaseResume;
@@ -61,7 +61,7 @@ public class TuneetService extends BasePostService<
                         .tunableItemType(item.getItemType().toString())
                         .tunableItemArtworkUrl(item.getArtworkUrl() != null ? item.getArtworkUrl().toString() : null)
                         
-                        // Se o CreateTuneetDTO tivesse campos extras (ex: mood), setaria aqui:
+                        // Se o CreateBookReviewDTO tivesse campos extras (ex: mood), setaria aqui:
                         // .mood(dto.getMood()) 
                         .build();
         }        

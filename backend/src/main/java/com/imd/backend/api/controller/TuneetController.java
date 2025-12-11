@@ -1,8 +1,8 @@
 package com.imd.backend.api.controller;
 
 import com.imd.backend.api.controller.core.BasePostController;
-import com.imd.backend.app.dto.CreateTuneetDTO;
-import com.imd.backend.app.dto.UpdateTuneetDTO;
+import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
+import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
 import com.imd.backend.app.service.TuneetService;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueObjects.TunableItem.TunableItem;

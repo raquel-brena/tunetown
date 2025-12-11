@@ -37,7 +37,6 @@ public final class MovieItem extends PostItem {
     this.itemType = itemType;
   }
 
-  // Construtor JPA-Compliant (String-based)
   public MovieItem(
       String id,
       String platformName,

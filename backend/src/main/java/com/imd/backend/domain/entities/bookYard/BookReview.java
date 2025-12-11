@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.domain.entities.core.BasePost;
-import com.imd.backend.domain.entities.tunetown.Comment;
-import com.imd.backend.domain.entities.tunetown.Like;
 import com.imd.backend.domain.valueObjects.bookItem.BookItem;
 
 import jakarta.persistence.CascadeType;
@@ -59,18 +57,16 @@ public class BookReview extends BasePost {
 
   // --- DADOS ESPECÍFICOS ---
 
-  // Rating foi removido
-
   @Column(name = "reading_status", nullable = false)
   private String readingStatus; // "READING", "COMPLETED", "WANT_TO_READ"  
 
   // --- RELACIONAMENTOS ---
-  @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
   private List<BookComment> comments = new ArrayList<>();
 
-  @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @Builder.Default
   @JsonIgnore
   private List<BookLike> likes = new ArrayList<>();

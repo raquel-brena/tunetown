@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.imd.backend.app.dto.CreateMovieReviewDTO;
-import com.imd.backend.app.dto.UpdateMovieReviewDTO;
+import com.imd.backend.app.dto.movie.CreateMovieReviewDTO;
+import com.imd.backend.app.dto.movie.UpdateMovieReviewDTO;
 import com.imd.backend.app.gateway.filmPlataformGateway.FilmPlatformGateway;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.User;
