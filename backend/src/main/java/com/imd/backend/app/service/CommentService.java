@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class CommentService extends BaseCommentService<Comment, Tuneet, TunableItem>{
 
     public CommentService(CommentRepository repository,
-                             TutoResponder tutoResponder,
+                             BotResponder botResponder,
                              ProfileRepository profileRepository,
                              TuneetRepository tuneetRepository) {
-        super(repository,tutoResponder, profileRepository, tuneetRepository);
+        super(repository, botResponder, profileRepository, tuneetRepository);
     }
 
     @Override

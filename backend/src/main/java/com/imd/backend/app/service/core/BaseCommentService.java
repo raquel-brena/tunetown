@@ -1,7 +1,7 @@
 package com.imd.backend.app.service.core;
 
 import com.imd.backend.api.dto.comment.CommentDTO;
-import com.imd.backend.app.service.TutoResponder;
+import com.imd.backend.app.service.BotResponder;
 import com.imd.backend.domain.entities.core.BaseComment;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.Profile;
@@ -20,13 +20,13 @@ public abstract class BaseCommentService <
         > {
 
     protected final BaseCommentRepository<T> repository;
-    protected final TutoResponder tutoResponder;
+    protected final BotResponder botResponder;
     protected final ProfileRepository profileRepository;
     protected final BasePostRepository<P, I> postRepository;
 
-    protected BaseCommentService(BaseCommentRepository<T> repository, TutoResponder tutoResponder, ProfileRepository profileRepository, BasePostRepository<P, I> postRepository) {
+    protected BaseCommentService(BaseCommentRepository<T> repository, BotResponder botResponder, ProfileRepository profileRepository, BasePostRepository<P, I> postRepository) {
         this.repository = repository;
-        this.tutoResponder = tutoResponder;
+        this.botResponder = botResponder;
         this.profileRepository = profileRepository;
         this.postRepository = postRepository;
     }
@@ -54,7 +54,7 @@ public abstract class BaseCommentService <
 
         T savedComment = repository.save(entity);
 
-        if (containsTutoMention(dto.getContentText())) {
+        if (botResponder.isMentioned(dto.getContentText())) {
 
             String tunableSummary;
             try {
@@ -63,7 +63,7 @@ public abstract class BaseCommentService <
                 tunableSummary = null;
             }
 
-            tutoResponder.generateResponseAsync(
+            botResponder.generateResponseAsync(
                     post.getId(),
                     post.getTextContent(),
                     tunableSummary,
@@ -94,10 +94,6 @@ public abstract class BaseCommentService <
             throw new NotFoundException("Nenhum comentário encontrado para este tuneet.");
         }
         return entities;
-    }
-
-    private boolean containsTutoMention(String content) {
-        return content != null && content.toLowerCase().contains("@tuto");
     }
 
     protected abstract T buildComment(
