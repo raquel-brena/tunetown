@@ -1,6 +1,7 @@
 spring:
   application:
     name: TuneTown - Backend
+
   main:
     allow-bean-definition-overriding: true
 
@@ -22,16 +23,19 @@ spring:
     openai:
       api-key: ${OPENAI_API_KEY}
 
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:seed.sql
+
 app:
   cors:
     allowed-origins: http://localhost:3000
 
-# Configurações da API do Spotify
 spotify:
   client-id: ${SPOTIFY_CLIENT_ID:spotify_client_id}
   client-secret: ${SPOTIFY_CLIENT_SECRET:spotify_client_id}
 
-  # URLs da API
   auth:
     url: http://googleusercontent.com/spotify.com/4
   api:
@@ -43,13 +47,12 @@ tmdb:
 cloud:
   aws:
     credentials:
-      access-key: ${AWS_ACCESS_KEY_ID:AKIA6ODU6MPQT3T4VETR}
-      secret-key: ${AWS_SECRET_ACCESS_KEY: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}
-    region: ${AWS_REGION:us-east-2}
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    region: ${AWS_REGION}
     s3:
-      bucket: ${AWS_S3_BUCKET:tunetown-s3}
+      bucket: ${AWS_S3_BUCKET}
 
-# Token da API
 api:
   security:
     token:
