@@ -1,7 +1,7 @@
 package com.imd.backend.app.service.core;
 
 import com.imd.backend.api.dto.comment.CommentDTO;
-import com.imd.backend.app.service.BotResponder;
+import com.imd.backend.app.service.core.BaseBotResponder;
 import com.imd.backend.domain.entities.core.BaseComment;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.Profile;
@@ -20,11 +20,11 @@ public abstract class BaseCommentService <
         > {
 
     protected final BaseCommentRepository<T> repository;
-    protected final BotResponder botResponder;
+    protected final BaseBotResponder<P, ?> botResponder;
     protected final ProfileRepository profileRepository;
     protected final BasePostRepository<P, I> postRepository;
 
-    protected BaseCommentService(BaseCommentRepository<T> repository, BotResponder botResponder, ProfileRepository profileRepository, BasePostRepository<P, I> postRepository) {
+    protected BaseCommentService(BaseCommentRepository<T> repository, BaseBotResponder<P, ?> botResponder, ProfileRepository profileRepository, BasePostRepository<P, I> postRepository) {
         this.repository = repository;
         this.botResponder = botResponder;
         this.profileRepository = profileRepository;
@@ -64,8 +64,7 @@ public abstract class BaseCommentService <
             }
 
             botResponder.generateResponseAsync(
-                    post.getId(),
-                    post.getTextContent(),
+                    post,
                     tunableSummary,
                     dto.getContentText()
             );

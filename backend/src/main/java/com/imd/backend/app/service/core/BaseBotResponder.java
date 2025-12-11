@@ -1,54 +1,42 @@
 package com.imd.backend.app.service.core;
 
 import com.imd.backend.app.gateway.aiGateway.AiAgentGateway;
+import com.imd.backend.domain.entities.core.BaseComment;
+import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.Profile;
-import com.imd.backend.domain.entities.tunetown.Comment;
-import com.imd.backend.domain.entities.tunetown.Tuneet;
-import com.imd.backend.infra.configuration.TutoProfileRegistry;
-import com.imd.backend.infra.persistence.jpa.repository.CommentRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.imd.backend.infra.configuration.BotProfileProvider;
+import com.imd.backend.infra.persistence.jpa.repository.core.BaseCommentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 
 import java.time.LocalDateTime;
 
-/**
- * PONTO FIXO DO FRAMEWORK
- * Serviço base para respostas automáticas do bot mencionado em comentários.
- * Variações perceptíveis: identidade (nome/handle) e personalidade.
- */
-public abstract class BaseBotResponder {
+public abstract class BaseBotResponder<P extends BasePost, C extends BaseComment> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseBotResponder.class);
 
     private final AiAgentGateway aiGateway;
-    private final TutoProfileRegistry tutoProfileRegistry;
-    private final CommentRepository commentRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final BotProfileProvider botProfileProvider;
+    private final BaseCommentRepository<C> commentRepository;
 
     protected BaseBotResponder(
             AiAgentGateway aiGateway,
-            TutoProfileRegistry tutoProfileRegistry,
-            CommentRepository commentRepository
-    ) {
+            BotProfileProvider botProfileProvider,
+            BaseCommentRepository<C> commentRepository) {
         this.aiGateway = aiGateway;
-        this.tutoProfileRegistry = tutoProfileRegistry;
+        this.botProfileProvider = botProfileProvider;
         this.commentRepository = commentRepository;
     }
 
-    /**
-     * Texto curto descrevendo a personalidade/voz do bot.
-     */
+    /** Handle ou nome mencionado no comentário (ex: "@tuto"). */
+    protected abstract String getBotMentionHandle();
+
+    /** Descrição curta da personalidade do bot, definida pela instância. */
     protected abstract String getBotPersonality();
 
-    /**
-     * Handle ou nome mencionado no comentário (ex: "@tuto").
-     */
-    protected abstract String getBotMentionHandle();
+    /** Constrói o comentário do bot para o post específico. */
+    protected abstract C buildBotComment(Profile botProfile, P post, String responseText, LocalDateTime createdAt);
 
     public boolean isMentioned(String content) {
         if (content == null || content.isBlank()) {
@@ -59,51 +47,47 @@ public abstract class BaseBotResponder {
 
     @Async
     public void generateResponseAsync(
-            String tuneetId,
-            String tuneetText,
-            String tunableContent,
-            String originalComment
-    ) {
+            P post,
+            String itemSummary,
+            String originalComment) {
         try {
-            String prompt = buildPrompt(tuneetText, tunableContent, originalComment);
+            String prompt = buildPrompt(post.getTextContent(), itemSummary, originalComment);
             String response = aiGateway.chat(prompt);
 
             if (response == null || response.isBlank()) {
                 return;
             }
 
-            Profile tutoProfile = tutoProfileRegistry.getProfile();
-            if (tutoProfile == null) {
+            Profile botProfile = botProfileProvider.getProfile();
+            if (botProfile == null) {
                 LOGGER.warn("Perfil do bot não pôde ser recuperado. Resposta automática não será criada.");
                 return;
             }
 
-            Tuneet tuneetRef = entityManager.getReference(Tuneet.class, tuneetId);
-
-            Comment tutoComment = Comment.builder()
-                    .post(tuneetRef)
-                    .author(tutoProfile)
-                    .contentText(response.trim())
-                    .createdAt(LocalDateTime.now())
-                    .build();
-
-            commentRepository.save(tutoComment);
+            C botComment = buildBotComment(botProfile, post, response.trim(), LocalDateTime.now());
+            commentRepository.save(botComment);
         } catch (Exception ex) {
-            LOGGER.error("Erro ao gerar resposta do bot para o tuneet {}", tuneetId, ex);
+            LOGGER.error("Erro ao gerar resposta do bot para o post {}", post.getId(), ex);
         }
     }
 
-    private String buildPrompt(String tuneetText, String tunableContent, String commentContent) {
+    private String buildPrompt(String postText, String itemSummary, String commentContent) {
         StringBuilder prompt = new StringBuilder();
         prompt.append("Você é o bot oficial da plataforma. ")
-                .append("Seu handle é ").append(getBotMentionHandle()).append(". ")
-                .append("Personalidade: ").append(getBotPersonality()).append(".\n")
-                .append("Foi marcado em um comentário sobre um post musical e deve responder de forma breve e amigável.\n")
-                .append("Conteúdo do tuneet: \"").append(tuneetText).append("\".\n");
+                .append("Seu handle é ").append(getBotMentionHandle()).append(". ");
 
-        if (tunableContent != null && !tunableContent.isBlank()) {
-            prompt.append("Informações do item associado: ")
-                    .append(tunableContent)
+        String personality = getBotPersonality();
+        if (personality != null && !personality.isBlank()) {
+            prompt.append("Personalidade: ").append(personality).append(". ");
+        }
+
+        prompt.append(
+                "Você foi marcado em um comentário sobre um post e deve responder de forma breve e alinhada à sua personalidade.\n")
+                .append("Conteúdo do post: \"").append(postText).append("\".\n");
+
+        if (itemSummary != null && !itemSummary.isBlank()) {
+            prompt.append("Informações adicionais: ")
+                    .append(itemSummary)
                     .append(".\n");
         }
 
