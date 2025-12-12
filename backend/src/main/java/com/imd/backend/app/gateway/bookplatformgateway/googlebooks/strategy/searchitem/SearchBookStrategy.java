@@ -1,14 +1,12 @@
 package com.imd.backend.app.gateway.bookplatformgateway.googlebooks.strategy.searchitem;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.bookplatformgateway.googlebooks.GoogleBooksApiClient;
 import com.imd.backend.app.gateway.bookplatformgateway.googlebooks.mapper.BookItemGoogleMapper;
 import com.imd.backend.domain.valueobjects.bookitem.BookItem;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor

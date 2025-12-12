@@ -5,7 +5,6 @@ import com.imd.backend.domain.valueobjects.core.BaseResume;
 import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
 import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueobjects.core.PostItem;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

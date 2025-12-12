@@ -1,12 +1,12 @@
 package com.imd.backend.domain.valueobjects.core;
 
-import java.net.URI;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.net.URI;
 
 /**
  * PONTO FIXO (Value Object)

@@ -1,20 +1,19 @@
 package com.imd.backend.infra.persistence.jpa.repository;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-
 import com.imd.backend.domain.entities.filmlog.MovieReview;
 import com.imd.backend.domain.valueobjects.core.BaseResume;
 import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
 import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository("MovieJpaRepository")
 public interface MovieRepository extends BasePostRepository<MovieReview, MovieItem> {

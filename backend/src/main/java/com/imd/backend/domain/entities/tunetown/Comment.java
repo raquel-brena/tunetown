@@ -1,11 +1,11 @@
 package com.imd.backend.domain.entities.tunetown;
 
 import com.imd.backend.domain.entities.core.BaseComment;
-import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.Profile;
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Comment extends BaseComment {
+public class Comment extends BaseComment<Tuneet> {
 
   // PONTO VARIÁVEL (Implementação):
   // Aqui definimos que ESTE comentário pertence a um TUNEET.
@@ -43,7 +43,7 @@ public class Comment extends BaseComment {
   }
 
     @Override
-    public BasePost getPost() {
-        return null;
+    public Tuneet getPost() {
+        return post;
     }
 }

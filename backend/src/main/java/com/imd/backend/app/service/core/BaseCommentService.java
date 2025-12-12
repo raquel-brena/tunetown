@@ -1,6 +1,6 @@
 package com.imd.backend.app.service.core;
 
-import com.imd.backend.api.dto.comment.CommentDTO;
+import com.imd.backend.app.dto.core.CreateBaseCommentDTO;
 import com.imd.backend.domain.entities.core.BaseComment;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.entities.core.Profile;
@@ -15,7 +15,8 @@ import org.springframework.data.domain.Pageable;
 public abstract class BaseCommentService <
         T extends BaseComment, // Comment que será utilizado
         P extends BasePost,
-        I extends PostItem// LIKE que será utizado
+        I extends PostItem,
+        D extends CreateBaseCommentDTO
         > {
 
     protected final BaseCommentRepository<T> repository;
@@ -39,9 +40,9 @@ public abstract class BaseCommentService <
                 .orElseThrow(() -> new NotFoundException("Comentário não encontrado."));
     }
 
-    public T create(CommentDTO dto) {
+    public T create(D dto) {
 
-        P post = postRepository.findById(dto.getTuneetId())
+        P post = postRepository.findById(dto.getPostId())
                 .orElseThrow(() -> new NotFoundException("Post não encontrado."));
 
         Profile author = profileRepository.findById(dto.getAuthorId())
@@ -95,7 +96,7 @@ public abstract class BaseCommentService <
     }
 
     protected abstract T buildComment(
-            CommentDTO dto,
+            D dto,
             Profile author,
             P post
     );

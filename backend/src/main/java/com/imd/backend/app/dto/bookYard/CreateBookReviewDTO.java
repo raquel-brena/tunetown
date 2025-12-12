@@ -2,7 +2,6 @@ package com.imd.backend.app.dto.bookYard;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.app.dto.core.CreateBasePostDTO;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

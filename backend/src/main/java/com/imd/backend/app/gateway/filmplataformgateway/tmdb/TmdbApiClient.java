@@ -1,15 +1,14 @@
 package com.imd.backend.app.gateway.filmplataformgateway.tmdb;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbMovieDetailDTO;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbSearchResponseDTO;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbSearchSeriesResponseDTO;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbSeriesDetailDTO;
 import com.imd.backend.infra.configuration.TmdbFeignConfig;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "TmdbApiClient", url = "https://api.themoviedb.org/3", configuration = TmdbFeignConfig.class)
 public interface TmdbApiClient {

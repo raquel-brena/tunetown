@@ -1,8 +1,8 @@
 package com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 public record TmdbSeriesDetailDTO(
     Long id,

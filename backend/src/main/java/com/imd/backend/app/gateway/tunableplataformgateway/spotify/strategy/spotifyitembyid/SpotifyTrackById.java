@@ -4,7 +4,6 @@ import com.imd.backend.app.gateway.tunableplataformgateway.spotify.SpotifyApiCli
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.TrackResponseDTO;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.mapper.TunableItemSpotifyMapper;
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

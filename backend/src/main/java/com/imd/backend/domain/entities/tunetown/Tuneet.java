@@ -1,13 +1,16 @@
 package com.imd.backend.domain.entities.tunetown;
 
-import com.imd.backend.domain.entities.core.BasePost;
-import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
-import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.imd.backend.domain.entities.core.BasePost;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.net.URI;

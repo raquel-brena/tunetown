@@ -1,9 +1,8 @@
 package com.imd.backend.infra.configuration;
 
+import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-
-import feign.RequestInterceptor;
 
 public class TmdbFeignConfig {
 

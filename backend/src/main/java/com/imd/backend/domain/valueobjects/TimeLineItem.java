@@ -1,10 +1,10 @@
 package com.imd.backend.domain.valueobjects;
 
+import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
+
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
 
 public class TimeLineItem {
   private UUID tuneetId;

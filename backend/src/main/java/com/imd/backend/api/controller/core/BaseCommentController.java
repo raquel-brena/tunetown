@@ -1,8 +1,8 @@
 package com.imd.backend.api.controller.core;
 
 import com.imd.backend.api.dto.RestResponseMessage;
-import com.imd.backend.api.dto.comment.CommentDTO;
 import com.imd.backend.api.dto.comment.CommentResponseDTO;
+import com.imd.backend.app.dto.core.CreateBaseCommentDTO;
 import com.imd.backend.app.service.core.BaseCommentService;
 import com.imd.backend.domain.entities.core.BaseComment;
 import com.imd.backend.domain.entities.core.BasePost;
@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.*;
 public abstract class BaseCommentController<
         T extends BaseComment,
         P extends BasePost,
-        I extends PostItem
+        I extends PostItem,
+        D extends CreateBaseCommentDTO
         > {
 
-    protected final BaseCommentService<T, P, I> service;
+    protected final BaseCommentService<T, P, I, D> service;
 
-    protected BaseCommentController(BaseCommentService<T, P, I> service) {
+    protected BaseCommentController(BaseCommentService<T, P, I, D> service) {
         this.service = service;
     }
 
@@ -53,7 +54,7 @@ public abstract class BaseCommentController<
     }
 
     @PostMapping
-    public ResponseEntity<RestResponseMessage> create(@Valid @RequestBody CommentDTO dto) {
+    public ResponseEntity<RestResponseMessage> create(@Valid @RequestBody D dto) {
         T created = service.create(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -62,7 +63,7 @@ public abstract class BaseCommentController<
     }
 
     @PutMapping
-    public ResponseEntity<RestResponseMessage> update(@Valid @RequestBody CommentDTO dto) {
+    public ResponseEntity<RestResponseMessage> update(@Valid @RequestBody D dto) {
 
         T entity = buildComment(dto);
         T updated = service.update(entity);
@@ -98,5 +99,5 @@ public abstract class BaseCommentController<
         return ResponseEntity.ok(dtoPage);
     }
 
-    protected abstract T buildComment(CommentDTO dto);
+    protected abstract T buildComment(D dto);
 }

@@ -1,10 +1,9 @@
 package com.imd.backend.app.gateway.bookplatformgateway.googlebooks.mapper;
 
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.bookplatformgateway.googlebooks.dto.GoogleBookDetailDTO;
 import com.imd.backend.app.gateway.bookplatformgateway.googlebooks.dto.IndustryIdentifierDTO;
 import com.imd.backend.domain.valueobjects.bookitem.BookItem;
+import org.springframework.stereotype.Component;
 
 @Component
 public class BookItemGoogleMapper {

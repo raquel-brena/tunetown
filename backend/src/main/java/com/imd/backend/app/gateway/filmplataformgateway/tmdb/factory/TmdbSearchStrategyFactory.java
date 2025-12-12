@@ -1,14 +1,12 @@
 package com.imd.backend.app.gateway.filmplataformgateway.tmdb.factory;
 
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.strategy.tmdbsearchitem.TmdbSearchMovieStrategy;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.strategy.tmdbsearchitem.TmdbSearchSeriesStrategy;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.strategy.tmdbsearchitem.TmdbSearchStrategy;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.domain.valueobjects.movieitem.FilmItemType;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

@@ -1,11 +1,10 @@
 package com.imd.backend.app.gateway.tunableplataformgateway.spotify;
 
+import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.auth.SpotifyTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.auth.SpotifyTokenResponse;
 
 @FeignClient(
   name = "SpotifyAuthComponent",

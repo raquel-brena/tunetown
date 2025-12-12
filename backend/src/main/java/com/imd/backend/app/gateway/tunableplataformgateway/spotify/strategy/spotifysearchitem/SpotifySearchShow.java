@@ -1,12 +1,11 @@
 package com.imd.backend.app.gateway.tunableplataformgateway.spotify.strategy.spotifysearchitem;
 
-import java.util.List;
-
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.SpotifyApiClient;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.mapper.TunableItemSpotifyMapper;
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
-
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public class SpotifySearchShow implements SpotifySearchItemStrategy{

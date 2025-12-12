@@ -1,15 +1,14 @@
 package com.imd.backend.app.gateway.tunableplataformgateway.spotify;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.AlbumResponseDTO;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.SearchResponseDTO;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.ShowResponseDTO;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.TrackResponseDTO;
 import com.imd.backend.infra.configuration.SpotifyFeignConfig;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
   name = "SpotifyApiClient",

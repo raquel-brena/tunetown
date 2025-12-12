@@ -1,15 +1,10 @@
 package com.imd.backend.domain.valueobjects.bookitem;
 
-import java.net.URI;
-
 import com.imd.backend.domain.valueobjects.core.PostItem;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.net.URI;
 
 @Getter
 @Setter

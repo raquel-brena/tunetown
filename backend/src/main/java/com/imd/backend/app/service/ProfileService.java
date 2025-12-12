@@ -6,7 +6,6 @@ import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.domain.exception.NotFoundException;
 import com.imd.backend.infra.persistence.jpa.mapper.ProfileMapper;
 import com.imd.backend.infra.persistence.jpa.repository.ProfileRepository;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

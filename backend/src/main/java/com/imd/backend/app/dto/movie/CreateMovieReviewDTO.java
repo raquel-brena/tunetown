@@ -2,7 +2,6 @@ package com.imd.backend.app.dto.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.app.dto.core.CreateBasePostDTO;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

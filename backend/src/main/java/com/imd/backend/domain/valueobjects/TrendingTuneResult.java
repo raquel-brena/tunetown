@@ -1,8 +1,8 @@
 package com.imd.backend.domain.valueobjects;
 
-import java.net.URI;
-
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
+
+import java.net.URI;
 
 
 public record TrendingTuneResult(

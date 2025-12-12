@@ -7,7 +7,6 @@ import com.imd.backend.domain.entities.filmlog.MovieComment;
 import com.imd.backend.domain.entities.filmlog.MovieReview;
 import com.imd.backend.infra.configuration.BotProfileProvider;
 import com.imd.backend.infra.persistence.jpa.repository.filmlog.MovieCommentRepository;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -1,8 +1,6 @@
 package com.imd.backend.domain.entities.filmlog;
 
 import com.imd.backend.domain.entities.core.BaseComment;
-import com.imd.backend.domain.entities.core.BasePost;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class MovieComment extends BaseComment {
+public class MovieComment extends BaseComment<MovieReview> {
 
   // PONTO VARIÁVEL:
   // Define que este comentário pertence especificamente a uma Review de Filme.
@@ -28,7 +26,7 @@ public class MovieComment extends BaseComment {
 
     // Implementação do método abstrato do pai para retornar o post genérico
   @Override
-  public BasePost getPost() {
+  public MovieReview getPost() {
     return this.post;
   }
 

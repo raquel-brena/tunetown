@@ -1,10 +1,5 @@
 package com.imd.backend.app.gateway.tunableplataformgateway.spotify;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.tunableplataformgateway.TunablePlataformGateway;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.factory.SpotifyItemByIdStrategyFactory;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.factory.SpotifySearchItemStrategyFactory;
@@ -12,8 +7,11 @@ import com.imd.backend.app.gateway.tunableplataformgateway.spotify.strategy.spot
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.strategy.spotifysearchitem.SpotifySearchItemStrategy;
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Qualifier("SpotifyGateway")

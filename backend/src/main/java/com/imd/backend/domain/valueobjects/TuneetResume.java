@@ -1,12 +1,11 @@
 package com.imd.backend.domain.valueobjects;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Setter
 @Getter

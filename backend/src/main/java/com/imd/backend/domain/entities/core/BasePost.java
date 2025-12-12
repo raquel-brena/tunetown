@@ -1,13 +1,15 @@
 package com.imd.backend.domain.entities.core;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
-
-import jakarta.persistence.*;
-import lombok.*;
-
-import lombok.experimental.SuperBuilder;
 
 /**
  * PONTO FIXO DO FRAMEWORK

@@ -1,7 +1,9 @@
 package com.imd.backend.domain.entities.core;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -16,7 +18,8 @@ import java.util.Objects;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class BaseComment {
+public abstract class BaseComment<
+        I extends BasePost > {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +37,7 @@ public abstract class BaseComment {
   protected LocalDateTime createdAt;
 
   @Transient
-  public abstract BasePost getPost();
+  public abstract I getPost();
 
     // --- MÉTODOS DE DOMÍNIO ---
 

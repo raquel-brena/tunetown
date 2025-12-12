@@ -1,11 +1,5 @@
 package com.imd.backend.app.service;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import com.imd.backend.app.dto.movie.CreateMovieReviewDTO;
 import com.imd.backend.app.dto.movie.UpdateMovieReviewDTO;
 import com.imd.backend.app.gateway.filmplataformgateway.FilmPlatformGateway;
@@ -15,6 +9,11 @@ import com.imd.backend.domain.entities.filmlog.MovieReview;
 import com.imd.backend.domain.valueobjects.core.BaseResume;
 import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
 import com.imd.backend.infra.persistence.jpa.repository.MovieRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class MovieService extends BasePostService<

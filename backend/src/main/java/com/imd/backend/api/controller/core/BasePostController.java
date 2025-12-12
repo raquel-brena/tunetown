@@ -1,24 +1,5 @@
 package com.imd.backend.api.controller.core;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.imd.backend.app.dto.core.CreateBasePostDTO;
 import com.imd.backend.app.dto.core.UpdateBasePostDTO;
 import com.imd.backend.app.service.core.BasePostService;
@@ -28,8 +9,20 @@ import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
 import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueobjects.core.PostItem;
 import com.imd.backend.infra.security.CoreUserDetails;
-
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 public abstract class BasePostController<
     T extends BasePost,

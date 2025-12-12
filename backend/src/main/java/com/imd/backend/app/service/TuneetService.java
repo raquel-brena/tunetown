@@ -1,21 +1,19 @@
 package com.imd.backend.app.service;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
+import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
+import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
+import com.imd.backend.app.gateway.tunableplataformgateway.TunablePlataformGateway;
 import com.imd.backend.app.service.core.BasePostService;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.entities.tunetown.Tuneet;
 import com.imd.backend.domain.valueobjects.core.BaseResume;
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
 import com.imd.backend.infra.persistence.jpa.repository.TuneetRepository;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.imd.backend.app.dto.tunetown.CreateTuneetDTO;
-import com.imd.backend.app.dto.tunetown.UpdateTuneetDTO;
-import com.imd.backend.app.gateway.tunableplataformgateway.TunablePlataformGateway;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class TuneetService extends BasePostService<

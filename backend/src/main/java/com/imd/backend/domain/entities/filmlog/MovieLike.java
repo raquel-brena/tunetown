@@ -3,7 +3,6 @@ package com.imd.backend.domain.entities.filmlog;
 import com.imd.backend.domain.entities.core.BaseLike;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.valueobjects.movieitem.MovieReaction;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

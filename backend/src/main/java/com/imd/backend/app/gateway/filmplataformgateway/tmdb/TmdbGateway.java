@@ -1,17 +1,15 @@
 package com.imd.backend.app.gateway.filmplataformgateway.tmdb;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.filmplataformgateway.FilmPlatformGateway;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.factory.TmdbGetItemByIdFactory;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.factory.TmdbSearchStrategyFactory;
 import com.imd.backend.domain.valueobjects.movieitem.FilmItemType;
 import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Qualifier("TmdbGateway")

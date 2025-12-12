@@ -3,7 +3,6 @@ package com.imd.backend.infra.persistence.jpa.repository;
 
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.infra.persistence.jpa.projections.UserWithProfileProjection;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

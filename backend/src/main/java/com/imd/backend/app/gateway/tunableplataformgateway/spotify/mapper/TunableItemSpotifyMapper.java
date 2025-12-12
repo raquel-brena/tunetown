@@ -1,15 +1,14 @@
 package com.imd.backend.app.gateway.tunableplataformgateway.spotify.mapper;
 
-import java.net.URI;
-
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.AlbumResponseDTO;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.ShowResponseDTO;
 import com.imd.backend.app.gateway.tunableplataformgateway.spotify.dto.TrackResponseDTO;
 import com.imd.backend.domain.exception.TunableItemConvertionException;
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItem;
 import com.imd.backend.domain.valueobjects.tunableitem.TunableItemType;
+import org.springframework.stereotype.Component;
+
+import java.net.URI;
 
 @Component
 public class TunableItemSpotifyMapper {

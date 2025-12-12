@@ -3,7 +3,6 @@ package com.imd.backend.app.service;
 import com.imd.backend.domain.entities.core.Follow;
 import com.imd.backend.domain.entities.core.Profile;
 import com.imd.backend.infra.persistence.jpa.repository.FollowRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

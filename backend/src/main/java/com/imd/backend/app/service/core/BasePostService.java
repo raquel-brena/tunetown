@@ -13,8 +13,10 @@ import com.imd.backend.domain.valueobjects.core.BaseTimelineItem;
 import com.imd.backend.domain.valueobjects.core.BaseTrendingItem;
 import com.imd.backend.domain.valueobjects.core.PostItem;
 import com.imd.backend.infra.persistence.jpa.repository.core.BasePostRepository;
-
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 

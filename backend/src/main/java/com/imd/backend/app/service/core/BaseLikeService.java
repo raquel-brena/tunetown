@@ -1,5 +1,6 @@
 package com.imd.backend.app.service.core;
 
+import com.imd.backend.app.dto.core.CreateBaseLikeDTO;
 import com.imd.backend.domain.entities.core.BaseLike;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.exception.NotFoundException;
@@ -11,7 +12,8 @@ import java.util.Optional;
 
 public abstract class BaseLikeService <
                 T extends BaseLike, // POST que será utilizado
-                P extends BasePost // LIKE que será utizado
+                P extends BasePost, // LIKE que será utizado
+                D extends CreateBaseLikeDTO
                 > {
 
     protected final BaseLikeRepository<T> repository;

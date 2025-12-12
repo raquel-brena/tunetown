@@ -1,19 +1,18 @@
 package com.imd.backend.app.service;
 
 import com.imd.backend.api.dto.auth.LoginResponse;
-import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.api.dto.profile.ProfileCreateDTO;
+import com.imd.backend.api.dto.user.UserDTO;
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.domain.exception.BusinessException;
 import com.imd.backend.infra.security.CoreUserDetails;
+import com.imd.backend.infra.security.JwtService;
 import com.imd.backend.infra.security.TuneUserDetailsService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.imd.backend.infra.security.JwtService;
 
 @Service
 public class AuthService {

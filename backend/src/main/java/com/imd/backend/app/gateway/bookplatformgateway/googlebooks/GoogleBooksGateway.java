@@ -1,17 +1,15 @@
 package com.imd.backend.app.gateway.bookplatformgateway.googlebooks;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.bookplatformgateway.BookPlatformGateway;
 import com.imd.backend.app.gateway.bookplatformgateway.googlebooks.factories.GoogleBooksGetByIdFactory;
 import com.imd.backend.app.gateway.bookplatformgateway.googlebooks.factories.GoogleBooksSearchFactory;
 import com.imd.backend.domain.valueobjects.bookitem.BookItem;
 import com.imd.backend.domain.valueobjects.bookitem.BookItemType;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Qualifier("GoogleBooksGateway")

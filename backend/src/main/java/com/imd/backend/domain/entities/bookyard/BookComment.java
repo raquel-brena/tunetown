@@ -1,8 +1,6 @@
 package com.imd.backend.domain.entities.bookyard;
 
 import com.imd.backend.domain.entities.core.BaseComment;
-import com.imd.backend.domain.entities.core.BasePost;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder 
 @NoArgsConstructor
-public class BookComment extends BaseComment {
+public class BookComment extends BaseComment<BookReview> {
 
   // PONTO VARIÁVEL:
   // Define que este comentário pertence especificamente a uma Review de Livro.
@@ -31,7 +29,7 @@ public class BookComment extends BaseComment {
 
   // Implementação do método abstrato do pai para retornar o post genérico
   @Override
-  public BasePost getPost() {
+  public BookReview getPost() {
     return this.post;
   }
 

@@ -1,14 +1,9 @@
 package com.imd.backend.app.gateway.filmplataformgateway.tmdb.mapper;
 
-import org.springframework.stereotype.Component;
-
-import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbCrewDTO;
-import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbMovieDetailDTO;
-import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbMovieResultDTO;
-import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbSeriesDetailDTO;
-import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.TmdbSeriesResultDTO;
+import com.imd.backend.app.gateway.filmplataformgateway.tmdb.dto.*;
 import com.imd.backend.domain.valueobjects.movieitem.FilmItemType;
 import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MovieItemTmdbMapper {

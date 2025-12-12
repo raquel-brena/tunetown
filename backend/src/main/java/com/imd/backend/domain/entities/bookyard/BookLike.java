@@ -3,7 +3,6 @@ package com.imd.backend.domain.entities.bookyard;
 import com.imd.backend.domain.entities.core.BaseLike;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.valueobjects.bookitem.ImpactLevel;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

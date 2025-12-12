@@ -1,14 +1,12 @@
 package com.imd.backend.app.gateway.filmplataformgateway.tmdb.strategy.tmdbsearchitem;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.TmdbApiClient;
 import com.imd.backend.app.gateway.filmplataformgateway.tmdb.mapper.MovieItemTmdbMapper;
 import com.imd.backend.domain.valueobjects.movieitem.MovieItem;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor

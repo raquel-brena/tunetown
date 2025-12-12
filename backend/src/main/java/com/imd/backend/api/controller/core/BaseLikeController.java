@@ -1,8 +1,8 @@
 package com.imd.backend.api.controller.core;
 
 import com.imd.backend.api.dto.RestResponseMessage;
-import com.imd.backend.api.dto.like.LikeCreateDTO;
 import com.imd.backend.api.dto.like.LikeResponseDTO;
+import com.imd.backend.app.dto.core.CreateBaseLikeDTO;
 import com.imd.backend.app.service.core.BaseLikeService;
 import com.imd.backend.domain.entities.core.BaseLike;
 import com.imd.backend.domain.entities.core.BasePost;
@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 public abstract class BaseLikeController <
         T extends BaseLike,
-        I extends BasePost
+        I extends BasePost,
+        D extends CreateBaseLikeDTO
         > {
 
-    protected final BaseLikeService<T, I> service;
+    protected final BaseLikeService<T, I, D> service;
 
-    protected BaseLikeController(BaseLikeService<T, I> service) {
+    protected BaseLikeController(BaseLikeService<T, I, D> service) {
         this.service = service;
     }
 
@@ -48,7 +49,7 @@ public abstract class BaseLikeController <
 
     @PostMapping
     public ResponseEntity<RestResponseMessage> create(
-            @Valid @RequestBody LikeCreateDTO dto
+            @Valid @RequestBody D dto
     ) {
 
         T like = buildLike(dto);
@@ -87,6 +88,6 @@ public abstract class BaseLikeController <
         return ResponseEntity.ok(dtoPage);
     }
 
-    protected abstract T buildLike(LikeCreateDTO dto);
+    protected abstract T buildLike(D dto);
 
 }

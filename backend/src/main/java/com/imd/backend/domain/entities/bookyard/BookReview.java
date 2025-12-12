@@ -1,27 +1,20 @@
 package com.imd.backend.domain.entities.bookyard;
 
-import java.net.URI;
-import java.util.List;
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imd.backend.domain.entities.core.BasePost;
 import com.imd.backend.domain.valueobjects.bookitem.BookItem;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "book_reviews")

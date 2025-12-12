@@ -2,7 +2,6 @@ package com.imd.backend.infra.security;
 
 import com.imd.backend.domain.entities.core.User;
 import com.imd.backend.infra.persistence.jpa.repository.UserRepository;
-
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
